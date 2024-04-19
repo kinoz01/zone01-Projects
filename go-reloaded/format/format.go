@@ -20,10 +20,8 @@ func convertFromBaseToBase(s string, a, b int) string {
 
 // this function handle regular expression in the form (w, low|up|case|hex|bin|cap)
 func Format1(text string) string {
-
 	// Compile the regular expression
-	// captures the word before "(flag)"
-	re := regexp.MustCompile(`(\b\w+\b)\s+\((low|up|case|hex|bin|cap)\)`)
+	re := regexp.MustCompile(`(\b\w+\b[.,:;']*?)\s+\((low|up|case|hex|bin|cap)\)\s`)
 
 	// Perform the replacement
 	return re.ReplaceAllStringFunc(text, func(match string) string {
@@ -31,26 +29,33 @@ func Format1(text string) string {
 		word := parts[0]
 		flag := parts[1]
 
+		var replacement string
 		switch flag {
 		case "(up)":
-			return strings.ToUpper(word)
+			replacement = strings.ToUpper(word) + " "
 		case "(low)":
-			return strings.ToLower(word)
+			replacement = strings.ToLower(word) + " "
 		case "(cap)":
-			return strings.Title(word)
+			replacement = strings.Title(word) + " "
 		case "(bin)":
-			return convertFromBaseToBase(word, 2, 10)
+			replacement = convertFromBaseToBase(word, 2, 10) + " "
 		case "(hex)":
-			return convertFromBaseToBase(word, 16, 10)
+			replacement = convertFromBaseToBase(word, 16, 10) + " "
 		}
-		return match
+
+		// Preserve newline characters if present in the original match
+		if strings.ContainsAny(match, "\n") {
+			replacement += "\n"
+		}
+
+		return replacement
 	})
 }
 
 // this function handle regular expression in the form (words... (low|up|case, <number>))
 func Format2(text string) string {
 	// capture any text followed by (low, number), (up, number), or (cap, number)
-	re := regexp.MustCompile(`((?:\w+\s+)*)(\w+)\s+(\w+)\s+(\w+)\s+\((low|up|cap),\s*(\d+)\)`)
+	re := regexp.MustCompile(`((?:\w+[.,:;')]*\s+)*)(\w+[.,:;')]*)\s+(\w+[.,:;')]*)\s+(\w+[.,:;')]*)\s+\((low|up|cap),\s*(\d+)\)`)
 	matches := re.FindAllStringSubmatch(text, -1)
 
 	for _, match := range matches {
@@ -71,16 +76,17 @@ func Format2(text string) string {
 		for i := startIndex; i < len(allWords); i++ {
 			switch match[5] {
 			case "low":
-				allWords[i] = strings.ToLower(allWords[i])
+				allWords[i] = strings.ToLower(allWords[i]) 
 			case "up":
-				allWords[i] = strings.ToUpper(allWords[i])
+				allWords[i] = strings.ToUpper(allWords[i]) 
 			case "cap":
-				allWords[i] = strings.Title(allWords[i])
+				allWords[i] = strings.Title(allWords[i]) 
 			}
 		}
 
 		// Construct the modified segment without the control phrase
-		modifiedSegment := strings.Join(allWords, " ")
+		modifiedSegment := strings.Join(allWords, " ") 
+
 		fullMatch := match[0]
 
 		// Replace the original segment with the modified segment in the text
