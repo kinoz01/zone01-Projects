@@ -1,11 +1,18 @@
-1E (hex) files were added
+1E (hex) files were added 42 (bin)
 
 It has been 10 (bin) years
 
 Ready, set, go (up) !
+SHOUTING
 
 I should stop SHOUTING (low)
 
 Welcome to the Brooklyn bridge (cap)
 
 This is so exciting AHDS SDSKS (low, 2)
+
+This is so exciting (up, 3)
+
+AHDS SDSKS
+
+Welcome to is the brooklyn bridge (cap, 2)

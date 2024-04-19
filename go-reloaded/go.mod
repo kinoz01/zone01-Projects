@@ -1,3 +1,3 @@
-module go.mod
+module formatTex
 
 go 1.18
