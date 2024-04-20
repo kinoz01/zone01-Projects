@@ -22,8 +22,8 @@ func main() {
 	text := string(textBin) // Here we have our text as a string
 
 	//text1 := format.Format1(text)
-	//text1 := format.Format1(text)
-	text2 := format.Format1(text)
+	text1 := format.Format2(text)
+	//text2 := format.Format1(text)
 	//text3 := format.Punctuation(text)
-	fmt.Println(text2)
+	fmt.Println(text1)
 }
