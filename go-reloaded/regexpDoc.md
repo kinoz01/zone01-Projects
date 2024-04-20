@@ -235,7 +235,7 @@ func main() {
 re := regexp.MustCompile(`(\b\w+\b[.,:;']*)\s+\((low|up|case|hex|bin|cap)\)\s`)
 ```
 
-- `\`` to define raw string literals.
+- \` to define raw string literals.
 - `\b` for boundaries (pos between word and non-word).
 - `[...]` Matches any single character in the brackets.
 - `*` Matches zero or more of the preceding element.
