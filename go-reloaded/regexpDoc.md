@@ -205,6 +205,9 @@ func main() {
 }
 ```
 
+**Note:**
+When using the `MatchString` method from the regexp package in Go with regex patterns that include capturing groups (`()`), the purpose of the capturing groups within `MatchString` does not change the behavior of the match check. `MatchString` simply checks if the string matches the regex pattern and returns a boolean result (`true` or `false`), but it does not return any of the contents of the capturing groups.
+
 # Examples
 
 ## Example 1:
