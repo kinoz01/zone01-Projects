@@ -242,4 +242,4 @@ re := regexp.MustCompile(`(\b\w+\b[.,:;']*)\s+\((low|up|case|hex|bin|cap)\)\s`)
 - `+` Matches one or more of the preceding element.
 - `\s` Matches any whitespace character.
 - `\w` Matches any word character.
-- Note: I need to use `()` so it won't go and include all the string before `low`, the other pranthese `()` before (I mean here: (\b\w+\b[.,:;']*)) are optional and we can safely remove them.
+- Note: I need to use `()` so it won't go and include all the string before `low` as an or (`|`) expression, the other pranthese `()` before (I mean here: (\b\w+\b[.,:;']*)) are optional and we can safely remove them.
