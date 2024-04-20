@@ -8,6 +8,9 @@ I have 101 (bin) apples. And 1a (hex) bananas
 
 1E (hex) files were added 42 (bin)
 
+1E      (hex) files were added 42 (bin)
+1E      (hex)        files were    added 42 (bin)
+
 1E..., (hex) files were added 42 (bin)
 
 d,d (hex) files were 011 (bin) added 

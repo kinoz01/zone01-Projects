@@ -4,6 +4,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"fmt"
 )
 
 // this is a helper function.
@@ -55,18 +56,19 @@ func Format1(text string) string {
 // this function handle regular expression in the form (words... (low|up|case, <number>))
 func Format2(text string) string {
 	// capture any text followed by (low, number), (up, number), or (cap, number)
-	re := regexp.MustCompile(`((?:\w+[.,:;')]*\s+)*)(\w+[.,:;')]*)\s+(\w+[.,:;')]*)\s+(\w+[.,:;')]*)\s+\((low|up|cap),\s*(\d+)\)`)
+	re := regexp.MustCompile(`((?:\w+[.,:;')]*\s+)*)(\w+[.,:;')]*)\s+\((low|up|cap),\s*(\d+)\)`)
 	matches := re.FindAllStringSubmatch(text, -1)
 
 	for _, match := range matches {
 		// Number of words to transform
-		num, err := strconv.Atoi(match[6])
+		num, err := strconv.Atoi(match[4])
 		if err != nil {
 			continue // skip processing this match if the number can't be parsed
 		}
 
 		// Total words captured before the control phrase
-		allWords := strings.Fields(match[1] + match[2] + " " + match[3] + " " + match[4])
+		allWords := strings.Fields(match[1] + match[2])
+		fmt.Println(match[1], match[2])
 		if num > len(allWords) {
 			num = len(allWords) // Prevent index out of range error
 		}
@@ -74,13 +76,16 @@ func Format2(text string) string {
 		// Find the index to start transformations
 		startIndex := len(allWords) - num
 		for i := startIndex; i < len(allWords); i++ {
-			switch match[5] {
+			switch match[3] {
 			case "low":
 				allWords[i] = strings.ToLower(allWords[i]) 
+				//fmt.Println(allWords[i])
 			case "up":
-				allWords[i] = strings.ToUpper(allWords[i]) 
+				allWords[i] = strings.ToUpper(allWords[i])
+				//fmt.Println(allWords[i])
 			case "cap":
 				allWords[i] = strings.Title(allWords[i]) 
+				//fmt.Println(allWords[i])
 			}
 		}
 
