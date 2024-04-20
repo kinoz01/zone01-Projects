@@ -81,7 +81,7 @@ return re.ReplaceAllStringFunc(text, func(match string) string {
 submatches := re.FindStringSubmatch("search in this string")
 ```
 
-`FindAllStringSubmatch`: The `FindAllStringSubmatch` method is designed to find all matches of the pattern in the provided text and also to capture the contents of any groups defined within the pattern (return  slice of slices of strings, specifically `[][]string`). Here's a breakdown of the returned data structure:
+✋ `FindAllStringSubmatch`: The `FindAllStringSubmatch` method is designed to find all matches of the pattern in the provided text and also to capture the contents of any groups defined within the pattern (return  slice of slices of strings, specifically `[][]string`). Here's a breakdown of the returned data structure:
 
 - **Outer Slice**: Each element of this outer slice represents one match of the entire pattern within the text. If your pattern is found three times in the text, the outer slice will have three elements.
 - **Inner Slice**: Each element of this inner slice corresponds to one group of captured substrings for a single match. - The first element (index 0) is always the entire match, and subsequent elements (index 1, 2, ...) contain the substrings captured by any capturing groups in your regex pattern.
