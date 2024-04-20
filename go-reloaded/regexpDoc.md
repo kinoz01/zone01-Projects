@@ -100,7 +100,10 @@ Matches: "cat" in "catapult" but not in "concatenate"
 - `$`: Anchors the match at the end of the string.    
 Regex: `end$`  
 Matches: "end" in "friend" but not in "endless"
-- `*`: Matches zero or more of the preceding element.
+- `*`: Matches zero or more of the preceding element (this can be a single character, a class of characters, or a grouped subpattern)..  
+Regex: bo*  
+Matches: "b", "bo", "boo", "booo", etc., in "A ghost booooed"  
+Note: "b" followed by zero or more "o"s.  
 - `+`: Matches one or more of the preceding element.
 - `?`: Makes the preceding element optional (zero or one match).
 - `\`: Escapes a special character, treating it as a literal.
