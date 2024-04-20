@@ -233,14 +233,13 @@ func main() {
 
 ```go
 re := regexp.MustCompile(`(\b\w+\b[.,:;']*)\s+\((low|up|case|hex|bin|cap)\)\s`)
-	// ` to define raw string literals.
-	// \b for boundaries (pos between w and non-w).
-	// [...] Matches any single character in the brackets.
-	// * Matches zero or more of the preceding element.
-	// + Matches one or more of the preceding element.
-	// \s Matches any whitespace character.
-	// \w Matches any word character.
-	// i need to use () so it won't go and include all the 
-    // string before "low", the other pranthese () before are 
-    // optional we can safely remove them.
 ```
+
+- `\`` to define raw string literals.
+- `\b` for boundaries (pos between word and non-word).
+- `[...]` Matches any single character in the brackets.
+- `*` Matches zero or more of the preceding element.
+- `+` Matches one or more of the preceding element.
+- `\s` Matches any whitespace character.
+- `\w` Matches any word character.
+- Note: I need to use `()` so it won't go and include all the string before `low`, the other pranthese `()` before (I mean here: (\b\w+\b[.,:;']*)) are optional and we can safely remove them.
