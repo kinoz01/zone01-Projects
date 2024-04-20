@@ -21,7 +21,17 @@ func convertFromBaseToBase(s string, a, b int) string {
 // this function handle regular expression in the form (w, low|up|case|hex|bin|cap)
 func Format1(text string) string {
 	// Compile the regular expression
-	re := regexp.MustCompile(`(\b\w+\b[.,:;']*?)\s+\((low|up|case|hex|bin|cap)\)\s`)
+	re := regexp.MustCompile(`(\b\w+\b[.,:;']*)\s+\((low|up|case|hex|bin|cap)\)\s`)
+	// ` to define raw string literals.
+	// \b for boundaries (pos between w and non-w)
+	// [...] Matches any single character in the brackets
+	// * Matches zero or more of the preceding element
+	// + Matches one or more of the preceding element
+	// \s Matches any whitespace character
+	// \w Matches any word character
+	// i need to use () so it won't go and include all
+	// the string before "low", the other pranthese ()
+	//before are optional we can safely remove them
 
 	// Perform the replacement
 	return re.ReplaceAllStringFunc(text, func(match string) string {
@@ -29,26 +39,26 @@ func Format1(text string) string {
 		word := parts[0]
 		flag := parts[1]
 
-		var replacement string
+		var r string
 		switch flag {
 		case "(up)":
-			replacement = strings.ToUpper(word) + " "
+			r = strings.ToUpper(word) + " "
 		case "(low)":
-			replacement = strings.ToLower(word) + " "
+			r = strings.ToLower(word) + " "
 		case "(cap)":
-			replacement = strings.Title(word) + " "
+			r = strings.Title(word) + " "
 		case "(bin)":
-			replacement = convertFromBaseToBase(word, 2, 10) + " "
+			r = convertFromBaseToBase(word, 2, 10) + " "
 		case "(hex)":
-			replacement = convertFromBaseToBase(word, 16, 10) + " "
+			r = convertFromBaseToBase(word, 16, 10) + " "
 		}
 
 		// Preserve newline characters if present in the original match
 		if strings.ContainsAny(match, "\n") {
-			replacement += "\n"
+			r += "\n"
 		}
 
-		return replacement
+		return r
 	})
 }
 

@@ -228,3 +228,19 @@ func main() {
     fmt.Println(re.MatchString("123-45-6789"))  // Outputs: true
 }
 ```
+
+## Example 2:
+
+```go
+re := regexp.MustCompile(`(\b\w+\b[.,:;']*)\s+\((low|up|case|hex|bin|cap)\)\s`)
+	// ` to define raw string literals.
+	// \b for boundaries (pos between w and non-w).
+	// [...] Matches any single character in the brackets.
+	// * Matches zero or more of the preceding element.
+	// + Matches one or more of the preceding element.
+	// \s Matches any whitespace character.
+	// \w Matches any word character.
+	// i need to use () so it won't go and include all the 
+    // string before "low", the other pranthese () before are 
+    // optional we can safely remove them.
+```

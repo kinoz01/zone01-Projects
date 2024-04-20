@@ -23,7 +23,7 @@ func main() {
 
 	//text1 := format.Format1(text)
 	//text1 := format.Format1(text)
-	//text2 := format.Format1(text)
-	text3 := format.Punctuation(text)
-	fmt.Println(text3)
+	text2 := format.Format1(text)
+	//text3 := format.Punctuation(text)
+	fmt.Println(text2)
 }
