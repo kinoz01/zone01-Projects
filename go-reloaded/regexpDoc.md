@@ -163,7 +163,7 @@ Flags can be included in the pattern to modify its behavior:
 
 When using these in Go, you can incorporate them directly into your pattern string or use syntax like `(?ims)` at the beginning of your regex string to set multiple flags.
 
-### Note 
+## Note 
 
 In Go, both backquotes (\` \`) and double quotes (" ") can be used to delimit strings, but they serve different purposes and behave in subtly different ways:
 
