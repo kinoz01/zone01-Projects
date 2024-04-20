@@ -54,10 +54,33 @@ indexes := re.FindStringIndex("search in this string")
 ```go
 allMatches := re.FindAllString("search in this string", -1)
 ```
+Signature:
+```go
+func (re *Regexp) FindAllString(s string, n int) []string
+```
 
 When you pass `-1` as the second argument, it tells the method to find all possible matches in the string. This is commonly used when you want to retrieve every match without any restriction on the count.
 
 If you specify a non-negative integer `n`, then the method returns at most `n` matches. This can be useful if you're only interested in the first few matches and want to limit the output to improve performance or reduce output size.
+
+
+### Extracting Submatches
+
+`FindStringSubmatch`: Returns slices containing matched parts of the string including capturing groups (**return a slice of string** `[]string`).
+
+```go
+submatches := re.FindStringSubmatch("search in this string")
+```
+
+✋ `FindAllStringSubmatch`: The `FindAllStringSubmatch` method is designed to find all matches of the pattern in the provided text and also to capture the contents of any groups defined within the pattern (return  slice of slices of strings, specifically `[][]string`). Here's a breakdown of the returned data structure:
+
+- **Outer Slice**: Each element of this outer slice represents one match of the entire pattern within the text. If your pattern is found three times in the text, the outer slice will have three elements.
+- **Inner Slice**: Each element of this inner slice corresponds to one group of captured substrings for a single match. - The first element (index 0) is always the entire match, and subsequent elements (index 1, 2, ...) contain the substrings captured by any capturing groups in your regex pattern.
+
+Signature:
+```go
+func (re *Regexp) FindAllStringSubmatch(s string, n int) [][]string
+```
 
 ### Replacing
 
@@ -72,19 +95,6 @@ return re.ReplaceAllStringFunc(text, func(match string) string {
     // function body
 })
 ```
-
-### Extracting Submatches
-
-`FindStringSubmatch`: Returns slices containing matched parts of the string including capturing groups (**return a slice of string** `[]string`).
-
-```go
-submatches := re.FindStringSubmatch("search in this string")
-```
-
-✋ `FindAllStringSubmatch`: The `FindAllStringSubmatch` method is designed to find all matches of the pattern in the provided text and also to capture the contents of any groups defined within the pattern (return  slice of slices of strings, specifically `[][]string`). Here's a breakdown of the returned data structure:
-
-- **Outer Slice**: Each element of this outer slice represents one match of the entire pattern within the text. If your pattern is found three times in the text, the outer slice will have three elements.
-- **Inner Slice**: Each element of this inner slice corresponds to one group of captured substrings for a single match. - The first element (index 0) is always the entire match, and subsequent elements (index 1, 2, ...) contain the substrings captured by any capturing groups in your regex pattern.
 
 ## 4. Handling Special Characters and Flags
 
@@ -177,7 +187,7 @@ In Go, both backquotes (\` \`) and double quotes (" ") can be used to delimit st
 
 For regular expressions, backquotes are generally preferred because:
 
-You avoid the need to escape backslashes. In regex patterns, backslashes are used very frequently (e.g., `\b`, `\w`, `\s`). If you were to use double quotes, every backslash in the pattern would need to be escaped (`\\b`, `\\w`, `\\s`), making the regex less readable and more prone to errors.
+You avoid the need to escape backslashes. In regex patterns, backslashes are used very frequently (e.g., `\b`, `\w`, `\s`). If you were to use double quotes, **every backslash in the pattern would need to be escaped** (`\\b`, `\\w`, `\\s`), making the regex less readable and more prone to errors.
 
 ## Using `()` While Creating a `Regexp`
 In Go, once you use parentheses to create capturing groups in a regular expression, you can access the captured content by using methods provided by the regexp package, such as `FindStringSubmatch`. This method returns a slice of strings where each element corresponds to a part of the string matched by the entire regular expression and each subsequent capturing group.

@@ -4,28 +4,42 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"fmt"
+	//"fmt"
 )
 
 // this is a helper function.
 func convertFromBaseToBase(s string, a, b int) string {
 	// Signature: func ParseInt(s string, base int, bitSize int) (i int64, err error)
+		// int64 specify that I want int64 even in a no 64-bits architecture computer
+		// if I do "var i int64" in a 32-bits system I wont get overflow error unlike using just int
 	num, err := strconv.ParseInt(s, a, 64)
 	if err != nil {
 		// fmt.Println("Error converting hex to decimal:", err) // no need to print error
-		return s
+		return s // return the input number if non valid in the called base
 	}
-	// Signature:
+	// Signature: func FormatInt(i int64, base int) string 
 	return strconv.FormatInt(num, b)
+}
+
+// This is a helper function fixing if there is a flag in the end of the text
+func FixWhenFlagLast(text string) string{
+	if text[len(text)-1] != ' ' || text[len(text)-1] != '\n' {
+		return text + " "
+	}
+	return text
 }
 
 // this function handle regular expression in the form (w, low|up|case|hex|bin|cap)
 func Format1(text string) string {
 	// Compile the regular expression
-	re := regexp.MustCompile(`(\b\w+\b[.,:;']*)\s+\((low|up|case|hex|bin|cap)\)\s`)
+	re := regexp.MustCompile(`\b(\w+)\b[.,:;']*\s+\((low|up|case|hex|bin|cap)\)\W`) 
+	// note that here we included whitespaces lastely so we need to get them back later when replacing
 
-	// Perform the replacement
+	// Perform the replacement: which means run `repl func` for each match
+	// signature: func (re *Regexp) ReplaceAllStringFunc(src string, repl func(string) string) string
+
 	return re.ReplaceAllStringFunc(text, func(match string) string {
+		
 		parts := strings.Fields(match)
 		word := parts[0]
 		flag := parts[1]
@@ -53,74 +67,73 @@ func Format1(text string) string {
 	})
 }
 
-// this function handle regular expression in the form (words... (low|up|case, <number>))
+
 func Format2(text string) string {
-	// capture any text followed by (low, number), (up, number), or (cap, number)
-	re := regexp.MustCompile(`((?:\w+[.,:;')]*\s+)*)(\w+[.,:;')]*)\s+\((low|up|cap),\s*(\d+)\)`)
+	
+	flagNumPattern := "\\b(\\w+)\\b([.,:;'\\!\\?]*)\\s+\\((low|up|cap),\\s*(\\d+)\\)\\s"
+	re := regexp.MustCompile(flagNumPattern)
 	matches := re.FindAllStringSubmatch(text, -1)
-
 	for _, match := range matches {
-		// Number of words to transform
-		num, err := strconv.Atoi(match[4])
-		if err != nil {
-			continue // skip processing this match if the number can't be parsed
+		num, _ := strconv.Atoi(match[4])
+		pattern := ""
+		for num > 1 {
+			pattern += "\\b(\\w+)\\b([.,:;'\\!\\?]*)\\s+"
+			num--
 		}
+		pattern += flagNumPattern
 
-		// Total words captured before the control phrase
-		allWords := strings.Fields(match[1] + match[2])
-		fmt.Println(match[1], match[2])
-		if num > len(allWords) {
-			num = len(allWords) // Prevent index out of range error
-		}
+		rex := regexp.MustCompile(pattern)
 
-		// Find the index to start transformations
-		startIndex := len(allWords) - num
-		for i := startIndex; i < len(allWords); i++ {
-			switch match[3] {
-			case "low":
-				allWords[i] = strings.ToLower(allWords[i]) 
-				//fmt.Println(allWords[i])
-			case "up":
-				allWords[i] = strings.ToUpper(allWords[i])
-				//fmt.Println(allWords[i])
-			case "cap":
-				allWords[i] = strings.Title(allWords[i]) 
-				//fmt.Println(allWords[i])
+		text = rex.ReplaceAllStringFunc(text, func(s string) string {
+			parts := strings.Fields(s)
+			result := ""
+			// Apply transformation to each word except the last two (directive and number)
+			for _, word := range parts[:len(parts)-2] {
+				switch parts[len(parts)-2] {
+				case "(cap,":
+					word = strings.Title(word)
+				case "(low,":
+					word = strings.ToLower(word)
+				case "(up,":
+					word = strings.ToUpper(word)
+				}
+				result += word + " " // add the last space character that we overlaped while defining the pattern
+				
 			}
-		}
-
-		// Construct the modified segment without the control phrase
-		modifiedSegment := strings.Join(allWords, " ") 
-
-		fullMatch := match[0]
-
-		// Replace the original segment with the modified segment in the text
-		text = strings.Replace(text, fullMatch, modifiedSegment, 1)
+			if strings.ContainsAny(s, "\n") {
+				result += "\n"
+			}
+			return result 
+		})
 	}
-
 	return text
 }
 
 func Punctuation(text string) string {
-    // Regex to find spaces before punctuation
+    // Remove spaces before punctuation:
     re1 := regexp.MustCompile(`\s+([,.!?;:])`)
     text = re1.ReplaceAllString(text, "$1")
-    
-    // Regex to adjust space after punctuation
-    re2 := regexp.MustCompile(`([,.!?;:]+)(\s*)`)
-    text = re2.ReplaceAllString(text, "$1 ")
-    
-    // Regex to trim any excess whitespace after punctuation (if any)
-    re3 := regexp.MustCompile(`([,.!?;:]+)\s+`)
-    text = re3.ReplaceAllString(text, "$1 ")
-    
-    // Trim any space at the end of the string if necessary
-    re4 := regexp.MustCompile(`\s+$`)
-    text = re4.ReplaceAllString(text, "")
+
+    // Ensure one space after punctuation:
+	// when what come after punctuation is not a punctuation or a whitespace.
+    re2 := regexp.MustCompile(`([,.!?;:]+)([^,.!?;:\s])`)
+    text = re2.ReplaceAllString(text, "$1 $2")
     
     return text
 }
 
-// func Apostrophe(text string) string {
-	
-// }
+func Apostrophe(text string) string {
+	return ""
+}
+
+func BasicGrammar(text string) string {
+	return ""
+}
+
+func RemoveTrailingSpaces(text string) string {
+	return ""
+}
+
+func RemoveTrailingNewLines(text string) string {
+	return ""
+}

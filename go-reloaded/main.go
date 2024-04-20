@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"formatTex/format"
+	"fmt"
 )
 
 func main() {
@@ -15,15 +15,17 @@ func main() {
 
 	textBin, err := os.ReadFile(args[0]) 
 	if err != nil {
-		fmt.Printf("Error reading file: %s\n", args[0])
+		os.Stdout.WriteString("Error reading file: " + args[0])
 		return
 	}
 
 	text := string(textBin) // Here we have our text as a string
 
-	//text1 := format.Format1(text)
-	text1 := format.Format2(text)
-	//text2 := format.Format1(text)
-	//text3 := format.Punctuation(text)
-	fmt.Println(text1)
+	text = format.FixWhenFlagLast(text)
+	text = format.Punctuation(text)
+	//text = format.Format1(text)
+	//text = format.Format2(text)
+	
+
+	fmt.Println(text)
 }
