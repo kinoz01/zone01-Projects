@@ -178,3 +178,24 @@ In Go, both backquotes (\` \`) and double quotes (" ") can be used to delimit st
 For regular expressions, backquotes are generally preferred because:
 
 You avoid the need to escape backslashes. In regex patterns, backslashes are used very frequently (e.g., `\b`, `\w`, `\s`). If you were to use double quotes, every backslash in the pattern would need to be escaped (`\\b`, `\\w`, `\\s`), making the regex less readable and more prone to errors.
+
+# Examples
+
+## Example 1:
+
+This example defines a pattern for matching strings that look like U.S. Social Security numbers, using quantifiers and the case-insensitive flag.
+
+```go
+package main
+
+import (
+    "fmt"
+    "regexp"
+)
+
+func main() {
+    pattern := `(?i)^\d{3}-\d{2}-\d{4}$`  // Case-insensitive, matches a specific format like "123-45-6789"
+    re := regexp.MustCompile(pattern)
+    fmt.Println(re.MatchString("123-45-6789"))  // Outputs: true
+}
+```
