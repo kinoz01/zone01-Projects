@@ -32,7 +32,7 @@ Once you have a `Regexp` object, you can use its **methods** to perform various 
 
 ### Matching
 
-`MatchString`: Checks if a string matches the pattern.
+`MatchString`: Checks if a string matches the pattern (return true or false).
 
 ```go
 matched := re.MatchString("string to check")
@@ -108,5 +108,68 @@ Regular expressions use several special characters (also known as "metacharacter
   - Regex: bo+  
   - Matches: "bo", "boo", "booo", etc., in "A ghost booooed"  
   - Note: "b" followed by at least one "o".  
-- `?`: Makes the preceding element optional (zero or one match).
+- `?`: Makes the preceding element optional (It matches zero or one occurrence of the preceding element).
+  - Regex: colou?r
+  - Matches: Both "color" and "colour"
 - `\`: Escapes a special character, treating it as a literal.
+
+
+### Character Classes
+
+- `[abc]`: Matches any single character in the brackets (a, b, or c).
+- `[^abc]`: Matches any single character not in the brackets.
+- `[a-z]`: Matches any single character in the range from a to z.
+- `[A-Z]`: Matches any single character in the range from A to Z.
+- `[0-9]`: Matches any single digit.
+
+### Predefined Character Classes
+
+- `\d`: Matches any digit, equivalent to [0-9].
+- `\D`: Matches any non-digit.
+- `\s`: Matches any whitespace character (space, tab, newline).
+- `\S`: Matches any non-whitespace character.
+- `\w`: Matches any word character (letters, digits, underscore), equivalent to [a-zA-Z0-9_].
+- `\W`: Matches any non-word character.
+
+### Quantifiers
+
+Quantifiers specify how many instances of a character, group, or character class must be present in the target string for a match to be found:
+
+- `{n}`: Matches exactly `n` times.
+- `{n,}`: Matches at least `n` times.
+- `{n,m}`: Matches between `n` and `m` times, inclusively.
+
+### Grouping and Capturing
+
+- `(abc)`: Matches the characters `abc` and remembers the match.
+- `(?:abc)`: Matches the characters `abc` but does not remember the match (non-capturing group).
+
+### Alternation
+
+- `a|b`: Matches either `a` or `b`.
+
+### Assertions
+
+- `\b`: Matches a word boundary (the position between a word character and a non-word character).
+- `\B`: Matches only when not at a word boundary.
+
+### Flags
+
+Flags can be included in the pattern to modify its behavior:
+
+- `i`: Case-insensitive matching.
+- `m`: Multiline mode (changes the behavior of `^` and `$` to match the start and end of each line).
+- `s`: Dotall mode (makes . match newlines).
+
+When using these in Go, you can incorporate them directly into your pattern string or use syntax like `(?ims)` at the beginning of your regex string to set multiple flags.
+
+### Note 
+
+In Go, both backquotes (\` \`) and double quotes (" ") can be used to delimit strings, but they serve different purposes and behave in subtly different ways:
+
+1. Backquotes: These are used to create raw string literals. The contents between the backquotes are taken exactly as they are, including any newlines, tabs, and other special characters, without the need for escaping them. This makes raw string literals particularly useful for regular expressions, as they often contain backslashes (`) that would otherwise need to be doubled up (escaped) when using double quotes.
+2. Double Quotes (" "): These create interpreted string literals, where certain escape sequences (like \n for a newline, `\t` for a tab, and `\\` for a literal backslash) are processed and converted to their actual character values.
+
+For regular expressions, backquotes are generally preferred because:
+
+You avoid the need to escape backslashes. In regex patterns, backslashes are used very frequently (e.g., `\b`, `\w`, `\s`). If you were to use double quotes, every backslash in the pattern would need to be escaped (`\\b`, `\\w`, `\\s`), making the regex less readable and more prone to errors.
