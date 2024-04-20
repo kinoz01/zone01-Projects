@@ -1,0 +1,22 @@
+Simple tests: 
+It has been 10 (bin) years
+Ready, set, go (up) !
+I should stop SHOUTING (low)
+Welcome to the Brooklyn bridge (cap)
+I have 101 (bin) apples. And 1a (hex) bananas
+
+
+1E (hex) files were added 42 (bin)
+
+1E..., (hex) files were added 42 (bin)
+
+d,d (hex) files were 011 (bin) added 
+
+sdfsdf..., (up) files were added (cap)
+
+AAZZZ (low)hey
+files were 011 ,(bin) added 
+
+Note :
+// if i run punctuation first i will correct this one to , (bin) but then i will have a problem with: (up) !
+// so i will not run puctuation first 
