@@ -179,6 +179,32 @@ For regular expressions, backquotes are generally preferred because:
 
 You avoid the need to escape backslashes. In regex patterns, backslashes are used very frequently (e.g., `\b`, `\w`, `\s`). If you were to use double quotes, every backslash in the pattern would need to be escaped (`\\b`, `\\w`, `\\s`), making the regex less readable and more prone to errors.
 
+## Using `()` While Creating a `Regexp`
+In Go, once you use parentheses to create capturing groups in a regular expression, you can access the captured content by using methods provided by the regexp package, such as `FindStringSubmatch`. This method returns a slice of strings where each element corresponds to a part of the string matched by the entire regular expression and each subsequent capturing group.
+
+Here’s a simple example to demonstrate how you can define a regex with capturing groups and then access the captured content:
+
+```go
+package main
+
+import (
+    "fmt"
+    "regexp"
+)
+
+func main() {
+    // Define a regex pattern with capturing groups for year, month, and day
+    dateRegex := regexp.MustCompile(`(\d{4})-(\d{2})-(\d{2})`)
+
+    // Sample date string
+    dateStr := "2023-04-15"
+
+    // Use FindStringSubmatch to extract parts
+    matches := dateRegex.FindStringSubmatch(dateStr)
+    fmt.Println(matches)
+}
+```
+
 # Examples
 
 ## Example 1:
