@@ -105,8 +105,8 @@ Regex: bo*
 Matches: "b", "bo", "boo", "booo", etc., in "A ghost booooed"  
 Note: "b" followed by zero or more "o"s.  
 - `+`: Matches one or more of the preceding element. (The `+` character is similar to the `*` but it requires at least one or more occurrences of the preceding element to be present for a match.)  
-- Regex: bo+  
-- Matches: "bo", "boo", "booo", etc., in "A ghost booooed"  
-- Note: "b" followed by at least one "o".  
+-  Regex: bo+  
+-  Matches: "bo", "boo", "booo", etc., in "A ghost booooed"  
+-  Note: "b" followed by at least one "o".  
 - `?`: Makes the preceding element optional (zero or one match).
 - `\`: Escapes a special character, treating it as a literal.
