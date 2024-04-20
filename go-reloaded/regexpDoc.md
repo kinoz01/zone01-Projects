@@ -94,7 +94,8 @@ Most characters, like a, 1, or B, are "literals" and match the same character in
 Regular expressions use several special characters (also known as "metacharacters") that have specific functions:
 
 - `.`: Matches any single character except newline (`\n`).
-- `^`: Anchors the match at the start of the string.  Regex: `^cat `  
+- `^`: Anchors the match at the start of the string.  
+Regex: `^cat `  
 Matches: "cat" in "catapult" but not in "concatenate"
 - `$`: Anchors the match at the end of the string.    
 Regex: `end$`  
