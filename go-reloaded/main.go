@@ -9,7 +9,7 @@ import (
 func main() {
 	args := os.Args[1:]
 	if len(args) != 2 {
-		fmt.Println("Error usage: <input.txt> <output.txt>")
+		os.Stdout.WriteString("Error usage: <input.txt> <output.txt>\n")
 		return
 	}
 
