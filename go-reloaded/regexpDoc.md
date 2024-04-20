@@ -95,15 +95,15 @@ Regular expressions use several special characters (also known as "metacharacter
 
 - `.`: Matches any single character except newline (`\n`).
 - `^`: Anchors the match at the start of the string.  
-Regex: `^cat `  
-Matches: "cat" in "catapult" but not in "concatenate"
+  - Regex: `^cat `  
+  - Matches: "cat" in "catapult" but not in "concatenate"
 - `$`: Anchors the match at the end of the string.    
-Regex: `end$`  
-Matches: "end" in "friend" but not in "endless"
+  - Regex: `end$`  
+  - Matches: "end" in "friend" but not in "endless"
 - `*`: Matches zero or more of the preceding element (this can be a single character, a class of characters, or a grouped subpattern)..  
-Regex: bo*  
-Matches: "b", "bo", "boo", "booo", etc., in "A ghost booooed"  
-Note: "b" followed by zero or more "o"s.  
+  - Regex: bo*  
+  - Matches: "b", "bo", "boo", "booo", etc., in "A ghost booooed"  
+  - Note: "b" followed by zero or more "o"s.  
 - `+`: Matches one or more of the preceding element. (The `+` character is similar to the `*` but it requires at least one or more occurrences of the preceding element to be present for a match.)  
   - Regex: bo+  
   - Matches: "bo", "boo", "booo", etc., in "A ghost booooed"  
