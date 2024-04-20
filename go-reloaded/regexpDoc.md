@@ -167,8 +167,8 @@ When using these in Go, you can incorporate them directly into your pattern stri
 
 In Go, both backquotes (\` \`) and double quotes (" ") can be used to delimit strings, but they serve different purposes and behave in subtly different ways:
 
-1. Backquotes: These are used to create raw string literals. The contents between the backquotes are taken exactly as they are, including any newlines, tabs, and other special characters, without the need for escaping them. This makes raw string literals particularly useful for regular expressions, as they often contain backslashes (`) that would otherwise need to be doubled up (escaped) when using double quotes.
-2. Double Quotes (" "): These create interpreted string literals, where certain escape sequences (like \n for a newline, `\t` for a tab, and `\\` for a literal backslash) are processed and converted to their actual character values.
+1. **Backquotes**: These are used to create raw string literals. The contents between the backquotes are taken exactly as they are, including any newlines, tabs, and other special characters, without the need for escaping them. This makes raw string literals particularly useful for regular expressions, as they often contain backslashes (\` \`) that would otherwise need to be doubled up (escaped) when using double quotes.
+2. **Double Quotes** (" "): These create interpreted string literals, where certain escape sequences (like \n for a newline, `\t` for a tab, and `\\` for a literal backslash) are processed and converted to their actual character values.
 
 For regular expressions, backquotes are generally preferred because:
 
