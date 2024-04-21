@@ -4,10 +4,12 @@ Welcome to is the up', brooklyn bridge (cap, 4)
 
 Welcome to is    (up, 3) the up', brooZZklyn brZZidge (low, 2)
 
-sdfsdf...,(up, 1) files were added (cap, 2)
+sdfsdf..., (up, 1) files were added (cap, 2)
 
 sdfsdf..., (up, 1)files were added, (cap, 2)
 
+Ready, set go! ,,.. [] (up, 2) fghgh
+
 Ready, set go! (up, 2) fghgh
 
-fghghsdfsdf..., (up, 1)files were added, (cap, 2)
+fghghsdfsdf..., (up, 1)files were added, (cap, 2) 

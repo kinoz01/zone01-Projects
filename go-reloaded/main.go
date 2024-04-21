@@ -2,8 +2,8 @@ package main
 
 import (
 	"os"
-	"formatTex/format"
 	"fmt"
+	"formatTex/format"
 )
 
 func main() {
@@ -21,10 +21,11 @@ func main() {
 
 	text := string(textBin) // Here we have our text as a string
 
-	text = format.FixWhenFlagLast(text)
-	text = format.Punctuation(text)
+	//text = format.FixWhenFlagLast(text)
+	//text = format.Punctuation(text)
 	//text = format.Format1(text)
 	//text = format.Format2(text)
+	text = format.Flags(text)
 	
 
 	fmt.Println(text)
