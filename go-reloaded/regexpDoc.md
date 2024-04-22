@@ -253,3 +253,5 @@ re := regexp.MustCompile(`(\b\w+\b[.,:;']*)\s+\((low|up|case|hex|bin|cap)\)\s`)
 - `\s` Matches any whitespace character.
 - `\w` Matches any word character.
 - Note: I need to use `()` so it won't go and include all the string before `low` as an or (`|`) expression, the other pranthese `()` before (I mean here: (\b\w+\b[.,:;']*)) are optional and we can safely remove them.
+
+[Great Tool](https://regex101.com/)
