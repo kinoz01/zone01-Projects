@@ -2,34 +2,60 @@ package format
 
 import (
 	"regexp"
+	"strconv"
 	"strings"
 	//"fmt"
 )
 
 func FormatFlagHelper(s string) string {
-	/******************************** This parts handles flags without numbers ********************************/
+	/******************************** This part handles flags without numbers ********************************/
 	words := strings.Fields(s)
 	endIndex := len(words)-1
 		flag1 := words[endIndex]
 
-	if WordFinder(words) == "" || HexFinder(words) == "" {
-		return s[:len(s)-len(flag1)-1]
+	if ((flag1 == "(cap)" || flag1 == "(up)" || flag1 == "(low)") && WordFinder(words) == "") || (flag1 == "(hex)" && HexFinder(words) == "") || (flag1 == "(bin)" && BinFinder(words) == "") {
+		return s[:len(s)-len(flag1)-1] // in case we don't find any word to modify we just remove the flag from the string to avoid a panic
 	}
 
 	switch flag1 {
 	case "(cap)":
-		//fmt.Println("hey")
 		return s[:Index(s, WordFinder(words))] + strings.Title(WordFinder(words)) + s[Index(s, WordFinder(words))+len(WordFinder(words)):len(s)-len(flag1)-1]
 	case "(up)":
 		return s[:Index(s, WordFinder(words))] + strings.ToUpper(WordFinder(words)) + s[Index(s, WordFinder(words))+len(WordFinder(words)):len(s)-len(flag1)-1]
 	case "(low)":
-		//fmt.Println("hey")
 		return s[:Index(s, WordFinder(words))] + strings.ToLower(WordFinder(words)) + s[Index(s, WordFinder(words))+len(WordFinder(words)):len(s)-len(flag1)-1]
-	//case "(hex)":
-	//	return s[:Index(s, HexFinder(words))] + ConvertFromBaseToBase(HexFinder(words), 16, 10) + s[Index(s, HexFinder(words))+len(HexFinder(words)):len(s)-len(flag1)-1]
-  //	case "(bin)":	
+	case "(hex)":
+		return s[:Index(s, HexFinder(words))] + ConvertFromBaseToBase(HexFinder(words), 16, 10) + s[Index(s, HexFinder(words))+len(HexFinder(words)):len(s)-len(flag1)-1]
+    case "(bin)":	
+		return s[:Index(s, BinFinder(words))] + ConvertFromBaseToBase(BinFinder(words), 2, 10) + s[Index(s, BinFinder(words))+len(BinFinder(words)):len(s)-len(flag1)-1]
 	}
-	/*********************************************************************************************************/
+	/**********************************************************************************************************/
+
+	/********************************** This part handles flags with numbers **********************************/
+	// if we get to this part this means we for sure have "<number>)" in `flag1 := words[endIndex]`
+	temp := words[endIndex]
+	flag2 := words[endIndex-1]
+	removeFlag := words[endIndex-1] + words[endIndex]
+	num, _ := strconv.Atoi(temp[:len(temp)-1]) // remove ")" from the number and convert it to int
+	switch flag2 {
+	case "(up,":
+		for _, str := range FindWords(words, num) {
+			s = SearchWordAndReplaceIt(s, str, "(up,")
+		}
+		return s[:len(s)-len(removeFlag)-2]
+	case "(low,":
+		for _, str := range FindWords(words, num) {
+			s = SearchWordAndReplaceIt(s, str, "(low,")
+		}
+		return s[:len(s)-len(removeFlag)-2]	
+	case "(cap,":
+		for _, str := range FindWords(words, num) {
+			s = SearchWordAndReplaceIt(s, str, "(cap,")
+		}
+		return s[:len(s)-len(removeFlag)-2]
+	}	
+	//fmt.Println(number)
+	
 	return s
 }
 
@@ -38,7 +64,7 @@ func FormatFlagHelper(s string) string {
 func Flags(text string) string {
 	re := regexp.MustCompile(`\s+(\((cap|low|up|hex|bin)\)|\((low|up|cap),\s*(\d+)\))`)
 	for re.MatchString(text) {
-		pattern := regexp.MustCompile(`(?s)^(.*?)\s+(\((cap|low|up|hex|bin)\)|\((low|up|cap),\s*(\d+)\))`)
+		pattern := regexp.MustCompile(`(?s)^(.*?)\s+(\((cap|low|up|hex|bin)\)|\((low|up|cap),\s+(\d+)\))`)
 		match := pattern.FindString(text)
 
 		if len(match) < len(text) && (text[len(match)] == ' ' || text[len(match)] == '\n') {
@@ -49,7 +75,6 @@ func Flags(text string) string {
 	}
 	return text	
 }
-
 
 
 func Punctuation(text string) string {
@@ -66,11 +91,20 @@ func Punctuation(text string) string {
 }
 
 func Apostrophe(text string) string {
-	return ""
+	// Regular expression to find quoted sections with potential leading and trailing spaces
+	re := regexp.MustCompile(`'\s*[^']+?\s*'`)
+	return re.ReplaceAllStringFunc(text, func(m string) string {
+		// Trim spaces around the matched section
+		trimmed := strings.TrimSpace(m)
+		// Ensure single quotes are directly next to the inner content
+		innerContent := trimmed[1 : len(trimmed)-1] // Remove the outer quotes
+		return "'" + strings.TrimSpace(innerContent) + "'"
+	})
 }
 
 func BasicGrammar(text string) string {
-	return ""
+	re := regexp.MustCompile(`(?i)\ba(\s+)([aeiouh]+)`)
+    return re.ReplaceAllString(text, "an$1$2")
 }
 
 func RemoveTrailingSpaces(text string) string {

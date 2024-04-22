@@ -2,9 +2,10 @@ package format
 
 import (
 	"strconv"
+	"strings"
 	//"strings"
-	"unicode"
 	"fmt"
+	"unicode"
 )
 
 // this function searches the index the last occurrence of a substring within a string
@@ -56,20 +57,78 @@ func WordFinder(words []string) string {
 	return wordFound
 }
 
-func isValidHex(hexStr string) bool {
+// this function check if string is valid hex number.
+func IsValidHex(hexStr string) bool {
 	var dummy int
 	n, err := fmt.Sscanf(hexStr, "%x", &dummy)
 	return err == nil && n == 1
 }
 
+// this function find in []string a valid hex number starting from the end of the slice.
 func HexFinder(words []string) string {
 	endIndex := len(words)-1
 	hexFound := ""
 	for i := endIndex-1; i >= 0; i--{
-		if IsHexNumber(words[i]) {			
+		if IsValidHex(words[i]) {			
 			hexFound = words[i]
 			break
 		}
 	}
 	return hexFound
+}
+
+// IsValidBinary checks if the given string is a valid binary number.
+func IsValidBinary(binaryStr string) bool {
+	var dummy int
+	n, err := fmt.Sscanf(binaryStr, "%b", &dummy)
+	return err == nil && n == 1
+}
+
+// BinaryFinder finds the first valid binary number in a slice of strings, starting from the end of the slice.
+func BinFinder(words []string) string {
+	endIndex := len(words) - 1
+	binaryFound := ""
+	for i := endIndex; i >= 0; i-- {
+		if IsValidBinary(words[i]) {
+			binaryFound = words[i]
+			break
+		}
+	}
+	return binaryFound
+}
+
+func FindWords(words []string, n int) []string {
+	endIndex := len(words) - 3
+	wordsFound := []string{}
+	for i := endIndex; i >= 0; i-- {
+		if ContainsLetters(words[i]) {
+			wordsFound = append(wordsFound, words[i])
+			n--
+			if n <= 0 {
+				break
+			}
+		}
+	}
+	return wordsFound
+}
+
+func SearchWordAndReplaceIt(s, word, flag string) string {
+	runeS := []rune(s)
+	runeF := []rune(word)
+	for i := len(runeS) - len(runeF); i >= 0; i-- {
+		if string(runeS[i:i+len(runeF)]) == word {
+			for j := 0; j < len(runeF); j++ {
+				switch flag{
+				case "(up,":
+					runeS[i+j] = []rune(strings.ToUpper(word))[j]
+				case "(low,":
+					runeS[i+j] = []rune(strings.ToLower(word))[j]
+				case "(cap,":
+					runeS[i+j] = []rune(strings.Title(word))[j]
+				}				
+			}
+			return string(runeS)
+		}
+	}
+	return s // Substring not found
 }
