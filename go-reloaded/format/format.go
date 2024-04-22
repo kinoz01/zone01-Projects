@@ -89,9 +89,7 @@ func Punctuation(text string) string {
 
 func Apostrophe(text string) string {
 	re := regexp.MustCompile(`'\s+(.*?)\s+'`)
-	for re.MatchString(text){
-		text = re.ReplaceAllString(text, "'$1'")
-	}
+	text = re.ReplaceAllString(text, "'$1'")
 	return text
 }
 
