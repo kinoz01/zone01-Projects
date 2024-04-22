@@ -21,12 +21,12 @@ func main() {
 
 	text := string(textBin) // Here we have our text as a string
 
-	//text = format.FixWhenFlagLast(text)
-	//text = format.Punctuation(text)
-	//text = format.Format1(text)
-	//text = format.Format2(text)
+	text = format.Punctuation(text)
+	text = format.BasicGrammar(text)
+	text = format.Apostrophe(text)
 	text = format.Flags(text)
-	
+	text = format.RemoveTrailingSpaces(text) // optional
+	text = format.RemoveTrailingNewLines(text) // optional
 
 	fmt.Println(text)
 }

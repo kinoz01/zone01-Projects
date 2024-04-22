@@ -97,6 +97,7 @@ func BinFinder(words []string) string {
 	return binaryFound
 }
 
+// find n words starting from the end of the slice and return them as a slice.
 func FindWords(words []string, n int) []string {
 	endIndex := len(words) - 3
 	wordsFound := []string{}

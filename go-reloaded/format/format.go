@@ -54,13 +54,11 @@ func FormatFlagHelper(s string) string {
 		}
 		return s[:len(s)-len(removeFlag)-2]
 	}	
-	//fmt.Println(number)
 	
 	return s
 }
 
-
-// this function handle regular expression in the form (w, low|up|case|hex|bin|cap)
+// this function handle flags (low|up|case|hex|bin|cap) or (low|up|case|hex|bin|cap, <number>)
 func Flags(text string) string {
 	re := regexp.MustCompile(`\s+(\((cap|low|up|hex|bin)\)|\((low|up|cap),\s*(\d+)\))`)
 	for re.MatchString(text) {
@@ -75,7 +73,6 @@ func Flags(text string) string {
 	}
 	return text	
 }
-
 
 func Punctuation(text string) string {
     // Remove spaces before punctuation:
@@ -108,9 +105,13 @@ func BasicGrammar(text string) string {
 }
 
 func RemoveTrailingSpaces(text string) string {
-	return ""
+	re := regexp.MustCompile(`[ \t]+`)
+    text = re.ReplaceAllString(text, " ")
+	return strings.TrimRight(text, " \t")
 }
 
 func RemoveTrailingNewLines(text string) string {
-	return ""
+	re := regexp.MustCompile(`[\n]+`)
+    text = re.ReplaceAllString(text, "\n")
+	return strings.TrimRight(text, "\n\r")
 }
