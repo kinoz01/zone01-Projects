@@ -3,7 +3,6 @@ package format
 import (
 	"strconv"
 	"strings"
-	//"strings"
 	"fmt"
 	"unicode"
 )
@@ -20,11 +19,8 @@ func Index(s string, toFind string) int {
 	return -1 // Substring not found
 }
 
-// this is a helper function to convert from base to base.
 func ConvertFromBaseToBase(s string, a, b int) string {
 	// Signature: func ParseInt(s string, base int, bitSize int) (i int64, err error)
-		// int64 specify that I want int64 even in a no 64-bits architecture computer
-		// if I do "var i int64" in a 32-bits system I wont get overflow error unlike using just int
 	num, err := strconv.ParseInt(s, a, 64)
 	if err != nil {
 		// fmt.Println("Error converting hex to decimal:", err) // no need to print error
@@ -34,7 +30,7 @@ func ConvertFromBaseToBase(s string, a, b int) string {
 	return strconv.FormatInt(num, b)
 }
 
-// this is a helper function checks if the input string contains any letter.
+// this is a helper function checks if the input string contains any letters.
 func ContainsLetters(s string) bool {
 	for _, char := range s {
 		if unicode.IsLetter(char) {
@@ -67,14 +63,12 @@ func IsValidHex(hexStr string) bool {
 // this function find in []string a valid hex number starting from the end of the slice.
 func HexFinder(words []string) string {
 	endIndex := len(words)-1
-	hexFound := ""
 	for i := endIndex-1; i >= 0; i--{
 		if IsValidHex(words[i]) {			
-			hexFound = words[i]
-			break
+			return words[i]
 		}
 	}
-	return hexFound
+	return ""
 }
 
 // IsValidBinary checks if the given string is a valid binary number.
@@ -87,14 +81,12 @@ func IsValidBinary(binaryStr string) bool {
 // BinaryFinder finds the first valid binary number in a slice of strings, starting from the end of the slice.
 func BinFinder(words []string) string {
 	endIndex := len(words) - 1
-	binaryFound := ""
 	for i := endIndex; i >= 0; i-- {
 		if IsValidBinary(words[i]) {
-			binaryFound = words[i]
-			break
+			return words[i]
 		}
 	}
-	return binaryFound
+	return ""
 }
 
 // find n words starting from the end of the slice and return them as a slice.
@@ -119,7 +111,7 @@ func SearchWordAndReplaceIt(s, word, flag string) string {
 	for i := len(runeS) - len(runeF); i >= 0; i-- {
 		if string(runeS[i:i+len(runeF)]) == word {
 			for j := 0; j < len(runeF); j++ {
-				switch flag{
+				switch flag {
 				case "(up,":
 					runeS[i+j] = []rune(strings.ToUpper(word))[j]
 				case "(low,":
