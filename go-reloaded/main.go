@@ -20,10 +20,10 @@ func main() {
 	}
 
 	text := string(textBin) // Here we have our text as a string
-
+	
 	text = format.Punctuation(text)
-	text = format.BasicGrammar(text)
 	text = format.Apostrophe(text)
+	text = format.BasicGrammar(text)
 	text = format.Flags(text)
 	text = format.Punctuation(text)
 	// text = format.RemoveTrailingSpaces(text) // optional
