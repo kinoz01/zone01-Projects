@@ -25,8 +25,8 @@ func main() {
 	text = format.BasicGrammar(text)
 	text = format.Apostrophe(text)
 	text = format.Flags(text)
-	text = format.RemoveTrailingSpaces(text) // optional
-	text = format.RemoveTrailingNewLines(text) // optional
+	// text = format.RemoveTrailingSpaces(text) // optional
+	// text = format.RemoveTrailingNewLines(text) // optional
 
 	fmt.Println(text)
 }

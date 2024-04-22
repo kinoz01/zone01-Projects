@@ -88,15 +88,11 @@ func Punctuation(text string) string {
 }
 
 func Apostrophe(text string) string {
-	// Regular expression to find quoted sections with potential leading and trailing spaces
-	re := regexp.MustCompile(`'\s*[^']+?\s*'`)
-	return re.ReplaceAllStringFunc(text, func(m string) string {
-		// Trim spaces around the matched section
-		trimmed := strings.TrimSpace(m)
-		// Ensure single quotes are directly next to the inner content
-		innerContent := trimmed[1 : len(trimmed)-1] // Remove the outer quotes
-		return "'" + strings.TrimSpace(innerContent) + "'"
-	})
+	re := regexp.MustCompile(`'\s+(.*?)\s+'`)
+	for re.MatchString(text){
+		text = re.ReplaceAllString(text, "'$1'")
+	}
+	return text
 }
 
 func BasicGrammar(text string) string {
@@ -115,3 +111,14 @@ func RemoveTrailingNewLines(text string) string {
     text = re.ReplaceAllString(text, "\n")
 	return strings.TrimRight(text, "\n\r")
 }
+
+// Apostrophe
+// Regular expression to find quoted sections with potential leading and trailing spaces
+	// re := regexp.MustCompile(`'\s*[^']+?\s*'`)
+	// return re.ReplaceAllStringFunc(text, func(m string) string {
+	// 	// Trim spaces around the matched section
+	// 	trimmed := strings.TrimSpace(m)
+	// 	// Ensure single quotes are directly next to the inner content
+	// 	innerContent := trimmed[1 : len(trimmed)-1] // Remove the outer quotes
+	// 	return "'" + strings.TrimSpace(innerContent) + "'"
+	// })
