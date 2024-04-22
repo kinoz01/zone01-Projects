@@ -12,7 +12,7 @@ Ready, set go! ,,.. [] (up, 2) fghgh
 
 Ready, set go! (up, 2) fghgh
 
-fghghsdfsdf..., (up, 1)files were added, (cap, 2) 
+fghghsdfsdf..., (up, 1)files were added, (cap, 2)
 
 1E (hex) files were added 42 (bin)
 
@@ -25,8 +25,8 @@ I should stop SHOUTING (low)
 
 Welcome to the Brooklyn bridge (cap)
 
-This is so exciting AHDS fhfgh dfgdfg (cap, 100) fdgdfg 
+This is so exciting AHDS fhfgh dfgdfg (cap, 10) fdgdfg 
 
 This is so exciting (up, 3) dfg
 
-Welcome to is the up', brooklyn bridge (cap, 100) 
+Welcome to is the up', brooklyn bridge (cap, 10)
