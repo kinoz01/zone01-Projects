@@ -29,5 +29,18 @@ func main() {
 	// text = format.RemoveTrailingSpaces(text) // optional
 	// text = format.RemoveTrailingNewLines(text) // optional
 
-	fmt.Println(text)
+	// Create a new file or truncate the existing file
+	file, err := os.Create(args[1])
+	if err != nil {
+		fmt.Println("Error creating file:", err)
+		return
+	}
+	defer file.Close()
+
+	// Write the string to the file
+	_, err = file.WriteString(text)
+	if err != nil {
+		fmt.Println("Error writing to file:", err)
+		return
+	}
 }
