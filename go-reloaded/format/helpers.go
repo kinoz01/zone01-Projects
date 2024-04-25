@@ -1,9 +1,10 @@
 package format
 
 import (
+	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
-	"fmt"
 	"unicode"
 )
 
@@ -89,10 +90,14 @@ func BinFinder(words []string) string {
 	return ""
 }
 
-// find n words starting from the end of the slice and return them as a slice.
+// find n "valid" words starting from the end of the slice and return them as a slice.
 func FindWords(words []string, n int) []string {
-	endIndex := len(words) - 3
+	endIndex := len(words) - 3 //remove the number and the flag
 	wordsFound := []string{}
+	if n <= 0 {
+		fmt.Println("A flag with no valid number is found. Please enter a valid number in your flag.")
+		return wordsFound
+	}
 	for i := endIndex; i >= 0; i-- {
 		if ContainsLetters(words[i]) {
 			wordsFound = append(wordsFound, words[i])
@@ -105,23 +110,75 @@ func FindWords(words []string, n int) []string {
 	return wordsFound
 }
 
+// search for a word in a string and replace it rune by rune by another word depending on a flag.
 func SearchWordAndReplaceIt(s, word, flag string) string {
 	runeS := []rune(s)
 	runeF := []rune(word)
+
+	// Preprocess the replacement based on the flag
+	var replacement []rune
+	switch flag {
+	case "(up,":
+		replacement = []rune(strings.ToUpper(word))
+	case "(low,":
+		replacement = []rune(strings.ToLower(word))
+	case "(cap,":
+		replacement = []rune(Title(strings.ToLower(word)))
+	}
+
 	for i := len(runeS) - len(runeF); i >= 0; i-- {
 		if string(runeS[i:i+len(runeF)]) == word {
 			for j := 0; j < len(runeF); j++ {
-				switch flag {
-				case "(up,":
-					runeS[i+j] = []rune(strings.ToUpper(word))[j]
-				case "(low,":
-					runeS[i+j] = []rune(strings.ToLower(word))[j]
-				case "(cap,":
-					runeS[i+j] = []rune(strings.Title(word))[j]
-				}				
+				runeS[i+j] = replacement[j]
 			}
 			return string(runeS)
 		}
 	}
 	return s // Substring not found
+}
+
+// Trim spaces from both the beginning and the end of the line (line by line).
+func TrimSpaces(text string) string {
+    var result []string
+    lines := strings.Split(text, "\n")
+    for _, line := range lines {
+        trimmedLine := strings.TrimSpace(line)
+        result = append(result, trimmedLine)
+    }
+    return strings.Join(result, "\n")
+}
+
+// Title capitalise the first alphabet character found in a word.
+func Title(s string) string {
+	runeS := []rune(s)
+	for i, char := range runeS {
+		if unicode.IsLetter(char) { // Check if the character is a letter
+			runeS[i] = unicode.ToUpper(char) // Convert to uppercase if it is a letter (slices behaves like pointers.)
+			break
+		}
+	}
+	return string(runeS)
+}
+
+
+// Determine if the number in the flag is postive or negative counting (++++ and -----) before the number.
+func FlagNumPos(text string, reFlagNegativeNumber *regexp.Regexp) bool {
+	matches := reFlagNegativeNumber.FindStringSubmatch(text)
+
+	signs := matches[2] // This captures the sequence of + and - before the number.
+	posCount, negCount := 0, 0
+
+	// Count the number of + and - signs.
+	for _, char := range signs {
+		switch char {
+		case '+':
+			posCount++
+		case '-':
+			negCount++
+		}
+	}
+	// Determine the sign based on the counts of + and -.
+	// If the number of - signs is odd, the result is negative; otherwise, it's positive.
+
+	return negCount%2 == 0
 }
