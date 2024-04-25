@@ -9,6 +9,11 @@ import (
 
 var specialCase1 bool // created to handle the case where an apostrophe is the first letter in text.
 
+/*
+func InitialiseSpecialCases() {
+	patternSpecialCase2 = `'(\n+)`
+}*/
+
 // this function keep finding flags (low|up|case|hex|bin|cap) or (low|up|case|hex|bin|cap, <number>)
 func Flags(text string) string {
 
@@ -88,6 +93,10 @@ func FlagsUserReact(text string) string {
 	if len(text) > 2 && text[0] == '\'' && text[1] == ' ' {
 		specialCase1 = true
 	}
+	/*reSpecialCase2 := regexp.MustCompile(patternSpecialCase2)
+	if reSpecialCase2.MatchString(text) {
+		text = reSpecialCase2.ReplaceAllString(text, "'$1")
+	}*/
 
 	/********** When a flag is at the begining *******/
 	reFlagSoloStart := regexp.MustCompile(`(?i)^(\((cap|low|up|hex|bin)\)|\((low|up|cap),\s+(\d+)\))\s+`)
@@ -119,14 +128,14 @@ func FlagsUserReact(text string) string {
 		text = reFlagNoSpaceAfter.ReplaceAllString(text, "$1 $5")
 	}
 
-	/**************WITHOUT NUMBER ******* flag with multiple whitespace on the left OR on the right inside ******** WITHOUT NUMBER**********************/
+	/**************WITHOUT NUMBER ******* flag with multiple whitespace on the left OR on the right INSIDE ******** WITHOUT NUMBER**********************/
 	reFlagSpaceLeftOrRight := regexp.MustCompile(`(?i)(\(\s+(cap|hex|bin|up|low)\))|(\((cap|hex|bin|up|low)\s+\))`)
 	prompt = "Found a flag with white space inside \"(+ flag)/(flag +)\". Is this a valid flag? (y/n): "
 	if reFlagSpaceLeftOrRight.MatchString(text) && GetUserInput(prompt) == "y" {
 		text = reFlagSpaceLeftOrRight.ReplaceAllString(text, "($4)")
 	}
 
-	/**************WITHOUT NUMBER ******* flag with multiple whitespace on the left AND on the right inside ******* WITHOUT NUMBER**********************/
+	/**************WITHOUT NUMBER ******* flag with multiple whitespace on the left AND on the right INSIDE ******* WITHOUT NUMBER**********************/
 	reFlagSpaceLeftAndRight := regexp.MustCompile(`(?i)(\(\s+(cap|hex|bin|up|low)\s+\))`)
 	prompt = "Found a flag with white space inside \"(+ flag +)\". Is this a valid flag? (y/n): "
 	if reFlagSpaceLeftAndRight.MatchString(text) && GetUserInput(prompt) == "y" {
@@ -135,19 +144,20 @@ func FlagsUserReact(text string) string {
 
 
 	/**************************WITHOUT NUMBER ******* flag pattern incomplete "something(flag" ********************* WITHOUT NUMBER****************/
-	reFlagIncomplete := regexp.MustCompile(`(?i)(\S)\((cap|low|up)(\s+)`)
-	prompt = "Found the start of a flag pattern \"<word>(flag\". Is this a valid flag? (y/n): "
+	reFlagIncomplete := regexp.MustCompile(`(?i)\((cap|low|up|bin|hex)(\s+|\n+|$)`)
+	prompt = "Found the start of a flag pattern \"(flag ...\". Is this a valid flag? (y/n): "
 	if reFlagIncomplete.MatchString(text) && GetUserInput(prompt) == "y" {
-		text = reFlagIncomplete.ReplaceAllString(text, "$1 ($2)$3")
+		text = reFlagIncomplete.ReplaceAllString(text, "($1)$2")
 	}
+	text = FlagReFix(text) // run and Re-fix spaces if it found any. (REFIX)
 
 
 	/***********WITHOUT NUMBER ******* flag pattern incomplete with punctuation "something(flag[,;:...]" ********* WITHOUT NUMBER****************/
-	reFlagPoncAfter := regexp.MustCompile(`(?i)(\S)\((cap|low|up)(\s+)`)
+	/*reFlagPoncAfter := regexp.MustCompile(`(?i)\((cap|low|up|bin|hex)(\s+)`)
 	prompt = "Found the start of a flag pattern \"<word>(flag\". Is this a valid flag? (y/n): "
 	if reFlagPoncAfter.MatchString(text) && GetUserInput(prompt) == "y" {
 		text = reFlagPoncAfter.ReplaceAllString(text, "$1 ($2)$3")
-	}
+	}*/
 
 
 /***************************************************************************************************************************************************************/

@@ -182,3 +182,26 @@ func FlagNumPos(text string, reFlagNegativeNumber *regexp.Regexp) bool {
 
 	return negCount%2 == 0
 }
+
+
+// we add spaces on the left  or on the right of flag without re-asking user.
+func FlagReFix(text string) string{
+	/*********** Flag Between two words with no space ****************/
+	reFlagNoBoundSpace := regexp.MustCompile(`(?i)(\S)(\((cap|low|up|hex|bin)\)|\((low|up|cap),\s+(\d+)\))(\S)`)
+	if reFlagNoBoundSpace.MatchString(text) {
+		text = reFlagNoBoundSpace.ReplaceAllString(text, "$1 $2 $6")
+	} 
+
+	/************ Flag is close to the word before it ****************/
+	reFlagNoSpaceBefore := regexp.MustCompile(`(?i)(\S)(\((cap|low|up|hex|bin)\)|\((low|up|cap),\s+(\d+)\))`)
+	if reFlagNoSpaceBefore.MatchString(text)  {
+		text = reFlagNoSpaceBefore.ReplaceAllString(text, "$1 $2")
+	}
+
+	/************ Flag is close to the word after it ****************/
+	reFlagNoSpaceAfter := regexp.MustCompile(`(?i)(\((cap|low|up|hex|bin)\)|\((low|up|cap),\s+(\d+)\))(\S)`)
+	if reFlagNoSpaceAfter.MatchString(text) {
+		text = reFlagNoSpaceAfter.ReplaceAllString(text, "$1 $5")
+	}
+	return text
+}
