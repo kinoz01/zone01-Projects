@@ -162,7 +162,7 @@ func Title(s string) string {
 
 
 // Determine if the number in the flag is postive or negative counting (++++ and -----) before the number.
-func FlagNumPos(text string, reFlagNegativeNumber *regexp.Regexp) bool {
+func FlagNumPositive(text string, reFlagNegativeNumber *regexp.Regexp) bool {
 	matches := reFlagNegativeNumber.FindStringSubmatch(text)
 
 	signs := matches[2] // This captures the sequence of + and - before the number.
@@ -183,25 +183,71 @@ func FlagNumPos(text string, reFlagNegativeNumber *regexp.Regexp) bool {
 	return negCount%2 == 0
 }
 
+func HasFlagWithoutNum(s, flag string) bool {
+	index := 0
+	found := false
 
-// we add spaces on the left  or on the right of flag without re-asking user.
-func FlagReFix(text string) string{
-	/*********** Flag Between two words with no space ****************/
-	reFlagNoBoundSpace := regexp.MustCompile(`(?i)(\S)(\((cap|low|up|hex|bin)\)|\((low|up|cap),\s+(\d+)\))(\S)`)
-	if reFlagNoBoundSpace.MatchString(text) {
-		text = reFlagNoBoundSpace.ReplaceAllString(text, "$1 $2 $6")
-	} 
+	for _, char := range s {
+		if unicode.IsLetter(char) && !CharInFlag(flag, char) {
+			return false
+		}
+		if found {
+			if unicode.IsDigit(char) {
+				return false
+			}
+		}
+		if index < len(flag) && char == rune(flag[index]) {
+			index++
+			if index == len(flag) {
+				found = true
+			}
+		}
+	}
+	return found
+}
 
-	/************ Flag is close to the word before it ****************/
-	reFlagNoSpaceBefore := regexp.MustCompile(`(?i)(\S)(\((cap|low|up|hex|bin)\)|\((low|up|cap),\s+(\d+)\))`)
-	if reFlagNoSpaceBefore.MatchString(text)  {
-		text = reFlagNoSpaceBefore.ReplaceAllString(text, "$1 $2")
+func CharInFlag(flag string, char rune) bool {
+	for _, flagRune := range flag {
+		if char == flagRune {
+			return true
+		}
+	}
+	return false
+}
+
+// HasFlagWithNum searches for the specified flag in the string and extracts the first number following it.
+func HasFlagWithNum(s, flag string) (bool, int) {
+	index := 0
+	found := false
+	numberStarted := false
+	numStr := ""
+
+	for _, char := range s {
+
+		// Check if we have found the flag and start looking for numbers
+		if found {
+			if unicode.IsDigit(char) {
+				numberStarted = true
+				numStr += string(char)
+			} else if numberStarted {
+				// If we started capturing a number but find a non-digit, stop
+				break
+			}
+		} else if index < len(flag) && char == rune(flag[index]) {
+			index++
+			if index == len(flag) {
+				found = true // Flag found, start looking for the number next
+			}
+		}
 	}
 
-	/************ Flag is close to the word after it ****************/
-	reFlagNoSpaceAfter := regexp.MustCompile(`(?i)(\((cap|low|up|hex|bin)\)|\((low|up|cap),\s+(\d+)\))(\S)`)
-	if reFlagNoSpaceAfter.MatchString(text) {
-		text = reFlagNoSpaceAfter.ReplaceAllString(text, "$1 $5")
+	if found && numStr != "" {
+		number, err := strconv.Atoi(numStr)
+		if err != nil {
+			return false, 0 // Return false if there was an error converting the number string
+		}
+		return true, number
 	}
-	return text
+
+	return false, 0 // Return false if no number was found after the flag
 }

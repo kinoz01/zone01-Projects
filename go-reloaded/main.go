@@ -23,9 +23,9 @@ func main() {
 
 	text = format.FlagsUserReact(text)
 	text = format.Punctuation(text)
-	text = format.Apostrophe(text)
-	text = format.BasicGrammar(text)
 	text = format.Flags(text)
+	text = format.Apostrophe(text)
+	text = format.BasicGrammar(text)	
 	text = format.Punctuation(text)
 	text = format.CleanText(text)
 
