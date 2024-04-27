@@ -105,13 +105,6 @@ func FlagsUserReact(text string) string {
 		text = reFlagNoBoundSpace.ReplaceAllString(text, "$1 $2 $6")
 	}
 
-	/************ Flag WITH NUMBER is close to the word before it ****************/
-	reFlagNoSpaceBefore := regexp.MustCompile(`(?i)(\S)\((low|up|cap),\s+(\d+)\)`)
-	prompt = "Found a flag pattern \"<word>(flag, number)\". Is this a valid flag? (y/n): "
-	if reFlagNoSpaceBefore.MatchString(text) && GetUserInputPrompt(prompt) == "y" {
-		text = reFlagNoSpaceBefore.ReplaceAllString(text, "$1 $2$5")
-	}
-
 
 	/********** When a flag is at the begining *******/
 	reFlagSoloStart := regexp.MustCompile(`\A\s*(?i)(\((cap|low|up|hex|bin)\)|\((low|up|cap),\s+(\d+)\))\s+`)
@@ -124,6 +117,12 @@ func FlagsUserReact(text string) string {
 	
 	/***************************************************************************************************************************************************************/
 	/**********************WITH NUMBERS ******** flag with negtaive number "(flag, -/+\d)" ************************ WITH NUMBER****************/
+	/************ Flag WITH NUMBER is close to the word before it ****************/
+	reFlagNoSpaceBefore := regexp.MustCompile(`(?i)(\S)\((low|up|cap),\s+(\d+)\)`)
+	prompt = "Found a flag pattern \"<word>(flag, number)\". Is this a valid flag? (y/n): "
+	if reFlagNoSpaceBefore.MatchString(text) && GetUserInputPrompt(prompt) == "y" {
+		text = reFlagNoSpaceBefore.ReplaceAllString(text, "$1 $2$5")
+	}
 
 	return text
 }

@@ -150,6 +150,7 @@ func TrimSpaces(text string) string {
 
 // Title capitalise the first alphabet character found in a word.
 func Title(s string) string {
+	s = strings.ToLower(s)
 	runeS := []rune(s)
 	for i, char := range runeS {
 		if unicode.IsLetter(char) { // Check if the character is a letter
