@@ -1,4 +1,4 @@
-(hex)I'm having a '   great time witfgf   ' ' sdfsdfh sdfhsdf    ' tgrte  ' dgfdg '.
+   I'm having a '   great time witfgf   ' ' sdfsdfh sdfhsdf    ' tgrte  ' dgfdg '.
 ..,;:,; []  ,, (up)h
 hey (cap)  sdf (cap)
 dfg dfg (up) Ready, set, go (up)f
@@ -10,7 +10,7 @@ e 1e (hex)
 I have 101 [] (bin) apples. And 1a (hex) bananas
 
 
-1E (hex) files were added 42 (bin)
+1E ("hex") files were added 42 (bin)
 
 1E      (hex) files were added 42 (bin)
 1E      (hex)        files were    added 42 (bin)
@@ -47,4 +47,4 @@ Ready, set go! ,,.. [] (up, 2) fghgh
 
 Ready, set go! (up, 2)fghgh
 
-fghghsdfsdf..., (up)files were added, (cap, 2)
+fghghsdfsdf..., ((up) files were added, (cap, 2)

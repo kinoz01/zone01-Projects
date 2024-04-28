@@ -9,7 +9,7 @@ import (
 func main() {
 	args := os.Args[1:]
 	if len(args) != 2 {
-		os.Stdout.WriteString("Error usage: <input.txt> <output.txt>\n")
+		os.Stdout.WriteString("❌ Please enter a valid number of arguments. Usage: \"input.txt output.txt\"\n")
 		return
 	}
 
@@ -22,12 +22,12 @@ func main() {
 	text := string(textBin) // Here we have our text as a string
 
 	text = format.FlagsUserReact(text)
-	text = format.Punctuation(text)
 	text = format.Flags(text)
 	text = format.Apostrophe(text)
 	text = format.BasicGrammar(text)	
 	text = format.Punctuation(text)
 	text = format.CleanText(text)
+	text = format.Flags(text)
 
 	// Create a new file or truncate the existing file
 	file, err := os.Create(args[1])

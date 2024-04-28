@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+
 func GetUserReact(text string) string {
 
 	reFlagInsideStuff := regexp.MustCompile(`(?i)\([^a-zA-Z]*(low|up|cap|hex|bin)[^\w]*\)`)
@@ -41,9 +42,9 @@ func GetUserReact(text string) string {
 			return match
 		}
 
-		reFlagNegativeNumber := regexp.MustCompile(`(?i)\((cap|low|up),\s+([+-]*)(\d+)\s*\)`) // put(\s*) to handle case of non space after flag.
+		reFlagNegativeNumber := regexp.MustCompile(`(?i)\((cap|low|up),\s*([+-]*)(\d+)\s*\)`) // put(\s*) to handle case of non space after flag.
 		if reFlagNegativeNumber.MatchString(match) {
-			if FlagNumPositive(match, reFlagNegativeNumber) {
+			if FlagNumPositive(match, reFlagNegativeNumber) { 
 				return reFlagNegativeNumber.ReplaceAllString(match, "($1, $3)")
 			} else {
 				fmt.Println("Flag takes only postive numbers!! Usage: <(flag, num)>.") 
@@ -77,9 +78,6 @@ func GetUserReact(text string) string {
 /********************************** FIRST FUNCT TO RUN (Try to find every case and interact with user to handle them) *********************************/
 func FlagsUserReact(text string) string {
 	/************************************** Special Case 1 (apostrophe + space at the start) *****************************/
-	if len(text) > 2 && text[0] == '\'' && text[1] == ' ' {
-		specialCase1 = true
-	}
 	if text == "" {
 		fmt.Println("It appears that you've provided an empty file.")
 		return ""
@@ -107,21 +105,19 @@ func FlagsUserReact(text string) string {
 
 
 	/********** When a flag is at the begining *******/
-	reFlagSoloStart := regexp.MustCompile(`\A\s*(?i)(\((cap|low|up|hex|bin)\)|\((low|up|cap),\s+(\d+)\))\s+`)
-	prompt = "You can't start your text with a flag. Usage: (words) (flag)."
+	reFlagSoloStart := regexp.MustCompile(`\A\s*(?i)(\((cap|low|up|hex|bin)\)|\((low|up|cap),\s+(\d+)\))`)
 	if reFlagSoloStart.MatchString(text) {
-		fmt.Println(prompt)
+		emptyFlag = true
 		text = reFlagSoloStart.ReplaceAllString(text, "")
 	}
 
 	
 	/***************************************************************************************************************************************************************/
-	/**********************WITH NUMBERS ******** flag with negtaive number "(flag, -/+\d)" ************************ WITH NUMBER****************/
 	/************ Flag WITH NUMBER is close to the word before it ****************/
-	reFlagNoSpaceBefore := regexp.MustCompile(`(?i)(\S)\((low|up|cap),\s+(\d+)\)`)
+	reFlagNoSpaceBefore := regexp.MustCompile(`(?i)([^(!?,.;:'))\s])(\((low|up|cap),\s+(\d+)\))`)
 	prompt = "Found a flag pattern \"<word>(flag, number)\". Is this a valid flag? (y/n): "
 	if reFlagNoSpaceBefore.MatchString(text) && GetUserInputPrompt(prompt) == "y" {
-		text = reFlagNoSpaceBefore.ReplaceAllString(text, "$1 $2$5")
+		text = reFlagNoSpaceBefore.ReplaceAllString(text, "$1 $2")
 	}
 
 	return text

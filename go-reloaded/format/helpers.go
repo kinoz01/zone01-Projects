@@ -9,7 +9,7 @@ import (
 )
 
 // this function searches the index the last occurrence of a substring within a string
-func Index(s string, toFind string) int {
+func Index(s, toFind string) int {
 	runeS := []rune(s)
 	runeF := []rune(toFind)
 	for i := len(runeS) - len(runeF); i >= 0; i-- {
@@ -106,6 +106,9 @@ func FindWords(words []string, n int) []string {
 				break
 			}
 		}
+	}
+	if len(wordsFound) == 0 {
+		emptyFlag = true
 	}
 	return wordsFound
 }
