@@ -42,12 +42,16 @@ func GetUserReact(text string) string {
 			return match
 		}
 
-		reFlagNegativeNumber := regexp.MustCompile(`(?i)\((cap|low|up),\s*([+-]*)(\d+)\s*\)`) // put(\s*) to handle case of non space after flag.
+		reFlagNegativeNumber := regexp.MustCompile(`(?i)\((cap|low|up), ([\+\-]+)(\d+)\)`) // put(\s*) to handle case of non space after flag.
 		if reFlagNegativeNumber.MatchString(match) {
 			if FlagNumPositive(match, reFlagNegativeNumber) { 
-				return reFlagNegativeNumber.ReplaceAllString(match, "($1, $3)")
+				if GetUserInput(match) == "y" {
+					return reFlagNegativeNumber.ReplaceAllString(match, "($1, $3)")
+				} else {
+					return UserChooseNo
+				}
 			} else {
-				fmt.Println("Flag takes only postive numbers!! Usage: <(flag, num)>.") 
+				fmt.Println("🚫 Flag takes only postive numbers!! Usage: <(flag, num)>.") 
 				if GetUserInput(match) == "y" {
 					return reFlagNegativeNumber.ReplaceAllString(match, "($1, $3)")
 				} else {
@@ -71,6 +75,7 @@ func GetUserReact(text string) string {
 		
 		return match
 	})
+
 	
 	return text
 }
@@ -79,7 +84,7 @@ func GetUserReact(text string) string {
 func FlagsUserReact(text string) string {
 	/************************************** Special Case 1 (apostrophe + space at the start) *****************************/
 	if text == "" {
-		fmt.Println("It appears that you've provided an empty file.")
+		fmt.Println("🟠 It appears that you've provided an empty file.")
 		return ""
 	}
 	var prompt string
@@ -89,16 +94,24 @@ func FlagsUserReact(text string) string {
 
 	/**************************WITHOUT NUMBER ******* flag pattern incomplete "something(flag" ******************** WITHOUT NUMBER****************/
 	reFlagIncomplete := regexp.MustCompile(`(?i)\((cap|low|up|bin|hex)([;:}\{$?!.]|\s+|\n+|$)`)
-	prompt = "Found the start of a flag pattern \"(flag ...\". Is this a valid flag? (y/n): "
+	prompt = "✋ Found the start of a flag pattern \"(flag ...\". Is this a valid flag? (y/n): "
 	if reFlagIncomplete.MatchString(text) && GetUserInputPrompt(prompt) == "y" {
-		text = reFlagIncomplete.ReplaceAllString(text, " ($1)$2")
+		text = reFlagIncomplete.ReplaceAllString(text, "($1)$2")
+	}
+
+	/***************************************************************************************************************************************************************/
+	/************************* Flag WITH NUMBER is Incomplete ****************************/
+	reNumFlagIncomplete := regexp.MustCompile(`(?i)(\((low|up|cap),\s+(\d+))[^)]`)
+	prompt = "✋ Found incomplete flag pattern \"(flag, number\". Is this a valid flag? (y/n): "
+	if reNumFlagIncomplete.MatchString(text) && GetUserInputPrompt(prompt) == "y" {
+		text = reNumFlagIncomplete.ReplaceAllString(text, "$1)")
 	}
 
 
 /*****************************************************HANDLE SPACES Before And After The Flag*********************************************************/
 	/***************** Flag Between two words with no space **********************/
 	reFlagNoBoundSpace := regexp.MustCompile(`(?i)(\S)(\((cap|low|up|hex|bin)\)|\((low|up|cap),\s+(\d+)\))(\S)`)
-	prompt = "Found a flag pattern \"<word>(flag)<word>\". Is this a valid flag? (y/n): "
+	prompt = "✋ Found a flag pattern \"<word>(flag)<word>\". Is this a valid flag? (y/n): "
 	if reFlagNoBoundSpace.MatchString(text) && GetUserInputPrompt(prompt) == "y" {
 		text = reFlagNoBoundSpace.ReplaceAllString(text, "$1 $2 $6")
 	}
@@ -114,12 +127,19 @@ func FlagsUserReact(text string) string {
 	
 	/***************************************************************************************************************************************************************/
 	/************ Flag WITH NUMBER is close to the word before it ****************/
-	reFlagNoSpaceBefore := regexp.MustCompile(`(?i)([^(!?,.;:'))\s])(\((low|up|cap),\s+(\d+)\))`)
-	prompt = "Found a flag pattern \"<word>(flag, number)\". Is this a valid flag? (y/n): "
+	reFlagNoSpaceBefore := regexp.MustCompile(`(?i)([^\s])(\((low|up|cap),\s+(\d+)\))`)
+	prompt = "✋ Found a flag pattern \"<word>/<punctuation>(flag, number)\". Is this a valid flag? (y/n): "
 	if reFlagNoSpaceBefore.MatchString(text) && GetUserInputPrompt(prompt) == "y" {
 		text = reFlagNoSpaceBefore.ReplaceAllString(text, "$1 $2")
 	}
 
+	/************ Flag WITHOUT NUMBER is close to the word before it ****************/
+	reNonumFlagNoSpaceBefore := regexp.MustCompile(`(?i)([^\s])(\((low|up|cap)\))`)
+	prompt = "✋ Found a flag pattern \"<word>/<punctuation>(flag)\". Is this a valid flag? (y/n): "
+	if reNonumFlagNoSpaceBefore.MatchString(text) && GetUserInputPrompt(prompt) == "y" {
+		text = reNonumFlagNoSpaceBefore.ReplaceAllString(text, "$1 $2")
+	}
+	
 	return text
 }
 

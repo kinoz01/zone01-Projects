@@ -1,7 +1,6 @@
 package format
 
 import (
-	//"fmt"
 	"fmt"
 	"regexp"
 	"strconv"
@@ -17,7 +16,7 @@ func Flags(text string) string {
 	reNoNumFlag := regexp.MustCompile(`(?i)(((\s|\n)\((cap|low|up|hex|bin)\)(\s|$)))|((\s|\n)\((cap|low|up), \d+\))`)
 	for reNoNumFlag.MatchString(text) {
 
-		pattern := regexp.MustCompile(`(?i)(?s)(.*?)\s+(\((cap|low|up|hex|bin)\)|\((low|up|cap),\s+(\d+)\))`)
+		pattern := regexp.MustCompile(`(?i)(?s)(.*?)\s+(\((cap|low|up|hex|bin)\)|\((low|up|cap), (\d+)\))`)
 		match := pattern.FindString(text)
 
 		if len(match) < len(text) && (text[len(match)] != ' ' && text[len(match)] != '\n') {
@@ -29,7 +28,6 @@ func Flags(text string) string {
 
 	return text
 }
-
 
 func FormatFlags(s string) string {
 
@@ -60,11 +58,11 @@ func FormatFlags(s string) string {
 	/********************************** This part handles flags with numbers **********************************/
 	// if we get to this part this means we for sure have "<number>)" in `flag1 := words[endIndex]`
 	temp := words[len(words)-1]
-	flag2 := strings.ToLower(words[len(words)-2])   // we have a flag on the form (up, 2) so we the index of the flag is in len(words)-2 .
+	flag2 := strings.ToLower(words[len(words)-2]) // we have a flag on the form (up, 2) so we the index of the flag is in len(words)-2 .
 	if temp[len(temp)-1] != ')' {
 		return s
 	}
-	removeFlag := words[len(words)-2] + words[len(words)-1]  // tha flag is equal to: "(flag," + "num)"
+	removeFlag := words[len(words)-2] + words[len(words)-1] // tha flag is equal to: "(flag," + "num)"
 
 	num, _ := strconv.Atoi(temp[:len(temp)-1]) // remove ")" from the number and convert it to int
 	switch flag2 {
@@ -88,7 +86,6 @@ func FormatFlags(s string) string {
 	return s
 }
 
-
 func Punctuation(text string) string {
 	// Remove spaces before punctuation:
 	re1 := regexp.MustCompile(` +([,.!?;:])`)
@@ -106,7 +103,7 @@ func Apostrophe(text string) string {
 
 	lines := strings.Split(text, "\n")
 	newLines := []string{}
-	for _, line := range lines{
+	for _, line := range lines {
 		re1 := regexp.MustCompile(`('\s+|\s+')`)
 		line = re1.ReplaceAllString(line, " $1 ")
 		re12 := regexp.MustCompile(`\A'`)
@@ -121,7 +118,7 @@ func Apostrophe(text string) string {
 		re4 := regexp.MustCompile(`'\s+`)
 		count := 0
 		line = re4.ReplaceAllStringFunc(line, func(match string) string {
-		if count%2 == 0 {
+			if count%2 == 0 {
 				count++
 				return "'"
 			} else {
@@ -157,7 +154,6 @@ func Apostrophe(text string) string {
 	text = re10.ReplaceAllString(text, "'\n")
 	re11 := regexp.MustCompile(`\A '`)
 	text = re11.ReplaceAllString(text, "'")
-	
 
 	return strings.TrimRight(text, " \t")
 }
@@ -180,7 +176,6 @@ func RemoveTrailingNewLines(text string) string {
 	return strings.TrimSpace(text)
 }
 
-
 /***************************************************** THIS IS THE LAST FUNCTION **********************************************************/
 func CleanText(text string) string {
 
@@ -201,7 +196,7 @@ func CleanText(text string) string {
 	prompt = "🤷 Found space at the beginning of a phrase(s) in your text. Do you want to remove it? (y/n): "
 	if len(text) > 1 && (reSpaceAtBeginOfNewline.MatchString(text) || reSpaceAtbeginOfText.MatchString(text)) && GetUserInputPrompt(prompt) == "y" {
 		text = TrimSpaces(text)
-	}	
+	}
 
 	if emptyFlag {
 		fmt.Println("🟠 Invalid flags detected. A flag should be called after a valid expression. All flags will be removed.")

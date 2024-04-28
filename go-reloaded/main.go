@@ -27,7 +27,7 @@ func main() {
 	text = format.BasicGrammar(text)	
 	text = format.Punctuation(text)
 	text = format.CleanText(text)
-	text = format.Flags(text)
+	//text = format.Flags(text)
 
 	// Create a new file or truncate the existing file
 	file, err := os.Create(args[1])

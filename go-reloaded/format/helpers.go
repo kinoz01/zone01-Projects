@@ -95,7 +95,7 @@ func FindWords(words []string, n int) []string {
 	endIndex := len(words) - 3 //remove the number and the flag
 	wordsFound := []string{}
 	if n <= 0 {
-		fmt.Println("A flag with no valid number is found. Please enter a valid number in your flag.")
+		fmt.Println("🟠 I can't find 0 words before a flag. Please enter a valid number.")
 		return wordsFound
 	}
 	for i := endIndex; i >= 0; i-- {
