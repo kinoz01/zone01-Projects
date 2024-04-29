@@ -21,13 +21,13 @@ func main() {
 
 	text := string(textBin) // Here we have our text as a string
 
-	text = format.FlagsUserReact(text)
+	text = format.FlagsWrongUsage(text)
 	text = format.Flags(text)
 	text = format.Apostrophe(text)
 	text = format.BasicGrammar(text)	
 	text = format.Punctuation(text)
 	text = format.CleanText(text)
-	//text = format.Flags(text)
+	text += "\n"  // for the cat command  
 
 	// Create a new file or truncate the existing file
 	file, err := os.Create(args[1])

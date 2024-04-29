@@ -117,7 +117,6 @@ func FindWords(words []string, n int) []string {
 func SearchWordAndReplaceIt(s, word, flag string) string {
 	runeS := []rune(s)
 	runeF := []rune(word)
-
 	// Preprocess the replacement based on the flag
 	var replacement []rune
 	switch flag {
@@ -125,12 +124,30 @@ func SearchWordAndReplaceIt(s, word, flag string) string {
 		replacement = []rune(strings.ToUpper(word))
 	case "(low,":
 		replacement = []rune(strings.ToLower(word))
-	case "(cap,":
-		replacement = []rune(Title(strings.ToLower(word)))
 	}
 
 	for i := len(runeS) - len(runeF); i >= 0; i-- {
 		if string(runeS[i:i+len(runeF)]) == word {
+			for j := 0; j < len(runeF); j++ {
+				runeS[i+j] = replacement[j]
+
+			}
+			return string(runeS)
+		}
+	}
+	return s // Substring not found
+}
+
+// SearchWordAndReplaceIt searches for a word in a string and replaces it rune by rune by another word depending on a flag.
+func SearchWordAndReplaceItCap(s, word, flag string) string {
+	runeS := []rune(s)
+	runeF := []rune(word)
+	// Preprocess the replacement based on the flag
+
+	replacement := []rune(Title(strings.ToLower(word)))
+
+	for i := len(runeS) - len(runeF); i >= 0; i-- {
+		if string(runeS[i:i+len(runeF)]) == word && (i == 0 || !unicode.IsLetter(runeS[i-1])) && (i+len(runeF) == len(runeS) || !unicode.IsLetter(runeS[i+len(runeF)])) {
 			for j := 0; j < len(runeF); j++ {
 				runeS[i+j] = replacement[j]
 			}
@@ -187,7 +204,7 @@ func FlagNumPositive(text string, reFlagNegativeNumber *regexp.Regexp) bool {
 	return negCount%2 == 0
 }
 
-func HasFlagWithoutNum(s, flag string) bool {
+func HasFlagWithoutNum(s, flag string) bool { // (cap, 4)
 	index := 0
 	found := false
 

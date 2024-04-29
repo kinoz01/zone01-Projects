@@ -13,19 +13,20 @@ var emptyFlag bool
 /**************************************************** This part handles flags WITHOUT NUMBES ***********************************************************/
 // this function handle flags (low|up|case|hex|bin|cap).
 func Flags(text string) string {
-	reNoNumFlag := regexp.MustCompile(`(?i)(((\s|\n)\((cap|low|up|hex|bin)\)(\s|$)))|((\s|\n)\((cap|low|up), \d+\))`)
+	
+	reNoNumFlag := regexp.MustCompile(`(?i)(((\s|\n)\(\s*(cap|low|up|hex|bin)\s*\)))|((\s|\n)\(\s*(cap|low|up), \d+\s*\))`)
+
 	for reNoNumFlag.MatchString(text) {
 
-		pattern := regexp.MustCompile(`(?i)(?s)(.*?)\s+(\((cap|low|up|hex|bin)\)|\((low|up|cap), (\d+)\))`)
+		pattern := regexp.MustCompile(`(?i)(?s)(.*?)\s+(\(\s*(cap|low|up|hex|bin)\s*\)|\(\s*(low|up|cap), (\d+)\s*\))`)
 		match := pattern.FindString(text)
 
-		if len(match) < len(text) && (text[len(match)] != ' ' && text[len(match)] != '\n') {
+		if len(match) < len(text) && (text[len(match)] != ' ' && text[len(match)] != '\n' && text[len(match)] != ')') {
 			text = FormatFlags(match) + " " + text[len(match):] // to add a space in case I have a word sticking to the right of the flag
 		} else {
 			text = FormatFlags(match) + text[len(match):] // no need for space if I already have space
 		}
 	}
-
 	return text
 }
 
@@ -63,27 +64,32 @@ func FormatFlags(s string) string {
 		return s
 	}
 	removeFlag := words[len(words)-2] + words[len(words)-1] // tha flag is equal to: "(flag," + "num)"
+	
+	s2 := s[:len(s)-len(removeFlag)-2]   // -2 beacuse now we have two spaces to remove
 
 	num, _ := strconv.Atoi(temp[:len(temp)-1]) // remove ")" from the number and convert it to int
+	if len(FindWords(words, num)) < num {
+		fmt.Printf("🟠 I can't find the number of words specified in your flag. I applied the flag to the first %v words I found.\n", len(FindWords(words, num)))
+	}
 	switch flag2 {
 	case "(up,":
 		for _, str := range FindWords(words, num) {
-			s = SearchWordAndReplaceIt(s, str, "(up,")
+			s2 = SearchWordAndReplaceIt(s2, str, "(up,")
 		}
-		return s[:len(s)-len(removeFlag)-2]
+		return s2
 	case "(low,":
 		for _, str := range FindWords(words, num) {
-			s = SearchWordAndReplaceIt(s, str, "(low,")
+			s2 = SearchWordAndReplaceIt(s2, str, "(low,")
 		}
-		return s[:len(s)-len(removeFlag)-2]
+		return s2
 	case "(cap,":
 		for _, str := range FindWords(words, num) {
-			s = SearchWordAndReplaceIt(s, str, "(cap,")
+			s2 = SearchWordAndReplaceItCap(s2, str, "(cap,")
 		}
-		return s[:len(s)-len(removeFlag)-2]
+		return s2
 	}
 
-	return s
+	return s2
 }
 
 func Punctuation(text string) string {
@@ -99,21 +105,26 @@ func Punctuation(text string) string {
 	return text
 }
 
+
 func Apostrophe(text string) string {
 
 	lines := strings.Split(text, "\n")
 	newLines := []string{}
 	for _, line := range lines {
-		re1 := regexp.MustCompile(`('\s+|\s+')`)
-		line = re1.ReplaceAllString(line, " $1 ")
+		re1 := regexp.MustCompile(`('\s+)`)
+		line = re1.ReplaceAllString(line, " $1")
+		re14 := regexp.MustCompile(`(\s+')`)
+		line = re14.ReplaceAllString(line, "$1 ")
 		re12 := regexp.MustCompile(`\A'`)
 		line = re12.ReplaceAllString(line, " ' ")
+		re15 := regexp.MustCompile(`'$`)
+		line = re15.ReplaceAllString(line, " ' ")
 
-		re2 := regexp.MustCompile(`'([\[\]{},.!'?;:)^\(\n])`)
-		line = re2.ReplaceAllString(line, " ' $1")
+		// re2 := regexp.MustCompile(`'([\[\]{},.!'?;:)^\(\n])`)
+		// line = re2.ReplaceAllString(line, " ' $1")
 
-		re3 := regexp.MustCompile(`([,.!?;:\)'(\n])'`)
-		line = re3.ReplaceAllString(line, "$1 ' ")
+		// re3 := regexp.MustCompile(`([,.!?;:\)'(\n])'`)
+		// line = re3.ReplaceAllString(line, "$1 ' ")
 
 		re4 := regexp.MustCompile(`'\s+`)
 		count := 0
@@ -137,29 +148,24 @@ func Apostrophe(text string) string {
 				return match
 			}
 		})
-		newLines = append(newLines, line)
+		re6 := regexp.MustCompile(`[ ]+'`)
+		line = re6.ReplaceAllString(line, " '")
+		re7 := regexp.MustCompile(`'[ ]+`)
+		line = re7.ReplaceAllString(line, "' ")
+		re11 := regexp.MustCompile(`\A '`)
+		line = re11.ReplaceAllString(line, "'")
+
+		newLines = append(newLines, strings.TrimRight(line, " \t"))
 	}
 
 	text = strings.Join(newLines, "\n")
 
-	re6 := regexp.MustCompile(`[ ]+'`)
-	text = re6.ReplaceAllString(text, " '")
-	re7 := regexp.MustCompile(`'[ ]+`)
-	text = re7.ReplaceAllString(text, "' ")
-	re8 := regexp.MustCompile(`' +(\n+) +`)
-	text = re8.ReplaceAllString(text, "'$1")
-	re9 := regexp.MustCompile(`\n '`)
-	text = re9.ReplaceAllString(text, "\n'")
-	re10 := regexp.MustCompile(`' \n`)
-	text = re10.ReplaceAllString(text, "'\n")
-	re11 := regexp.MustCompile(`\A '`)
-	text = re11.ReplaceAllString(text, "'")
 
 	return strings.TrimRight(text, " \t")
 }
 
 func BasicGrammar(text string) string {
-	re := regexp.MustCompile(`(?i)([^âéèĥ]\ba)(\s+)([aeiouh])`)
+	re := regexp.MustCompile(`(?i)(\ba)(\s+)([aeiouh])`)
 	return re.ReplaceAllString(text, "${1}n$2$3")
 }
 
@@ -199,7 +205,7 @@ func CleanText(text string) string {
 	}
 
 	if emptyFlag {
-		fmt.Println("🟠 Invalid flags detected. A flag should be called after a valid expression. All flags will be removed.")
+		fmt.Println("🟠 Invalid flags detected. A flag should be called after a valid expression. Flags are removed after being parsed.")
 	}
 
 	return text
