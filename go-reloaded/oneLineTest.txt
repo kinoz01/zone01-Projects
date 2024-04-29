@@ -1,1 +1,97 @@
-test   '(up)'
+
+(?i)(((\s|\n)\(\s*(cap|low|up|hex|bin)\s*\)(\s|$)))|((\s|\n)\(\s*(cap|low|up), \d+\s*\))
+`
+gm
+￼
+1st Alternative (?i)(((\s|\n)\(\s*(cap|low|up|hex|bin)\s*\)(\s|$)))
+￼
+(?i) match the remainder of the pattern with the following effective flags: gmi
+i modifier: insensitive. Case insensitive match (ignores case of [a-zA-Z])
+￼
+1st Capturing Group (((\s|\n)\(\s*(cap|low|up|hex|bin)\s*\)(\s|$)))
+￼
+2nd Capturing Group ((\s|\n)\(\s*(cap|low|up|hex|bin)\s*\)(\s|$))
+￼
+3rd Capturing Group (\s|\n)
+￼
+1st Alternative \s
+\s matches any kind of invisible character (equivalent to [\p{Z}\h\v])
+￼
+2nd Alternative \n
+\n matches a line-feed (newline) character (ASCII 10)
+\( matches the character ( with index 4010 (2816 or 508) literally (case insensitive)
+￼
+\s matches any kind of invisible character (equivalent to [\p{Z}\h\v])
+* matches the previous token between zero and unlimited times, as many times as possible, giving back as needed (greedy)
+￼
+4th Capturing Group (cap|low|up|hex|bin)
+￼
+1st Alternative cap
+￼
+cap matches the characters cap literally (case insensitive)
+￼
+2nd Alternative low
+￼
+low matches the characters low literally (case insensitive)
+￼
+3rd Alternative up
+￼
+up matches the characters up literally (case insensitive)
+￼
+4th Alternative hex
+￼
+hex matches the characters hex literally (case insensitive)
+￼
+5th Alternative bin
+￼
+bin matches the characters bin literally (case insensitive)
+￼
+\s matches any kind of invisible character (equivalent to [\p{Z}\h\v])
+* matches the previous token between zero and unlimited times, as many times as possible, giving back as needed (greedy)
+\) matches the character ) with index 4110 (2916 or 518) literally (case insensitive)
+￼
+5th Capturing Group (\s|$)
+￼
+1st Alternative \s
+\s matches any kind of invisible character (equivalent to [\p{Z}\h\v])
+￼
+2nd Alternative $
+$ asserts position at the end of a line
+￼
+2nd Alternative ((\s|\n)\(\s*(cap|low|up), \d+\s*\))
+￼
+6th Capturing Group ((\s|\n)\(\s*(cap|low|up), \d+\s*\))
+￼
+7th Capturing Group (\s|\n)
+￼
+1st Alternative \s
+￼
+2nd Alternative \n
+\( matches the character ( with index 4010 (2816 or 508) literally (case insensitive)
+￼
+\s matches any kind of invisible character (equivalent to [\p{Z}\h\v])
+* matches the previous token between zero and unlimited times, as many times as possible, giving back as needed (greedy)
+￼
+8th Capturing Group (cap|low|up)
+￼
+1st Alternative cap
+￼
+2nd Alternative low
+￼
+3rd Alternative up
+￼
+,  matches the characters ,  literally (case insensitive)
+￼
+\d matches a digit zero through nine in any script except ideographic scripts (equivalent to \p{Nd})
++ matches the previous token between one and unlimited times, as many times as possible, giving back as needed (greedy)
+￼
+\s matches any kind of invisible character (equivalent to [\p{Z}\h\v])
+* matches the previous token between zero and unlimited times, as many times as possible, giving back as needed (greedy)
+\) matches the character ) with index 4110 (2916 or 518) literally (case insensitive)
+￼
+Global pattern flags 
+g modifier: global. All matches (don't return after first match)
+m modifier: multi line. Causes ^ and $ to match the begin/end of each line (not only begin/end of string)
+
+
+(up, 999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999)
