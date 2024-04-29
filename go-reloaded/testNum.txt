@@ -31,4 +31,4 @@ This is so exciting (up, 3) dfg
 
 Welcome to is the up', brooklyn bridge (cap, 1)
 
-Welcome to isup up up  ', up (cap, 6)
+Welcome to isup up up  ', up (cap, 100)
