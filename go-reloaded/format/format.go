@@ -182,7 +182,7 @@ func RemoveTrailingNewLines(text string) string {
 	return strings.TrimSpace(text)
 }
 
-/***************************************************** THIS IS THE LAST FUNCTION **********************************************************/
+/***************************************************** THIS IS THE LAST FUNCTION TO RUN **********************************************************/
 func CleanText(text string) string {
 
 	reSpaces := regexp.MustCompile(`  +`)
