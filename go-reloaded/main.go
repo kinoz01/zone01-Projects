@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"formatTex/format"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -20,10 +21,10 @@ func main() {
 		return
 	}
 
-	if args[1] == "main.go" {
+	if strings.HasSuffix(args[1], ".go")  {
 		panic("HEY what are you doing bro?")
 	}
-
+	
 	text := string(textBin) // Here we have our text as a string
 
 	text = format.FlagsWrongUsage(text)

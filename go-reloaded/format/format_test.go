@@ -47,19 +47,17 @@ func TestPunctuation(t *testing.T) {
     for _, cas := range tests {
         t.Run(cas.name, func(t *testing.T) {
             // Compile the expected regexp.
-            want := regexp.MustCompile(cas.want)
-
             // Call the function.
             got := Punctuation(cas.text)
-
             // Check if the output matches the expected regexp.
-            if !want.MatchString(got) {
+            if got != cas.want {
 				t.Errorf("For input %q, expected match for %#q but got %q", cas.text, cas.want, got)
             }
         })
     }
 }
 
+// Test all the functions running in the expected order.
 func TestFormat(t *testing.T) {
     // Define test cases
     var tests = []struct {

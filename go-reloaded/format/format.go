@@ -157,14 +157,14 @@ func Apostrophe(text string) string {
 
 		newLines = append(newLines, strings.TrimRight(line, " \t"))
 	}
-
 	text = strings.Join(newLines, "\n")
-
 
 	return strings.TrimRight(text, " \t")
 }
 
 func BasicGrammar(text string) string {
+	re1 := regexp.MustCompile(`(?i)\b(a)(\s+)(a)\b`) 		// Treat the special case of "a a a a a a a"
+	text = re1.ReplaceAllString(text, "${1}n$2${3}n")
 	re := regexp.MustCompile(`(?i)(\ba)(\s+)([aeiouh])`)
 	return re.ReplaceAllString(text, "${1}n$2$3")
 }
