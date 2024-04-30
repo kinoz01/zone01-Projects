@@ -34,6 +34,9 @@ func FlagsWrongUsage(text string) string {
 
 
 	// to handle flags with signs. Ask user to parse them or ignore them.
+	// Defining a new regexp under the func "ReplaceAllStringFunc" is  a very powerful method
+	// as I can now replace submatches of each match using regexp replacing syntax "$1, $2..."
+	// and in this way I can even work on submatches using "FindAllStringSubmatch".
 	reFlagWithSigns := regexp.MustCompile(`(?i)\(\s*(cap|low|up),\s*([\+\-]+)(\d+)\s*\)`)
 	text = reFlagWithSigns.ReplaceAllStringFunc(text, func(match string) string {		
 		UserChooseNo := match
