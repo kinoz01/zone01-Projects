@@ -38,5 +38,5 @@ The program is designed to recognize and process flags that indicate text modifi
 (word)(flag) (word)
 (word) (flag) (word)
 ```
-All flags are parsed and removed after processing, except some cases when you put a flag inside a flag.
+All flags are parsed and removed after processing, except some cases when you put a flag inside a flag.  
 Note: the program can't handle text with accent for now, avoid using characters like ê, â or é, thank you for your understanding. 
