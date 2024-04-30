@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+// Get user input after printing a message containging the flag match we are in (used to parse wrong flags).
+// I removed most of wrong flags handling (user reactions) and only left the one with wrong signs in this version.
 func GetUserInput(match string) string {
 	reader := bufio.NewReader(os.Stdin)
 	for {
@@ -27,6 +29,7 @@ func GetUserInput(match string) string {
 	}
 }
 
+// Get user input after printing a message (used for cleaning spaces).
 func GetUserInputPrompt(prompt string) string {
 	reader := bufio.NewReader(os.Stdin)
 	for {

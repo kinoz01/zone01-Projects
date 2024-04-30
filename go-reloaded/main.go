@@ -1,3 +1,4 @@
+// v1.6
 package main
 
 import (
@@ -15,8 +16,12 @@ func main() {
 
 	textBin, err := os.ReadFile(args[0])
 	if err != nil {
-		os.Stdout.WriteString("Error reading file: " + args[0])
+		os.Stdout.WriteString("Error reading file: " + args[0] + "\n")
 		return
+	}
+
+	if args[1] == "main.go" {
+		panic("HEY what are you doing bro?")
 	}
 
 	text := string(textBin) // Here we have our text as a string

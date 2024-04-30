@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-var emptyFlag bool
+var emptyFlag bool // to print empty flag error only once.
 
 // this function keep finding flags (low|up|case|hex|bin|cap) or (low|up|case|hex|bin|cap, <number>)
 /**************************************************** This part handles flags WITHOUT NUMBES ***********************************************************/
@@ -111,24 +111,20 @@ func Apostrophe(text string) string {
 	lines := strings.Split(text, "\n")
 	newLines := []string{}
 	for _, line := range lines {
-		re1 := regexp.MustCompile(`('\s+)`)
+		// re1 ----> to re4 make sure there is a space before and after each apostrophe, excluding the ones between characters.
+		re1 := regexp.MustCompile(`('\s+)`) 
 		line = re1.ReplaceAllString(line, " $1")
-		re14 := regexp.MustCompile(`(\s+')`)
-		line = re14.ReplaceAllString(line, "$1 ")
-		re12 := regexp.MustCompile(`\A'`)
-		line = re12.ReplaceAllString(line, " ' ")
-		re15 := regexp.MustCompile(`'$`)
-		line = re15.ReplaceAllString(line, " ' ")
+		re2 := regexp.MustCompile(`(\s+')`)
+		line = re2.ReplaceAllString(line, "$1 ")
+		re3 := regexp.MustCompile(`\A'`)
+		line = re3.ReplaceAllString(line, " ' ")
+		re4 := regexp.MustCompile(`'$`)
+		line = re4.ReplaceAllString(line, " ' ")
 
-		// re2 := regexp.MustCompile(`'([\[\]{},.!'?;:)^\(\n])`)
-		// line = re2.ReplaceAllString(line, " ' $1")
-
-		// re3 := regexp.MustCompile(`([,.!?;:\)'(\n])'`)
-		// line = re3.ReplaceAllString(line, "$1 ' ")
-
-		re4 := regexp.MustCompile(`'\s+`)
+		// remove spaces on the right of even number apostrophes.
+		re5 := regexp.MustCompile(`'\s+`)
 		count := 0
-		line = re4.ReplaceAllStringFunc(line, func(match string) string {
+		line = re5.ReplaceAllStringFunc(line, func(match string) string {
 			if count%2 == 0 {
 				count++
 				return "'"
@@ -138,8 +134,10 @@ func Apostrophe(text string) string {
 			}
 		})
 		count = 0
-		re5 := regexp.MustCompile(`\s+'`)
-		line = re5.ReplaceAllStringFunc(line, func(match string) string {
+
+		// remove spaces on the left of odd number apostrophes.
+		re6 := regexp.MustCompile(`\s+'`)
+		line = re6.ReplaceAllStringFunc(line, func(match string) string {
 			if count%2 == 1 {
 				count++
 				return "'"
@@ -148,12 +146,14 @@ func Apostrophe(text string) string {
 				return match
 			}
 		})
-		re6 := regexp.MustCompile(`[ ]+'`)
-		line = re6.ReplaceAllString(line, " '")
-		re7 := regexp.MustCompile(`'[ ]+`)
-		line = re7.ReplaceAllString(line, "' ")
-		re11 := regexp.MustCompile(`\A '`)
-		line = re11.ReplaceAllString(line, "'")
+
+		// re7 ----> re9 clean any remaining spaces after or before the apostrophe.
+		re7 := regexp.MustCompile(`[ ]+'`)
+		line = re7.ReplaceAllString(line, " '")
+		re8 := regexp.MustCompile(`'[ ]+`)
+		line = re8.ReplaceAllString(line, "' ")
+		re9 := regexp.MustCompile(`\A '`)
+		line = re9.ReplaceAllString(line, "'")
 
 		newLines = append(newLines, strings.TrimRight(line, " \t"))
 	}

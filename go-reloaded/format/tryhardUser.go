@@ -3,7 +3,6 @@ package format
 import (
 	"fmt"
 	"regexp"
-	"strings"
 )
 
 
@@ -34,15 +33,10 @@ func FlagsWrongUsage(text string) string {
 	}
 
 
-	reFlagInsideStuff2 := regexp.MustCompile(`(?s)(?i)\([^a-zA-Z]*(low|up|cap)[^a-zA-Z]+\)`)
-	text = reFlagInsideStuff2.ReplaceAllStringFunc(text, func(match string) string {
+	// to handle flags with signs. Ask user to parse them or ignore them.
+	reFlagWithSigns := regexp.MustCompile(`(?i)\(\s*(cap|low|up),\s*([\+\-]+)(\d+)\s*\)`)
+	text = reFlagWithSigns.ReplaceAllStringFunc(text, func(match string) string {		
 		UserChooseNo := match
-		match = strings.ToLower(match)
-		reExactFlagWithNum := regexp.MustCompile(`^\((low|up|cap), (\d+)\)$`)
-		if reExactFlagWithNum.MatchString(match) {
-			return match
-		}
-
 		reFlagNegativeNumber := regexp.MustCompile(`(?i)\((cap|low|up), ([\+\-]+)(\d+)\)`) // put(\s*) to handle case of non space after flag.
 		if reFlagNegativeNumber.MatchString(match) {
 			if FlagNumPositive(match, reFlagNegativeNumber) { 
@@ -59,8 +53,7 @@ func FlagsWrongUsage(text string) string {
 					return UserChooseNo
 				}
 			}
-		}
-		
+		}		
 		return match
 	})
 	
