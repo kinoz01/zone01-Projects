@@ -139,11 +139,9 @@ func SearchWordAndReplaceIt(s, word, flag string) string {
 }
 
 // SearchWordAndReplaceIt searches for a word in a string and replaces it rune by rune by another word depending on a flag.
-func SearchWordAndReplaceItCap(s, word, flag string) string {
+func SearchWordAndReplaceItCap(s, word string) string {
 	runeS := []rune(s)
 	runeF := []rune(word)
-	// Preprocess the replacement based on the flag
-
 	replacement := []rune(Title(strings.ToLower(word)))
 
 	for i := len(runeS) - len(runeF); i >= 0; i-- {

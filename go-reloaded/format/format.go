@@ -84,7 +84,7 @@ func FormatFlags(s string) string {
 		return s2
 	case "(cap,":
 		for _, str := range FindWords(words, num) {
-			s2 = SearchWordAndReplaceItCap(s2, str, "(cap,")
+			s2 = SearchWordAndReplaceItCap(s2, str)
 		}
 		return s2
 	}
@@ -163,9 +163,9 @@ func Apostrophe(text string) string {
 }
 
 func BasicGrammar(text string) string {
-	re1 := regexp.MustCompile(`(?i)\b(a)(\s+)(a)\b`) 		// Treat the special case of "a a a a a a a"
+	re1 := regexp.MustCompile(`(?i)\b(a)( +)(a)\b`) 		// Treat the special case of "a a a a a a a"
 	text = re1.ReplaceAllString(text, "${1}n$2${3}n")
-	re := regexp.MustCompile(`(?i)(\ba)(\s+)([aeiouh])`)
+	re := regexp.MustCompile(`(?i)(\ba)( +)([aeiouh])`)
 	return re.ReplaceAllString(text, "${1}n$2$3")
 }
 
