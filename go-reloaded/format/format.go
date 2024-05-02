@@ -163,10 +163,11 @@ func Apostrophe(text string) string {
 }
 
 func BasicGrammar(text string) string {
-	re1 := regexp.MustCompile(`(?i)\b(a)( +)(a)\b`) 		// Treat the special case of "a a a a a a a"
-	text = re1.ReplaceAllString(text, "${1}n$2${3}n")
 	re := regexp.MustCompile(`(?i)(\ba)( +)([aeiouh])`)
-	return re.ReplaceAllString(text, "${1}n$2$3")
+	for re.MatchString(text){
+		text = re.ReplaceAllString(text, "${1}n$2$3")
+	}
+	return text
 }
 
 func RemoveTrailingSpaces(text string) string {

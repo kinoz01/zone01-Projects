@@ -1,0 +1,1 @@
+oooo oooo oooo oooo(up, 5) (low, 3) (cap, 2)
