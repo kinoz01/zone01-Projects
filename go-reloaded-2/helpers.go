@@ -11,6 +11,7 @@ func convertHex(s string) string {
 	num, err := strconv.ParseInt(s, 16, 64)
 	if err != nil {
 		fmt.Println("erur")
+		return s
 	}
 	// fmt.Println(num)
 	str := strconv.FormatInt(num, 10)
@@ -21,6 +22,7 @@ func convertBin(s string) string {
 	num, err := strconv.ParseInt(s, 2, 64)
 	if err != nil {
 		fmt.Println("erur")
+		return s
 	}
 	// fmt.Println(num)
 	str := strconv.FormatInt(num, 10)
