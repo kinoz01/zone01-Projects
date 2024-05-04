@@ -31,7 +31,7 @@ func main() {
 		return
 	}
 
-	// Split asciiTemplate by double newline ("\n\n") to get individual ASCII characters.
+	// Split asciiTemplate by double newline ("\n\n") to get individual ASCII characters from standard.txt.
 	asciiCharacters := strings.Split(string(asciiTemplateByte), "\n\n")
 
 	// Initialize asciiTable (2D table) (using "make" to avoid out of range).
