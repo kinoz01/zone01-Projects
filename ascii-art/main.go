@@ -46,7 +46,7 @@ func main() {
 	for _ , userTextChar := range userText{
 		asciiIndex := int(userTextChar)
 		if asciiIndex-32 < 0 || asciiIndex-32 >= len(asciiTable){
-			fmt.Println("Found an Invalid Ascii Character")
+			fmt.Println("Found an Invalid Ascii Character.")     // to avoid out of range when invalid ascii in input.
 			return
 		}
 	}
