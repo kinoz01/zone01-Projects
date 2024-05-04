@@ -26,39 +26,57 @@ func TestAsciiArt(t *testing.T) {
 	want15, _ := os.ReadFile("./cases/want15.txt")
 	want16, _ := os.ReadFile("./cases/want16.txt")
 	want17, _ := os.ReadFile("./cases/want17.txt")
+	want18, _ := os.ReadFile("./cases/want18.txt")
+	want19, _ := os.ReadFile("./cases/want19.txt")
+	want20, _ := os.ReadFile("./cases/want20.txt")
+	want21, _ := os.ReadFile("./cases/want21.txt")
+	want22, _ := os.ReadFile("./cases/want22.txt")
+	want23, _ := os.ReadFile("./cases/want23.txt")
+	want24, _ := os.ReadFile("./cases/want24.txt")
+	want25, _ := os.ReadFile("./cases/want25.txt")
 
 	tests := []struct {
 		name string // Name of the test case
 		text string // Input text
 		want string // Expected output using a regexp pattern
+		banner string // choosed font
 	}{
-		{"Test 1", `\n`, "\n"},
-		{"Test 2", `\n\n`, "\n\n"},
-		{"Test 3", "hello", string(want1)},
-		{"Test 4", "HELLO", string(want2)},
-		{"Test 5", "HeLlo HuMaN", string(want3)},
-		{"Test 6", "1Hello 2There", string(want4)},
-		{"Test 7", `Hello\nThere`, string(want5)},
-		{"Test 8", `Hello\n\nThere`, string(want6)},
-		{"Test 9", `{Hello & There #}`, string(want7)},
-		{"Test 10", `hello There 1 to 2!`, string(want8)},
-		{"Test 11", `MaD3IrA&LiSboN`, string(want9)},
-		{"Test 12", "1a\"#FdwHywR&/()=", string(want10)},
-		{"Test 13", "{|}~", string(want11)},
-		{"Test 14", `[\]^_ 'a`, string(want12)},
-		{"Test 15", "RGB", string(want13)},
-		{"Test 16", ":;<=>?@", string(want14)},
-		{"Test 17", `\!" #$%&` + "'" + `()*+,-./`, string(want15)},
-		{"Test 18", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", string(want16)},
-		{"Test 19", "abcdefghijklmnopqrstuvwxyz", string(want17)},
-		{"Test Error", "²", "Found an Invalid Ascii Character."},
-	}
+		{"Test 1", `\n`, "\n", "standard"},
+		{"Test 2", `\n\n`, "\n\n", "standard"},
+		{"Test 3", "hello", string(want1), "standard"},
+		{"Test 4", "HELLO", string(want2), "standard"},
+		{"Test 5", "HeLlo HuMaN", string(want3), "standard"},
+		{"Test 6", "1Hello 2There", string(want4), "standard"},
+		{"Test 7", `Hello\nThere`, string(want5), "standard"},
+		{"Test 8", `Hello\n\nThere`, string(want6), "standard"},
+		{"Test 9", `{Hello & There #}`, string(want7), "standard"},
+		{"Test 10", `hello There 1 to 2!`, string(want8), "standard"},
+		{"Test 11", `MaD3IrA&LiSboN`, string(want9), "standard"},
+		{"Test 12", "1a\"#FdwHywR&/()=", string(want10), "standard"},
+		{"Test 13", "{|}~", string(want11), "standard"},
+		{"Test 14", `[\]^_ 'a`, string(want12), "standard"},
+		{"Test 15", "RGB", string(want13), "standard"},
+		{"Test 16", ":;<=>?@", string(want14), "standard"},
+		{"Test 17", `\!" #$%&` + "'" + `()*+,-./`, string(want15), "standard"},
+		{"Test 18", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", string(want16), "standard"},
+		{"Test 19", "abcdefghijklmnopqrstuvwxyz", string(want17), "standard"},
+		{"Test Error", "²", "Found an Invalid Ascii Character.", "standard"},
 
+		{"Test 20", "hello world", string(want18), "shadow"},
+		{"Test 21", "nice 2 meet you", string(want19), "thinkertoy"},
+		{"Test 22", "you & me", string(want20), "standard"},
+		{"Test 23", "123", string(want21), "shadow"},
+		{"Test 24", "/(\")", string(want22), "thinkertoy"},
+		{"Test 25", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", string(want23), "shadow"},
+		{"Test 26", "\"#$%&/()*+,-./", string(want24), "thinkertoy"},
+		{"Test 27", "It's Working", string(want25), "thinkertoy"},
+	}
+	
 	for _, cas := range tests {
 		t.Run(cas.name, func(t *testing.T) {
 			// Compile the expected regexp.
 			// Call the function.
-			got := AsciiArt(cas.text)
+			got := AsciiArt(cas.text, cas.banner)
 			// Check if the output matches the expected regexp.
 			if got != cas.want {
 				t.Errorf("For input %q, expected match for %#q but got %q", cas.text, cas.want, got)
@@ -67,7 +85,8 @@ func TestAsciiArt(t *testing.T) {
 	}
 }
 
-func AsciiArt(userText string) string {
+// A function that takes user text and banner and return Ascii Art.
+func AsciiArt(userText, banner string) string {
 	if len(userText) == 0 {
 		os.Exit(1)
 	}
@@ -77,14 +96,27 @@ func AsciiArt(userText string) string {
 	re := regexp.MustCompile(`\A((\\n)+)\\n$`)
 	userText = re.ReplaceAllString(userText, "$1")
 
-	asciiTemplateByte, err := os.ReadFile("../banners/standard.txt")
+
+	var err error
+	var asciiTemplateByte []byte
+	switch banner {
+	case "standard":
+		asciiTemplateByte, err = os.ReadFile("../banners/standard.txt")
+	case "shadow":	
+		asciiTemplateByte, err = os.ReadFile("../banners/shadow.txt")
+	case "thinkertoy": 
+		asciiTemplateByte, err = os.ReadFile("../banners/thinkertoy.txt")
+	default:
+		return 	"Usage: go run . [STRING] [BANNER]\n\nEX: go run . something standard"
+	}
 	if err != nil {
 		os.Stdout.WriteString("Error reading file: standard.txt\n")
 		os.Exit(1)
 	}
+	asciiTemplate := strings.ReplaceAll(string(asciiTemplateByte), "\r", "")
 
 	// Split asciiTemplate by double newline ("\n\n") to get individual ASCII characters.
-	asciiCharacters := strings.Split(string(asciiTemplateByte), "\n\n")
+	asciiCharacters := strings.Split(asciiTemplate, "\n\n")
 
 	// Initialize asciiTable (2D table) (using "make" to avoid out of range).
 	asciiTable := make([][]string, len(asciiCharacters))
