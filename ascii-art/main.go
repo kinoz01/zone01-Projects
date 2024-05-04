@@ -25,7 +25,7 @@ func main() {
 	re := regexp.MustCompile(`\A((\\n)+)\\n$`)
 	userText = re.ReplaceAllString(userText, "$1")
 
-	asciiTemplateByte, err := os.ReadFile("./standard.txt")
+	asciiTemplateByte, err := os.ReadFile("./banners/standard.txt")
 	if err != nil {
 		os.Stdout.WriteString("Error reading file: standard.txt\n")
 		return
