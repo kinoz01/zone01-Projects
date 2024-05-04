@@ -17,7 +17,7 @@ func main() {
 	if len(userText) == 0 {
 		return
 	}
-	// these lines (20-->26) handle the cases of just new lines in the text.
+	// these lines (20-->26) handle the cases of just new lines ("\n\n...") in the text.
 	if userText == `\n` {
 		fmt.Print("\n")
 		return
@@ -43,7 +43,15 @@ func main() {
 		asciiTable[i] = append(asciiTable[i], lines...)
 	}
 
-	// printing user input.
+	for _ , userTextChar := range userText{
+		asciiIndex := int(userTextChar)
+		if asciiIndex-32 < 0 || asciiIndex-32 >= len(asciiTable){
+			fmt.Println("Found an Invalid Ascii Character")
+			return
+		}
+	}
+
+	// Printing user input.
 	for _, userLine := range strings.Split(userText, `\n`){
 		if userLine == "" {
 			fmt.Print("\n")
@@ -64,7 +72,6 @@ func PrintAscii(userLine string, asciiTable [][]string) {
 	}
 }
 
-
 /********** How did I come up with the printing mechanism? *************/
 // asciiTable[32][0] + " " +  asciiTable[33][0] + "\n" + asciiTable[32][1] + " " +  asciiTable[33][1] + "\n" + asciiTable[32][2] + " " +  asciiTable[33][2] + "\n" ....ect
-// Just by trying these.
+// Just by trying these!
