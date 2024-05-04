@@ -65,6 +65,6 @@ func PrintAscii(userLine string, asciiTable [][]string) {
 }
 
 
-/********** How did I come up with the printing mechanism?*************/
+/********** How did I come up with the printing mechanism? *************/
 // asciiTable[32][0] + " " +  asciiTable[33][0] + "\n" + asciiTable[32][1] + " " +  asciiTable[33][1] + "\n" + asciiTable[32][2] + " " +  asciiTable[33][2] + "\n" ....ect
 // Just by trying these.
