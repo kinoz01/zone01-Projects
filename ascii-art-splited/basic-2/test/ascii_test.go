@@ -51,7 +51,7 @@ func TestAsciiArt(t *testing.T) {
 		{"Test 17", `\!" #$%&` + "'" + `()*+,-./`, string(want15)},
 		{"Test 18", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", string(want16)},
 		{"Test 19", "abcdefghijklmnopqrstuvwxyz", string(want17)},
-		{"Test Error", "²", "🚨 Found an Invalidb Ascii Character."},
+		{"Test Error", "²", "🚨 Found an Invalid Ascii Character."},
 	}
 	
 	for _, cas := range tests {
