@@ -24,4 +24,51 @@ go run . "Hello World"
 |_|  |_|  \___| |_| |_|  \___/            \/  \/      \___/  |_|    |_|  \__,_| 
                                                                                 
                                                                                 
-```                                                                              
+```            
+
+### Fonts Usage
+
+You can change the displaying font by running: 
+
+```bash
+go run . "text" font
+```
+
+Available fonts:
+
+- **standard**: Standard ASCII font.
+- **shadow**: Shadow ASCII font.
+- **thinkertoy**: Thinkertoy ASCII font.
+
+### Example Using fonts
+
+```console
+$ go run . "hello" standard | cat -e
+ _              _   _          $
+| |            | | | |         $
+| |__     ___  | | | |   ___   $
+|  _ \   / _ \ | | | |  / _ \  $
+| | | | |  __/ | | | | | (_) | $
+|_| |_|  \___| |_| |_|  \___/  $
+                               $
+                               $
+$ go run . "Hello There!" shadow | cat -e
+                                                                                         $
+_|    _|          _| _|                _|_|_|_|_| _|                                  _| $
+_|    _|   _|_|   _| _|   _|_|             _|     _|_|_|     _|_|   _|  _|_|   _|_|   _| $
+_|_|_|_| _|_|_|_| _| _| _|    _|           _|     _|    _| _|_|_|_| _|_|     _|_|_|_| _| $
+_|    _| _|       _| _| _|    _|           _|     _|    _| _|       _|       _|          $
+_|    _|   _|_|_| _| _|   _|_|             _|     _|    _|   _|_|_| _|         _|_|_| _| $
+                                                                                         $
+                                                                                         $
+$ go run . "Hello There!" thinkertoy | cat -e
+                                                $
+o  o     o o           o-O-o o                o $
+|  |     | |             |   |                | $
+O--O o-o | | o-o         |   O--o o-o o-o o-o o $
+|  | |-' | | | |         |   |  | |-' |   |-'   $
+o  o o-o o o o-o         o   o  o o-o o   o-o O $
+                                                $
+                                                $
+```
+
