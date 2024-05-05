@@ -50,26 +50,33 @@ func main() {
 			return
 		}
 	}
-
-	// printing user input.
-	for _, userLine := range strings.Split(userText, `\n`){
-		if userLine == "" {
-			fmt.Print("\n")
-			continue
-		}
-		PrintAscii(userLine, asciiTable)
-	}		
+	fmt.Print(PrintAsciiArt(userText, asciiTable))	
 	// fmt.Println(strings.Split(userText, `\n`))  // Printing the splited user text for clarification.
 }
 
-func PrintAscii(userLine string, asciiTable [][]string) {
-	for i := 0; i < 8; i++ {
-		for _ , userTextChar := range userLine {
-			asciiIndex := int(userTextChar)
-		 	fmt.Print(asciiTable[asciiIndex-32][i])
+func PrintAsciiArt(userText string, asciiTable [][]string) string {
+	var AsciiArt string
+	for _, userLine := range strings.Split(userText, `\n`){
+		if userLine == "" {
+			AsciiArt += "\n"
+			continue
 		}
-		fmt.Print("\n")
+		AsciiArt += PrintAsciiLine(userLine, asciiTable)
 	}
+	return AsciiArt
+}
+
+func PrintAsciiLine(userLine string, asciiTable [][]string) string{
+	var output string
+	for i := 0; i < 8; i++ {
+		row := ""
+ 	   	for _, char := range userLine {
+			row += asciiTable[int(char-32)][i]
+   		}
+   		row += "\n"
+   		output += row
+	}
+	return output
 }
 
 /********** How did I come up with the printing mechanism? *************/
