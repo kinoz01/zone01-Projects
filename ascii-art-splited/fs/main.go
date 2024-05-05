@@ -32,9 +32,9 @@ func main() {
 		switch args[1] {
 		case "standard":
 			asciiTemplateByte, err = os.ReadFile("./banners/standard.txt")
-		case "shadow":
+		case "shadow":	
 			asciiTemplateByte, err = os.ReadFile("./banners/shadow.txt")
-		case "thinkertoy":
+		case "thinkertoy": 
 			asciiTemplateByte, err = os.ReadFile("./banners/thinkertoy.txt")
 		}
 	} else {
@@ -62,52 +62,31 @@ func main() {
 	for _, userTextChar := range userText {
 		asciiIndex := int(userTextChar)
 		if asciiIndex-32 < 0 || asciiIndex-32 >= len(asciiTable) {
-			fmt.Println("🚨 Found an Invalid Ascii Character.") // to avoid out of range when invalid ascii in input.
+			fmt.Println("Found an Invalid Ascii Character.") // to avoid out of range when invalid ascii in input.
 			return
 		}
 	}
 
-	var asciiOutput string
-
 	// Printing user input.
 	for _, userLine := range strings.Split(userText, `\n`) {
-		if userLine == "" { // result of spliting.
-			asciiOutput += "\n"
+		if userLine == "" {
+			fmt.Print("\n")
 			continue
 		}
-		asciiOutput += PrintAscii(userLine, asciiTable)
+		PrintAscii(userLine, asciiTable)
 	}
-
-	fmt.Print(asciiOutput)
 	// fmt.Println(strings.Split(userText, `\n`))  // Printing the splited user text for clarification.
 }
 
-func PrintAscii(userLine string, asciiTable [][]string) string {
-	var asciiOutput string
+func PrintAscii(userLine string, asciiTable [][]string) {
 	for i := 0; i < 8; i++ {
 		for _, userTextChar := range userLine {
 			asciiIndex := int(userTextChar)
-			asciiOutput += asciiTable[asciiIndex-32][i]
+			fmt.Print(asciiTable[asciiIndex-32][i])
 		}
-		asciiOutput += "\n"
+		fmt.Print("\n")
 	}
-	return asciiOutput
 }
-
-// Function to get the current terminal width
-// func getTerminalWidth() (int, error) {
-// 	var dimensions struct {
-// 		Rows uint16
-// 		Cols uint16
-// 	}
-
-// 	_, _, err := syscall.Syscall(syscall.SYS_IOCTL, uintptr(syscall.Stdout), uintptr(syscall.TIOCGWINSZ), uintptr(unsafe.Pointer(&dimensions)))
-// 	if err != 0 {
-// 		return 0, err
-// 	}
-
-// 	return int(dimensions.Cols), nil
-// }
 
 /********** How did I come up with the printing mechanism? *************/
 // asciiTable[32][0] + " " +  asciiTable[33][0] + "\n" + asciiTable[32][1] + " " +  asciiTable[33][1] + "\n" + asciiTable[32][2] + " " +  asciiTable[33][2] + "\n" ....ect
