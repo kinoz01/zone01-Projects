@@ -8,6 +8,8 @@ import (
 )
 
 func main() {
+	/***************************************/
+	// This lines handle user arguments.
 	args := os.Args[1:]
 	if len(args) <= 0 || len(args) > 2 || (len(args) == 2 && args[1] != "standard" && args[1] != "shadow" && args[1] != "thinkertoy") {
 		fmt.Println("Usage: go run . [STRING] [BANNER]\n\nEX: go run . something standard")
@@ -18,7 +20,10 @@ func main() {
 	if len(userText) == 0 {
 		return
 	}
-	// these lines (20-->26) handle the cases of just new lines ("\n\n...") in the text.
+
+	/*-----------------------------------------------------------------------------------*/
+	// These Lines (20-->26) handle the cases of just new lines ("\n\n...") in the text.
+	/*-----------------------------------------------------------------------------------*/
 	if userText == `\n` {
 		fmt.Print("\n")
 		return
@@ -48,7 +53,7 @@ func main() {
 	asciiTemplate := strings.ReplaceAll(string(asciiTemplateByte), "\r", "")
 
 	// Split asciiTemplate by double newline ("\n\n") to get individual ASCII characters from standard.txt.
-	asciiCharacters := strings.Split(asciiTemplate, "\n\n")
+	asciiCharacters  := strings.Split(asciiTemplate, "\n\n")
 
 	// Initialize asciiTable (2D table) (using "make" to avoid out of range).
 	asciiTable := make([][]string, len(asciiCharacters))
@@ -59,10 +64,13 @@ func main() {
 		asciiTable[i] = append(asciiTable[i], lines...)
 	}
 
+	/*------------------------------------------------------------------------------------------------------------------------------------*/
+	// This loop check user input searching for invalid ascii and returning if found any to avoid out of range when invalid ascii in input.
+	/*------------------------------------------------------------------------------------------------------------------------------------*/
 	for _, userTextChar := range userText {
 		asciiIndex := int(userTextChar)
 		if asciiIndex-32 < 0 || asciiIndex-32 >= len(asciiTable) {
-			fmt.Println("🚨 Found an Invalid Ascii Character.") // to avoid out of range when invalid ascii in input.
+			fmt.Println("🚨 Found an Invalid Ascii Character.") 
 			return
 		}
 	}
@@ -94,7 +102,7 @@ func PrintAscii(userLine string, asciiTable [][]string) string {
 	return asciiOutput
 }
 
-// Function to get the current terminal width
+// Function to get the current terminal width.
 // func getTerminalWidth() (int, error) {
 // 	var dimensions struct {
 // 		Rows uint16
