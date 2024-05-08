@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAsciiArt(t *testing.T) {
+func TestRunMain(t *testing.T) {
 	// Define test cases
 	want1, _ := os.ReadFile("./cases/want1.txt")
 	want2, _ := os.ReadFile("./cases/want2.txt")
@@ -51,17 +51,15 @@ func TestAsciiArt(t *testing.T) {
 		{"Test 17", `\!" #$%&` + "'" + `()*+,-./`, string(want15)},
 		{"Test 18", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", string(want16)},
 		{"Test 19", "abcdefghijklmnopqrstuvwxyz", string(want17)},
-		{"Test Error", "²", "🚨 Found an Invalid Ascii Character."},
+		{"Test Error", "²", "🚨 Found an Invalid Ascii Character.\n"},
 	}
-	
+
 	for _, cas := range tests {
 		t.Run(cas.name, func(t *testing.T) {
-			// Compile the expected regexp.
-			// Call the function.
 			got := AsciiArt(cas.text)
-			// Check if the output matches the expected regexp.
+			// Check if the output matches the expected result.
 			if got != cas.want {
-				t.Errorf("For input %q, expected match for %#q but got %q", cas.text, cas.want, got)
+				t.Errorf("\n\nFor input \x1b[31m%s\x1b[0m\n\nExpected:\n\x1b[36m%s\x1b[0m\nBUT Got:\n%s", cas.text, cas.want, got)
 			}
 		})
 	}
@@ -69,7 +67,7 @@ func TestAsciiArt(t *testing.T) {
 
 func AsciiArt(userText string) string {
 	if len(userText) == 0 {
-		os.Exit(1)
+		return ""
 	}
 	if userText == `\n` {
 		return "\n"
@@ -79,43 +77,38 @@ func AsciiArt(userText string) string {
 
 	asciiTemplateByte, err := os.ReadFile("../banners/standard.txt")
 	if err != nil {
-		os.Stdout.WriteString("Error reading file: standard.txt\n")
-		os.Exit(1)
+		return "Error reading file: standard.txt\n"
 	}
 
-	// Split asciiTemplate by double newline ("\n\n") to get individual ASCII characters.
 	asciiCharacters := strings.Split(string(asciiTemplateByte), "\n\n")
-
-	// Initialize asciiTable (2D table) (using "make" to avoid out of range).
 	asciiTable := make([][]string, len(asciiCharacters))
 
-	for _ , userTextChar := range userText {
-		asciiIndex := int(userTextChar)
-		if asciiIndex-32 < 0 || asciiIndex-32 >= len(asciiTable) {
-			return"🚨 Found an Invalid Ascii Character."
-		}
-	}
-
-	// Populate asciiTable [["1 line of A"...."8th line of A"]["1 line of B"...."8th line of B"]["1 line of C"...."8th line of C"]...["1 line of ~"..."8th line of ~"]].
 	for i := range asciiCharacters {
 		lines := strings.Split(asciiCharacters[i], "\n")
 		asciiTable[i] = append(asciiTable[i], lines...)
 	}
 
-	var AsciiArt string
-	// printing user input.
-	for _, userLine := range strings.Split(userText, `\n`) {
-		if userLine == "" {
-			AsciiArt += "\n"
+	for _, userTextChar := range userText {
+		asciiIndex := int(userTextChar)
+		if asciiIndex-32 < 0 || asciiIndex-32 >= len(asciiTable) {
+			return "🚨 Found an Invalid Ascii Character.\n"
+
+		}
+	}
+
+	var output string
+	userLine := strings.Split(userText, `\n`)
+	for _, newLine := range userLine {
+		if newLine == "" {
+			output += "\n"
 			continue
 		}
 		for i := 0; i < 8; i++ {
-			for _ , userTextChar := range userLine {
-				asciiIndex := int(userTextChar)
-				AsciiArt += asciiTable[asciiIndex-32][i]
+			for _, char := range newLine {
+				output += asciiTable[int(char)-32][i]
 			}
-			AsciiArt +="\n"
+			output += "\n"
 		}
 	}
-	return AsciiArt
+	return output
 }

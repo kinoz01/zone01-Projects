@@ -5,20 +5,20 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"time"
 )
 
 func main() {
 	args := os.Args[1:]
-	if len(args) <= 0 || len(args) > 2 || (len(args) == 2 && args[1] != "standard" && args[1] != "shadow" && args[1] != "thinkertoy") {
-		fmt.Println("Usage: go run . [STRING] [BANNER]\n\nEX: go run . something standard")
+	if len(args) > 2 || len(args) == 0 {
+		os.Stdout.WriteString("Usage: go run . [STRING] [BANNER]\n\nEX: go run . something standard\n")
 		return
 	}
-
 	userText := args[0]
 	if len(userText) == 0 {
 		return
 	}
-	// these lines (20-->26) handle the cases of just new lines ("\n\n...") in the text.
+	// these lines (20-->26) handle the cases of just new lines in the text.
 	if userText == `\n` {
 		fmt.Print("\n")
 		return
@@ -26,29 +26,21 @@ func main() {
 	re := regexp.MustCompile(`\A((\\n)+)\\n$`)
 	userText = re.ReplaceAllString(userText, "$1")
 
-	var err error
 	var asciiTemplateByte []byte
-	if len(args) == 2 {
-		switch args[1] {
-		case "standard":
-			asciiTemplateByte, err = os.ReadFile("./banners/standard.txt")
-		case "shadow":	
-			asciiTemplateByte, err = os.ReadFile("./banners/shadow.txt")
-		case "thinkertoy": 
-			asciiTemplateByte, err = os.ReadFile("./banners/thinkertoy.txt")
-		}
-	} else {
+	var err error
+	if len(args) == 1 {
 		asciiTemplateByte, err = os.ReadFile("./banners/standard.txt")
+	} else {
+		asciiTemplateByte, err = os.ReadFile("./banners/" + args[1] + ".txt")
 	}
 	if err != nil {
-		os.Stdout.WriteString("Error reading file: " + err.Error() + "\n")
+		os.Stdout.WriteString("Usage: go run . [STRING] [BANNER]\n\nEX: go run . something standard\n")
 		return
 	}
-
 	asciiTemplate := strings.ReplaceAll(string(asciiTemplateByte), "\r", "")
 
 	// Split asciiTemplate by double newline ("\n\n") to get individual ASCII characters from standard.txt.
-	asciiCharacters := strings.Split(asciiTemplate, "\n\n")
+	asciiCharacters := strings.Split(string(asciiTemplate), "\n\n")
 
 	// Initialize asciiTable (2D table) (using "make" to avoid out of range).
 	asciiTable := make([][]string, len(asciiCharacters))
@@ -58,36 +50,37 @@ func main() {
 		lines := strings.Split(asciiCharacters[i], "\n")
 		asciiTable[i] = append(asciiTable[i], lines...)
 	}
-
+	
+	// Searching for invalid ascii to avoid out of range panic.
 	for _, userTextChar := range userText {
 		asciiIndex := int(userTextChar)
 		if asciiIndex-32 < 0 || asciiIndex-32 >= len(asciiTable) {
-			fmt.Println("Found an Invalid Ascii Character.") // to avoid out of range when invalid ascii in input.
+			fmt.Println("🚨 Found an Invalid Ascii Character.")
 			return
 		}
 	}
 
-	// Printing user input.
-	for _, userLine := range strings.Split(userText, `\n`) {
-		if userLine == "" {
-			fmt.Print("\n")
+	// Printing mechanism.
+	var output string
+	userLine := strings.Split(userText, `\n`)
+	for _, newLine := range userLine {
+		if newLine == "" {
+			output += "\n"
 			continue
 		}
-		PrintAscii(userLine, asciiTable)
-	}
-	// fmt.Println(strings.Split(userText, `\n`))  // Printing the splited user text for clarification.
-}
-
-func PrintAscii(userLine string, asciiTable [][]string) {
-	for i := 0; i < 8; i++ {
-		for _, userTextChar := range userLine {
-			asciiIndex := int(userTextChar)
-			fmt.Print(asciiTable[asciiIndex-32][i])
+		for i := 0; i < 8; i++ {
+			for _, char := range newLine {
+				output += asciiTable[int(char)-32][i]
+			}
+			output += "\n"
 		}
-		fmt.Print("\n")
 	}
+	if len(args) == 2 && args[1] == "zigzag" {
+		for _, char := range output {
+			fmt.Print(string(char))
+			time.Sleep(time.Duration(len(userText)/4) * time.Millisecond) // just some printing "art" for this particular font.
+		}
+	} else {
+		fmt.Print(output)
+	}	
 }
-
-/********** How did I come up with the printing mechanism? *************/
-// asciiTable[32][0] + " " +  asciiTable[33][0] + "\n" + asciiTable[32][1] + " " +  asciiTable[33][1] + "\n" + asciiTable[32][2] + " " +  asciiTable[33][2] + "\n" ....ect
-// Just by trying these!

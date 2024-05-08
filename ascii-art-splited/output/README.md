@@ -1,7 +1,7 @@
 ## ASCII Art Program in Go
 ### Overview
 
-This project involves building a program in Go that generates ASCII art representations of input strings. The program will take a string as input and output its graphical representation using ASCII characters. The ASCII representations will be based on predefined templates stored in banner files.
+This program can generates ASCII art representations of input strings. The program will take a string as input and output its graphical representation using ASCII characters. The ASCII representations will be based on predefined templates stored in banner files.
 
 ### Functionality
 
@@ -73,3 +73,15 @@ o  o o-o o o o-o         o   o  o o-o o   o-o O $
                                                 $
 ```
 
+## Options
+```console
+Usage: go run . [OPTION] [STRING] [BANNER]
+```
+
+### Writing Output to File
+
+You can write the output to a file using the `--output=<fileName.txt>` flag. For example:
+
+```console
+go run . --output=output.txt "Hello World" thinkertoy
+```

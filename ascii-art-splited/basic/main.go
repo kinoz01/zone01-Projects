@@ -39,11 +39,12 @@ func main() {
 
 	// Populate asciiTable [["1 line of A"...."8th line of A"]["1 line of B"...."8th line of B"]["1 line of C"...."8th line of C"]...["1 line of ~"..."8th line of ~"]].
 	for i := range asciiCharacters {
-		lines := strings.Split(asciiCharacters[i], "\n")		
+		lines := strings.Split(asciiCharacters[i], "\n")
 		asciiTable[i] = append(asciiTable[i], lines...)
 	}
 
-	for _ , userTextChar := range userText {
+	// Searching for invalid ascii to avoid out of range panic.
+	for _, userTextChar := range userText {
 		asciiIndex := int(userTextChar)
 		if asciiIndex-32 < 0 || asciiIndex-32 >= len(asciiTable) {
 			fmt.Println("🚨 Found an Invalid Ascii Character.")
@@ -51,25 +52,22 @@ func main() {
 		}
 	}
 
-	// printing user input.
-	for _, userLine := range strings.Split(userText, `\n`){
-		if userLine == "" {
-			fmt.Print("\n")
+	// Printing mechanism.
+	var output string
+	userLine := strings.Split(userText, `\n`)
+	for _, newLine := range userLine {
+		if newLine == "" {
+			output += "\n"
 			continue
 		}
-		PrintAscii(userLine, asciiTable)
-	}		
-	// fmt.Println(strings.Split(userText, `\n`))  // Printing the splited user text for clarification.
-}
-
-func PrintAscii(userLine string, asciiTable [][]string) {
-	for i := 0; i < 8; i++ {
-		for _ , userTextChar := range userLine {
-			asciiIndex := int(userTextChar)
-		 	fmt.Print(asciiTable[asciiIndex-32][i])
+		for i := 0; i < 8; i++ {
+			for _, char := range newLine {
+				output += asciiTable[int(char)-32][i]
+			}
+			output += "\n"
 		}
-		fmt.Print("\n")
 	}
+	fmt.Print(output)
 }
 
 /********** How did I come up with the printing mechanism? *************/
