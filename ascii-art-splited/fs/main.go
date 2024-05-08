@@ -50,7 +50,7 @@ func main() {
 		lines := strings.Split(asciiCharacters[i], "\n")
 		asciiTable[i] = append(asciiTable[i], lines...)
 	}
-	
+
 	// Searching for invalid ascii to avoid out of range panic.
 	for _, userTextChar := range userText {
 		asciiIndex := int(userTextChar)
@@ -78,7 +78,7 @@ func main() {
 	if len(args) == 2 && args[1] == "zigzag" {
 		for _, char := range output {
 			fmt.Print(string(char))
-			time.Sleep(time.Duration(len(userText)/4) * time.Millisecond) // just some printing "art" for this particular font.
+			time.Sleep(4 * time.Second / time.Duration(len(output))) // just some printing "art" for this particular font.
 		}
 	} else {
 		fmt.Print(output)
