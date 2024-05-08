@@ -1,7 +1,7 @@
 ## ASCII Art Program in Go
 ### Overview
 
-This project involves building a program in Go that generates ASCII art representations of input strings. The program will take a string as input and output its graphical representation using ASCII characters. The ASCII representations will be based on predefined templates stored in banner files.
+This program can generates ASCII art representations of input strings. The program will take a string as input and output its graphical representation using ASCII characters. The ASCII representations will be based on predefined templates stored in banner files.
 
 ### Functionality
 
@@ -36,10 +36,11 @@ go run . "text" font
 
 Available fonts:
 
-- **standard**: Standard ASCII font.
-- **shadow**: Shadow ASCII font.
-- **thinkertoy**: Thinkertoy ASCII font.
-- **zigzag**: Zigzag ASCII font.
+- **standard**
+- **shadow**
+- **thinkertoy**
+- **zigzag**
+- **arob**
 
 ### Example Using fonts
 
@@ -72,4 +73,3 @@ o  o o-o o o o-o         o   o  o o-o o   o-o O $
                                                 $
                                                 $
 ```
-
