@@ -14,7 +14,7 @@ func Print(userText, font string) string {
 		return ""
 	}
 	asciiTemplate := strings.ReplaceAll(string(asciiTemplateByte), "\r", "")
-	asciiCharacters := strings.Split(string(asciiTemplate), "\n\n")
+	asciiCharacters := strings.Split(string(asciiTemplate[1:]), "\n\n")
 	asciiTable := make([][]string, len(asciiCharacters))
 
 	for i := range asciiCharacters {

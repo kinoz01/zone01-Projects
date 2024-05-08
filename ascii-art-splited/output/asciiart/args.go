@@ -3,6 +3,7 @@ package asciiart
 import (
 	"fmt"
 	"regexp"
+	"strings"
 )
 
 func UerArgs(args []string) (userText, font, outputFile string) {
@@ -10,6 +11,10 @@ func UerArgs(args []string) (userText, font, outputFile string) {
 
 	switch len(args) {
 	case 1:
+		if strings.HasPrefix(args[0], "--output") {
+			fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nEX: go run . --output=<fileName.txt> something standard")
+			return userText, font, outputFile
+		}
 		userText = args[0]
 		font = "standard"
 	case 2:

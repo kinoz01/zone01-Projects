@@ -80,7 +80,7 @@ func AsciiArt(userText string) string {
 		return "Error reading file: standard.txt\n"
 	}
 
-	asciiCharacters := strings.Split(string(asciiTemplateByte), "\n\n")
+	asciiCharacters := strings.Split(string(asciiTemplateByte[1:]), "\n\n")
 	asciiTable := make([][]string, len(asciiCharacters))
 
 	for i := range asciiCharacters {

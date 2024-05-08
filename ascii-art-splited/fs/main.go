@@ -40,7 +40,7 @@ func main() {
 	asciiTemplate := strings.ReplaceAll(string(asciiTemplateByte), "\r", "")
 
 	// Split asciiTemplate by double newline ("\n\n") to get individual ASCII characters from standard.txt.
-	asciiCharacters := strings.Split(string(asciiTemplate), "\n\n")
+	asciiCharacters := strings.Split(string(asciiTemplate[1:]), "\n\n")
 
 	// Initialize asciiTable (2D table) (using "make" to avoid out of range).
 	asciiTable := make([][]string, len(asciiCharacters))
@@ -78,7 +78,7 @@ func main() {
 	if len(args) == 2 && args[1] == "zigzag" {
 		for _, char := range output {
 			fmt.Print(string(char))
-			time.Sleep(4 * time.Second / time.Duration(len(output))) // just some printing "art" for this particular font.
+			time.Sleep(3 * time.Second / time.Duration(len(output))) // just some printing "art" for this particular font.
 		}
 	} else {
 		fmt.Print(output)
