@@ -31,5 +31,4 @@ func main() {
 	if outputFile != "" {
 		asciiart.CreateFile(output, outputFile)
 	}
-
 }
