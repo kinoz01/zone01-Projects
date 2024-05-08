@@ -36,10 +36,11 @@ go run . "text" font
 
 Available fonts:
 
-- **standard**: Standard ASCII font.
-- **shadow**: Shadow ASCII font.
-- **thinkertoy**: Thinkertoy ASCII font.
-- **zigzag**: Zigzag ASCII font.
+- **standard**
+- **shadow**
+- **thinkertoy**
+- **zigzag**
+- **arob**
 
 ### Example Using fonts
 
