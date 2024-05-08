@@ -14,7 +14,7 @@ func PrePrint(userText string) (string, bool) {
 	for _, userTextChar := range userText {
 		asciiIndex := int(userTextChar)
 		if asciiIndex-32 < 0 || asciiIndex-32 >= 95 {
-			return "🚨 Found an Invalid Ascii Character.", quit
+			return "🚨 Found an Invalid Ascii Character.\n", quit
 		}
 	}
 	re := regexp.MustCompile(`\A((\\n)+)\\n$`)

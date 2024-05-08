@@ -15,7 +15,7 @@ func main() {
 	}
 	userText, quit := asciiart.PrePrint(userText)
 	if quit {
-		fmt.Println(userText)
+		fmt.Print(userText)
 		return
 	}
 	output := asciiart.Print(userText, font)
