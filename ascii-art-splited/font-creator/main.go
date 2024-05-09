@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+	var outputAsciiFile string
 	args := os.Args[1:]
 	if len(args) != 2 {
 		fmt.Println("Enter a valid argument")
@@ -17,11 +18,14 @@ func main() {
 		fmt.Println("Error reading file.")
 		return
 	}
-	outputAsciiFile := strings.ReplaceAll(string(asciiTemplateByte), "##", "\n")
+	
+	// outputAsciiFile = strings.ReplaceAll(string(asciiTemplateByte), "@@", "\n")
+	outputAsciiFile = strings.ReplaceAll(string(asciiTemplateByte), "##", "\n")
 	outputAsciiFile = strings.ReplaceAll(outputAsciiFile, "$", " ")
 
-	re := regexp.MustCompile(`#`)
+	re := regexp.MustCompile(`(#|@)`)
 	outputAsciiFile = re.ReplaceAllString(outputAsciiFile, "")
+
 
 	CreateFile(outputAsciiFile, args[1]+".txt")
 }
