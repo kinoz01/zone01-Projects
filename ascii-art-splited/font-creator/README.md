@@ -39,7 +39,7 @@ The program will read the font file, convert it into a text file, and save it wi
 Suppose you want to convert the font file `standard.flf` into a text file named `standard.txt`. You would execute the following command:
 
 ``` bash
-./main standard.flf output
+./main standard.flf standard
 ```
 
 ## Credits
