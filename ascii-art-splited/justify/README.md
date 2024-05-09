@@ -36,11 +36,7 @@ go run . "text" font
 
 Available fonts:
 
-- **standard**
-- **shadow**
-- **thinkertoy**
-- **zigzag**
-- **arob**
+PLease checkout the `banners` folder.
 
 ### Example Using fonts
 
