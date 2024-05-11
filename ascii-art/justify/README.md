@@ -36,7 +36,7 @@ go run . "text" font
 
 **Available fonts:**
 
-PLease checkout the `banners` folder.
+Please checkout the `banners` folder.
 
 ### Example Using fonts
 
