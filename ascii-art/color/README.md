@@ -85,3 +85,55 @@ go run . --output=output.txt "Hello World" thinkertoy
 
 ### Align Output
 
+This option allows you to adjust the alignment of Ascii Art output according to your preferences. The alignment is based on your actual terminal window size. Ensure the terminal window is large enough to display the text appropriately.
+
+Supported alignment types:
+
+- **center**: Aligns the text at the center.
+- **left**: Aligns the text to the left.
+- **right**: Aligns the text to the right.
+- **justify**: Justifies the text.
+
+**Usage Examples:**
+
+Assume the bars in the display below are the terminal borders:
+
+```console
+|$ go run . --align=center "hello" standard                                                                                 |
+|                                             _                _    _                                                       |
+|                                            | |              | |  | |                                                      |
+|                                            | |__      ___   | |  | |    ___                                               |
+|                                            |  _ \    / _ \  | |  | |   / _ \                                              |
+|                                            | | | |  |  __/  | |  | |  | (_) |                                             |
+|                                            |_| |_|   \___|  |_|  |_|   \___/                                              |
+|                                                                                                                           |
+|                                                                                                                           |
+|$ go run . --align=left "Hello There" standard                                                                             |
+| _    _           _    _                 _______   _                                                                       |
+|| |  | |         | |  | |               |__   __| | |                                                                      |
+|| |__| |   ___   | |  | |    ___           | |    | |__      ___    _ __     ___                                           |
+||  __  |  / _ \  | |  | |   / _ \          | |    |  _ \    / _ \  | '__|   / _ \                                          |
+|| |  | | |  __/  | |  | |  | (_) |         | |    | | | |  |  __/  | |     |  __/                                          |
+||_|  |_|  \___|  |_|  |_|   \___/          |_|    |_| |_|   \___|  |_|      \___|                                          |
+|                                                                                                                           |
+|                                                                                                                           |
+|$ go run . --align=right "hello" shadow                                                                                    |
+|                                                                                                                           |
+|                                                                                          _|                _| _|          |
+|                                                                                          _|_|_|     _|_|   _| _|   _|_|   |
+|                                                                                          _|    _| _|_|_|_| _| _| _|    _| |
+|                                                                                          _|    _| _|       _| _| _|    _| |
+|                                                                                          _|    _|   _|_|_| _| _|   _|_|   |
+|                                                                                                                           |
+|                                                                                                                           |
+|$ go run . --align=justify "how are you" shadow                                                                            |
+|                                                                                                                           |
+|_|                                                                                                                         |
+|_|_|_|     _|_|   _|      _|      _|                  _|_|_| _|  _|_|   _|_|                    _|    _|   _|_|   _|    _| |
+|_|    _| _|    _| _|      _|      _|                _|    _| _|_|     _|_|_|_|                  _|    _| _|    _| _|    _| |
+|_|    _| _|    _|   _|  _|  _|  _|                  _|    _| _|       _|                        _|    _| _|    _| _|    _| |
+|_|    _|   _|_|       _|      _|                      _|_|_| _|         _|_|_|                    _|_|_|   _|_|     _|_|_| |
+|                                                                                                      _|                   |
+|                                                                                                  _|_|                     |
+|$                                                                                                                          |
+```

@@ -27,27 +27,14 @@ func GetAsciiTable(font string) [][]string {
 }
 
 // Function to get the current terminal width.
-func GetTerminalWidthCAT() (int, error) {
-	var dimensions [4]uint16 
-	_, _, errno := syscall.Syscall6(syscall.SYS_IOCTL, uintptr(syscall.Stdin), syscall.TIOCGWINSZ, uintptr(unsafe.Pointer(&dimensions)), 0, 0, 0)
-	if errno != 0 {
-		return 0, fmt.Errorf("error getting terminal dimensions: %v", errno)
-	}
-	return int(dimensions[1]), nil
-}
-
-// I am using this one because the one above ain't working when main_test run.
 func GetTerminalWidth() (int, error) {
-	var dimensions struct {
-		Rows uint16
-		Cols uint16
-	}
-
-	_, _, err := syscall.Syscall(syscall.SYS_IOCTL, uintptr(syscall.Stdout), uintptr(syscall.TIOCGWINSZ), uintptr(unsafe.Pointer(&dimensions)))
+	var dimensions [4]uint16 
+	_, _, err := syscall.Syscall6(syscall.SYS_IOCTL, 0, syscall.TIOCGWINSZ, uintptr(unsafe.Pointer(&dimensions)), 0, 0, 0) 
+	// put uintptr(syscall.Stdout) instead of 0 for testing
 	if err != 0 {
 		return 0, err
 	}
-	return int(dimensions.Cols), nil
+	return int(dimensions[1]), nil
 }
 
 func GetAsciiLineLen(userLine string, asciiTable [][]string) int {

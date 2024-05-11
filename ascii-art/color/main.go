@@ -25,6 +25,7 @@ func main() {
 	}
 	terminalWidth, err := asciiart.GetTerminalWidth()
 	if err != nil {
+		fmt.Printf("Error: %v\n", err)
 		return
 	}
 	output := asciiart.PrintAsciiArt(userText, alignement, asciiart.GetAsciiTable(font), terminalWidth)
