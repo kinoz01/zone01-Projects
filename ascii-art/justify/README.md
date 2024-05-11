@@ -71,7 +71,7 @@ o  o o-o o o o-o         o   o  o o-o o   o-o O $
 ```
 
 ## Options
-```console
+```md
 Usage: go run . [OPTION] [STRING] [BANNER]
 ```
 
