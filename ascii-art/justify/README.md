@@ -34,7 +34,7 @@ You can change the displaying font by running:
 go run . "text" font
 ```
 
-Available fonts:
+**Available fonts:**
 
 PLease checkout the `banners` folder.
 
