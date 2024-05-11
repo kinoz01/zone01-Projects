@@ -24,10 +24,10 @@ func UserArgs(args []string) (userText, font, outputFile, alignement string) {
 	case 2:
 		if (reOutput.MatchString(args[0]) && reAlign.MatchString(args[1])) || (reOutput.MatchString(args[1]) && reAlign.MatchString(args[0])){
 			fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nExample: go run . --align=right something standard")
-		} else if reOutput.MatchString(args[0]) {
+		} else if reOutput.MatchString(args[0]) && !strings.HasPrefix(args[1], "--align") {
 			outputFile = reOutput.FindStringSubmatch(args[0])[1]
 			userText = args[1]
-		} else if reAlign.MatchString(args[0]) {
+		} else if reAlign.MatchString(args[0]) && !strings.HasPrefix(args[1], "--output") {
 			alignement = reAlign.FindStringSubmatch(args[0])[1]
 			userText = args[1]
 		} else {

@@ -12,9 +12,9 @@ import (
 func TestMainFunction(t *testing.T) {
 	// Define test cases
 	testCases := []struct {
-		name      string
-		args      []string
-		want      string
+		name string
+		args []string
+		want string
 	}{
 		{
 			name: "Test 1",
@@ -117,12 +117,12 @@ func TestMainFunction(t *testing.T) {
 			args: []string{"It's Working", "thinkertoy"},
 		},
 		{
-			name: "Test 26 (All standard)",  // go run . ' !"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~'
-			args: []string{` !"#$%&'()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`+"`"+`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~`},
+			name: "Test 26 (All standard)", // go run . ' !"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~'
+			args: []string{` !"#$%&'()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_` + "`" + `abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~`},
 		},
 		{
 			name: "Test 27",
-			args: []string{"--align", "right", "something", "standard"},  
+			args: []string{"--align", "right", "something", "standard"},
 		},
 		{
 			name: "Test 28",
@@ -157,12 +157,12 @@ func TestMainFunction(t *testing.T) {
 			args: []string{"--output=test07.txt", "Testing long output!", "standard"},
 		},
 		{
-			name: "Test 36 (All shadow)",  // go run . ' !"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~'
-			args: []string{` !"#$%&'()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`+"`"+`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~`, "shadow"},
+			name: "Test 36 (All shadow)", // go run . ' !"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~'
+			args: []string{` !"#$%&'()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_` + "`" + `abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~`, "shadow"},
 		},
 		{
-			name: "Test 37 (All blocks)",  // go run . ' !"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~'
-			args: []string{` !"#$%&'()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`+"`"+`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~`, "blocks"},
+			name: "Test 37 (All blocks)", // go run . ' !"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~'
+			args: []string{` !"#$%&'()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_` + "`" + `abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~`, "blocks"},
 		},
 	}
 
@@ -177,7 +177,7 @@ func TestMainFunction(t *testing.T) {
 		var err error
 		got := ""
 		tc.want, err = readWantFile(wantFiles[i])
-		if err != nil{
+		if err != nil {
 			fmt.Println(err)
 			continue
 		}
@@ -188,6 +188,7 @@ func TestMainFunction(t *testing.T) {
 			os.Args = []string{"main.go"}
 			os.Args = append(os.Args, tc.args...)
 			main()
+
 			w.Close()
 
 			var buf bytes.Buffer
