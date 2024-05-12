@@ -166,7 +166,7 @@ green, yellow, blue, magenta, cyan, white, sky, orange, forest, ocean, lavender,
 ```
 
 **Note:**
-You can also use `RGB` (ex: `(255, 0, 0)`), `HSL` (ex: `hsl(0, 100%, 50%)`) or hexadecimal (ex: `#00ff00`)
+You can also use `RGB` (ex: `(255, 0, 0)`), `HSL` (ex: `hsl(0, 100%, 50%)`) or hexadecimal (ex: `#00ff00`) to use basic colors.
 
 
 **Extreme test**
