@@ -6,6 +6,7 @@ import (
 
 func PrintAsciiArt(userText, alignement string, asciiTable [][]string, terminalWidth int, colorMap map[string][]string) string {
 	var AsciiArt string
+	//var colorAll bool
 	for _, userLine := range strings.Split(userText, `\n`) {
 		if userLine == "" {
 			AsciiArt += "\n"
