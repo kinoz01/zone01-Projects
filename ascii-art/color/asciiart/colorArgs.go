@@ -18,9 +18,7 @@ func GetColorMap(args []string) ([]string, map[string][]string, bool) {
 
 	// return in case of invalid color flag or when a flag is directly next to a color flag or when there is a non flag string between two flags except color flag.
 	reError := regexp.MustCompile(`--color=(\S+) (--output|--align|--reverse|--color)`)
-	reError2 := regexp.MustCompile(`(--color[^=])|(--color= )|(--color=(\S+)$)`)
-	
-	//reError4 := regexp.MustCompile(`\A(?!(--output|--reverse|--align|--color)=\S+)(\S+) (--output|--reverse|--align|--color)=\S+`)
+	reError2 := regexp.MustCompile(`(--color[^=])|(--color= )|(--color=(\S+)$)`)	
 	if reError.MatchString(argsString) || reError2.MatchString(argsString) {
 		fmt.Println(colorUsageErr)
 		return nil, nil, true
