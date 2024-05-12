@@ -1,18 +1,27 @@
 package asciiart
 
-import "strings"
+import (
+	"strings"
+)
 
 func GetColoringIndex(colorMap map[string][]string, userText string) map[string][]int {
-	indexColorMap := make(map[string][]int)
+	//fmt.Println(userText)
+	intColorMap := make(map[string][]int)
 
 	for keyColor, values := range colorMap {
 		for _, colorChars := range values {
 			if strings.Contains(userText, colorChars) {
-				indexColorMap[keyColor] = append(indexColorMap[keyColor], FindSubstringIndices(colorChars, userText)...) // map[key] = append(map[key], slice...).
-			}
+				//fmt.Println("------------------hey")
+				intColorMap[keyColor] = append(intColorMap[keyColor], FindSubstringIndices(colorChars, userText)...) // map[key] = append(map[key], slice...).
+			} 
+			// else if strings.Contains(colorChars, userText) {
+			// 	//fmt.Println("----------------dfsdfsd--hey")
+			// 	intColorMap[keyColor] = append(intColorMap[keyColor], FindSubstringIndices(userText, colorChars)...) // sometimes the colorschars are longer than the userLine, so they do contain userLine (case of \n).
+			// }
 		}
 	}
-	return indexColorMap
+	//fmt.Println(intColorMap)
+	return intColorMap
 }
 
 func FindSubstringIndices(colorChars, userText string) []int {

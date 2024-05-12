@@ -64,12 +64,4 @@ func IsValidColor(color string) (ansiColor string) {
 	}
 	return ansiColor
 }
-
-// These are available fonts.
-func IsBanner(str string) bool {
-	switch str {
-	case "bigfig", "small", "phoenix", "o2", "starwar", "stop", "standard", "shadow", "thinkertoy", "arob", "zigzag", "henry3D", "doom", "blocks":
-		return true
-	}
-	return false
-}
+  

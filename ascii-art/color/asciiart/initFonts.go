@@ -2,6 +2,7 @@ package asciiart
 
 var fontLines int
 
+// this function initialize the number of lines present in the ascii character so we can range on them later.
 func InitFontLines(font string) {
 	switch font {
 	case "bigfig":
@@ -15,4 +16,13 @@ func InitFontLines(font string) {
 	case "blocks":
 		fontLines = 11
 	}
+}
+
+// These are available fonts.
+func IsBanner(str string) bool {
+	switch str {
+	case "bigfig", "small", "phoenix", "o2", "starwar", "stop", "standard", "shadow", "thinkertoy", "arob", "zigzag", "henry3D", "doom", "blocks":
+		return true
+	}
+	return false
 }

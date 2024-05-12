@@ -18,7 +18,6 @@ func main() {
 	if userText == "" {
 		return
 	}
-	//fmt.Println(asciiart.GetColoringIndex(colorMap, userText))
 	userText, quit = asciiart.PrePrint(userText)
 	if quit {
 		fmt.Print(userText)
