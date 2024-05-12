@@ -29,7 +29,7 @@ func GetColorMap(args []string) ([]string, map[string][]string, bool) {
 	reFlags := regexp.MustCompile(`(--output=|--reverse=|--align=|--color=)`)
 	for reError3.MatchString(noLookahead) {
 		checkForFlag := reError3.FindStringSubmatch(noLookahead)
-		if !reFlags.MatchString(checkForFlag[2]){
+		if !reFlags.MatchString(checkForFlag[2]){ // if (\S+) don't match a flag.
 			fmt.Println(colorUsageErr)
 			return nil, nil, true
 		} else {
