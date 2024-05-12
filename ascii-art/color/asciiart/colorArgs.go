@@ -45,6 +45,7 @@ func GetColorMap(args []string) ([]string, map[string][]string, bool) {
 		return args, nil, false
 	}
 
+	// lines 49 ---> 60 handle cases where we have "--color hello something (banner/notBanner)" or "--color hello".
 	// Storing userInput and banner.
 	if len(args) >= 3 && reColor.MatchString(args[len(args)-3]) {
 		if IsBanner(args[len(args)-1]) {
@@ -66,7 +67,7 @@ func GetColorMap(args []string) ([]string, map[string][]string, bool) {
 		color := submatches[1]
 		chars := submatches[2]
 		if IsValidColor(color) != "" {
-			colorMap[IsValidColor(color)] = append(colorMap[IsValidColor(color)], chars)
+			colorMap[IsValidColor(color)] = append(colorMap[IsValidColor(color)], chars) // map[key] = append(map[key], value) (in case of maping to a slice).
 		}
 		return ""
 	})
@@ -77,6 +78,12 @@ func GetColorMap(args []string) ([]string, map[string][]string, bool) {
 	reOutput := regexp.MustCompile(`--output`)
 	if reOutput.MatchString(argsString) {
 		fmt.Println("I can't color a txt output file!")
+		return args, nil, false
+	}
+
+	// if user enter the same characters for two or more different colors. But in case of overlap this won't work.
+	if SameStringForTwoColors(colorMap) {
+		fmt.Println("You can't color a text with multiple colors.")
 		return args, nil, false
 	}
 

@@ -4,7 +4,7 @@ import (
 	"strings"
 )
 
-func PrintAsciiArt(userText, alignement string, asciiTable [][]string, terminalWidth int) string {
+func PrintAsciiArt(userText, alignement string, asciiTable [][]string, terminalWidth int, colorMap map[string][]string) string {
 	var AsciiArt string
 	for _, userLine := range strings.Split(userText, `\n`) {
 		if userLine == "" {
@@ -12,12 +12,12 @@ func PrintAsciiArt(userText, alignement string, asciiTable [][]string, terminalW
 			continue
 		}
 		lenAscii := GetAsciiLineLen(userLine, asciiTable)
-		AsciiArt += PrintAsciiLine(userLine, alignement, asciiTable, lenAscii, terminalWidth)
+		AsciiArt += PrintAsciiLine(userLine, alignement, asciiTable, lenAscii, terminalWidth, colorMap)
 	}
 	return AsciiArt
 }
 
-func PrintAsciiLine(userLine, alignement string, asciiTable [][]string, lenAscii, terminalWidth int) string {
+func PrintAsciiLine(userLine, alignement string, asciiTable [][]string, lenAscii, terminalWidth int, colorMap map[string][]string) string {
 	var output string
 	var justify bool
 	for i := 0; i < fontLines; i++ {
@@ -31,12 +31,17 @@ func PrintAsciiLine(userLine, alignement string, asciiTable [][]string, lenAscii
 		case "justify":
 			justify = true
 		}
-		for _, char := range userLine {
+		for j, char := range userLine {
 			if char == ' ' && justify {
 				output += GetJustifySpace(terminalWidth, userLine, asciiTable)
 				continue
 			}
+			if color, paint := IsColorIndex(GetColoringIndex(colorMap, userLine), j); paint {
+				output += color + asciiTable[int(char-32)][i] + reset
+				continue
+			}
 			output += asciiTable[int(char-32)][i]
+
 		}
 		output += "\n"
 

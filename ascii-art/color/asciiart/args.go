@@ -22,9 +22,9 @@ func UserArgs(args []string) (userText, font, outputFile, alignement string) {
 	switch len(args) {
 	case 1:
 		if strings.HasPrefix(args[0], "--output") {
-			fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nEX: go run . --output=<fileName.txt> something standard")
+			fmt.Println(outputUsageErr)
 		} else if strings.HasPrefix(args[0], "--align") {
-			fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nExample: go run . --align=right something standard")
+			fmt.Println(alignUsageErr)
 		} else {
 			userText = args[0]
 		}

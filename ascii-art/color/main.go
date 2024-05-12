@@ -13,11 +13,12 @@ func main() {
 	if quit {
 		return
 	}
-	fmt.Println(colorMap)
+	//fmt.Println(colorMap)
 	userText, font, outputFile, alignement := asciiart.UserArgs(args)
 	if userText == "" {
 		return
 	}
+	//fmt.Println(asciiart.GetColoringIndex(colorMap, userText))
 	userText, quit = asciiart.PrePrint(userText)
 	if quit {
 		fmt.Print(userText)
@@ -28,7 +29,7 @@ func main() {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
-	output := asciiart.PrintAsciiArt(userText, alignement, asciiart.GetAsciiTable(font), terminalWidth)
+	output := asciiart.PrintAsciiArt(userText, alignement, asciiart.GetAsciiTable(font), terminalWidth, colorMap)
 
 	if outputFile == "" {
 		switch font {

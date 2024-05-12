@@ -8,6 +8,16 @@ import (
 	"unsafe"
 )
 
+var stdoutFd int
+
+func init() {
+	if os.Getenv("test") != "" {
+		stdoutFd = int(os.Stdout.Fd()) // use export test=true for the test to work, setting stdoutFd to 1.
+	} else {
+		stdoutFd = int(os.Stdin.Fd()) // unset test for the | cat -e to work, setting stdoutFd to 0.
+	}
+}
+
 func GetAsciiTable(font string) [][]string {
 	InitFontLines(font)
 	asciiTemplateByte, err := os.ReadFile("./banners/" + font + ".txt")
@@ -29,7 +39,7 @@ func GetAsciiTable(font string) [][]string {
 // Function to get the current terminal width.
 func GetTerminalWidth() (int, error) {
 	var dimensions [4]uint16 
-	_, _, err := syscall.Syscall6(syscall.SYS_IOCTL, 0, syscall.TIOCGWINSZ, uintptr(unsafe.Pointer(&dimensions)), 0, 0, 0) 
+	_, _, err := syscall.Syscall6(syscall.SYS_IOCTL, uintptr(stdoutFd), syscall.TIOCGWINSZ, uintptr(unsafe.Pointer(&dimensions)), 0, 0, 0) 
 	// put uintptr(syscall.Stdout) instead of 0 for testing
 	if err != 0 {
 		return 0, err
