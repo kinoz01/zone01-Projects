@@ -4,8 +4,6 @@ var fontLines int
 
 func InitFontLines(font string) {
 	switch font {
-	case "bigfig":
-		fontLines = 4
 	case "small":
 		fontLines = 5	
 	case "phoenix", "o2", "starwar", "stop":
