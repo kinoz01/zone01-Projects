@@ -2,8 +2,9 @@
 ### Overview
 
 <div align="center">
-  <img src="test_cases/example.gif" alt="Alt Text">
+  <img src="test_cases/example.gif" alt="Alt Text" width="600" height="300">
 </div>
+
 
 
 This program can generates ASCII art representations of input strings. The program will take a string as input and output its graphical representation using ASCII characters. The ASCII representations will be based on predefined templates stored in banner files.
