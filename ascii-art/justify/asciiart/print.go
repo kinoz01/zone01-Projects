@@ -25,11 +25,12 @@ func PrintAsciiLine(userLine, alignement string, asciiTable [][]string, lenAscii
 		case "left":
 			output += ""
 		case "center":
-			output += GetCenterSpaces(terminalWidth, lenAscii)
+			output += strings.Repeat(" ", (terminalWidth-lenAscii)/2)
 		case "right":
-			output += GetRightSpaces(terminalWidth, lenAscii)
+			output += strings.Repeat(" ", terminalWidth-lenAscii)
 		case "justify":
 			justify = true
+			userLine = strings.Join(strings.Fields(userLine), " ")
 		}
 		for _, char := range userLine {
 			if char == ' ' && justify {

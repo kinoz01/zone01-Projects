@@ -2,83 +2,77 @@ package asciiart
 
 import (
 	"fmt"
-	"regexp"
 	"strings"
 )
 
-const (
-	colorUsageErr  = "Usage: go run . [OPTION] [STRING]\n\nEX: go run . --color=<color> <letters to be colored> \"something\""
-	outputUsageErr = "Usage: go run . [OPTION] [STRING] [BANNER]\n\nEX: go run . --output=<fileName.txt> something standard"
-	alignUsageErr  = "Usage: go run . [OPTION] [STRING] [BANNER]\n\nExample: go run . --align=right something standard"
-	fontUsageErr   = "Usage: go run . [STRING] [BANNER]\n\nEX: go run . something standard"
-)
+var reverse bool
+var asciiColor string
 
-func UserArgs(args []string) (userText, font, outputFile, alignement string) {
-	alignement = "left"
+func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInput string, colorMap map[string][]string, quit bool) {
+	colorMap = make(map[string][]string)
 	font = "standard"
-	reOutput := regexp.MustCompile(`\A--output=(\S+.txt)$`)
-	reAlign := regexp.MustCompile(`\A--align=(center|left|right|justify)$`)
+	alignment = "left"
+	InitFlagPatterns()
 
-	switch len(args) {
-	case 1:
-		if strings.HasPrefix(args[0], "--output") {
-			fmt.Println(outputUsageErr)
-		} else if strings.HasPrefix(args[0], "--align") {
-			fmt.Println(alignUsageErr)
-		} else {
-			userText = args[0]
-		}
-	case 2:
-		if (reOutput.MatchString(args[0]) && reAlign.MatchString(args[1])) || (reOutput.MatchString(args[1]) && reAlign.MatchString(args[0])){
-			fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nExample: go run . --align=right something standard")
-		} else if reOutput.MatchString(args[0]) && !strings.HasPrefix(args[1], "--align") {
-			outputFile = reOutput.FindStringSubmatch(args[0])[1]
-			userText = args[1]
-		} else if reAlign.MatchString(args[0]) && !strings.HasPrefix(args[1], "--output") {
-			alignement = reAlign.FindStringSubmatch(args[0])[1]
-			userText = args[1]
-		} else {
-			userText = args[0]
-			font = args[1]
-		}
-	case 3:
-		if !reOutput.MatchString(args[0]) && !reAlign.MatchString(args[0]){
-			fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nExample: go run . --align=right something standard")
-		} else if reOutput.MatchString(args[0]) && reAlign.MatchString(args[1])  {
-			outputFile = reOutput.FindStringSubmatch(args[0])[1]
-			alignement = reAlign.FindStringSubmatch(args[1])[1]
-			userText = args[2]
-		} else if reAlign.MatchString(args[0]) && reOutput.MatchString(args[1]) {
-			alignement = reAlign.FindStringSubmatch(args[0])[1]
-			outputFile = reOutput.FindStringSubmatch(args[1])[1]
-			userText = args[2]		
-		} else if reOutput.MatchString(args[0]) && !strings.HasPrefix(args[1], "--align") {
-			outputFile = reOutput.FindStringSubmatch(args[0])[1]
-			userText = args[1]	
-			font = args[2]
-		} else if reAlign.MatchString(args[0]) && !strings.HasPrefix(args[1], "--output") {
-			alignement = reAlign.FindStringSubmatch(args[0])[1]
-			userText = args[1]	
-			font = args[2]
-		} else {
-			fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nExample: go run . --align=right something standard")
-		}
-	case 4:
-		if reOutput.MatchString(args[0]) && reAlign.MatchString(args[1]){
-			outputFile = reOutput.FindStringSubmatch(args[0])[1]
-			alignement = reAlign.FindStringSubmatch(args[1])[1]
-			userText = args[2]	
-			font = args[3]
-		} else if reOutput.MatchString(args[1]) && reAlign.MatchString(args[0]){
-			alignement = reAlign.FindStringSubmatch(args[0])[1]
-			outputFile = reOutput.FindStringSubmatch(args[1])[1]
-			userText = args[2]	
-			font = args[3]			
-		} else {
-			fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nExample: go run . --align=right something standard")
-		}
-	default:
-		fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nExample: go run . --align=right something standard")
+	if _, quit := ArgsErrors(args); quit { // Here I handle all possible input errors.
+		// fmt.Println("Error: ", err)     // we are restricted to the banal error msg.
+		fmt.Println(colorErr)
+		return "", "", "", "", "", nil, true
 	}
-	return userText, font, outputFile, alignement
+	if reverse {
+		return userText, font, alignment, outputFile, strings.TrimPrefix(args[0], "--reverse="), nil, false
+	}
+
+	/******* Building upon the fact that the last two words must either contain 'font' and 'user input'
+	or just 'user input' as the last word. ***********/
+	if len(args) == 1 {
+		return args[0], font, alignment, outputFile, reverseInput, nil, false
+	} else if len(args) >= 2 {
+		if GetAsciiTemplateByte(args[len(args)-1]) != nil {
+			if !reFlag.MatchString(args[len(args)-2]) {
+				font = args[len(args)-1]
+				userText = args[len(args)-2]
+			} else {
+				userText = args[len(args)-1]
+			}
+		} else {
+			userText = args[len(args)-1]
+		}
+	}
+	/*********************************************************************************************/
+
+	for i, arg := range args {
+		if reColor.MatchString(arg) {
+			color := IsValidColor(reColor.FindStringSubmatch(arg)[1])
+			switch i {
+			case len(args) - 2:
+				asciiColor = color
+				return args[i+1], font, alignment, outputFile, reverseInput, nil, false
+			case len(args) - 3:
+				if GetAsciiTemplateByte(args[len(args)-1]) != nil {
+					asciiColor = color
+					return args[i+1], args[i+2], alignment, outputFile, reverseInput, nil, false
+				} else {
+					colorMap[color] = append(colorMap[color], args[i+1]) // map[key] = append(map[key], value) (in case of maping to a slice).
+					return args[i+2], font, alignment, outputFile, reverseInput, colorMap, false
+				}
+			default:
+				colorMap[color] = append(colorMap[color], args[i+1])
+			}
+		} else if reAlign.MatchString(arg) {
+			alignment = reAlign.FindStringSubmatch(arg)[1]
+		} else if reOutput.MatchString(arg) {
+			outputFile = reOutput.FindStringSubmatch(arg)[1]
+
+		} else if reReverse.MatchString(arg) {
+			reverseInput = reReverse.FindStringSubmatch(arg)[1]
+		}
+	}
+
+	if reOutput.MatchString(strings.Join(args, " ")) && reColor.MatchString(strings.Join(args, " ")) {
+		fmt.Println("I can't color a txt output file!")
+		return userText, font, alignment, outputFile, reverseInput, nil, false
+	}
+
+	return userText, font, alignment, outputFile, reverseInput, colorMap, false
 }

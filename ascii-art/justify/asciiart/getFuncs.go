@@ -8,21 +8,11 @@ import (
 	"unsafe"
 )
 
-var stdoutFd int
-
-func init() {
-	if os.Getenv("test") != "" {
-		stdoutFd = int(os.Stdout.Fd()) // use export test=true for the test to work, setting stdoutFd to 1.
-	} else {
-		stdoutFd = int(os.Stdin.Fd()) // unset test for the | cat -e to work, setting stdoutFd to 0.
-	}
-}
-
 func GetAsciiTable(font string) [][]string {
 	InitFontLines(font)
 	asciiTemplateByte, err := os.ReadFile("./banners/" + font + ".txt")
 	if err != nil {
-		fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nEX: go run . --output=<fileName.txt> something standard")
+		fmt.Println(alignErr)
 		return nil
 	}
 	asciiTemplate := strings.ReplaceAll(string(asciiTemplateByte), "\r", "")
@@ -39,7 +29,7 @@ func GetAsciiTable(font string) [][]string {
 // Function to get the current terminal width.
 func GetTerminalWidth() (int, error) {
 	var dimensions [4]uint16
-	_, _, err := syscall.Syscall(syscall.SYS_IOCTL, uintptr(stdoutFd), syscall.TIOCGWINSZ, uintptr(unsafe.Pointer(&dimensions)))
+	_, _, err := syscall.Syscall(syscall.SYS_IOCTL, uintptr(syscall.Stderr), syscall.TIOCGWINSZ, uintptr(unsafe.Pointer(&dimensions)))
 	if err != 0 {
 		return 0, err
 	}
@@ -47,50 +37,21 @@ func GetTerminalWidth() (int, error) {
 }
 
 func GetAsciiLineLen(userLine string, asciiTable [][]string) int {
+	var output string
 	if userLine == "" {
 		return 0
 	}
-	var output string
-	for i := 0; i < fontLines; i++ {
-		for _, char := range userLine {
-			output += asciiTable[int(char-32)][i]
-		}
-		output += "\n"
+	for _, char := range userLine {
+		output += asciiTable[int(char-32)][0]
 	}
-	outputSlice := strings.Split(output, "\n")
-
-	return len([]rune(outputSlice[0])) // converting to []rune in case font contains special characters like zigzag.
-}
-
-func GetCenterSpaces(terminalWidth, lenAscii int) string {
-	var spaces string
-	spacesNum := (terminalWidth - lenAscii) / 2
-	for i := 0; i < spacesNum; i++ {
-		spaces += " "
-	}
-	return spaces
-}
-
-func GetRightSpaces(terminalWidth, outputLen int) string {
-	var spaces string
-	spacesNum := (terminalWidth - outputLen)
-	for i := 0; i < spacesNum; i++ {
-		spaces += " "
-	}
-	return spaces
+	return len([]rune(output)) // converting to []rune in case font contains special characters like zigzag.
 }
 
 func GetJustifySpace(terminalWidth int, userLine string, asciiTable [][]string) string {
 	userWords := strings.Split(userLine, " ")
 	var LenOfWords int
-	var JustifySpace string
 	for _, userWord := range userWords {
 		LenOfWords += GetAsciiLineLen(userWord, asciiTable)
 	}
-	JustifySpaceWidth := (terminalWidth - LenOfWords) / (len(userWords) - 1)
-
-	for j := 0; j < JustifySpaceWidth; j++ {
-		JustifySpace += " "
-	}
-	return JustifySpace
+	return strings.Repeat(" ", (terminalWidth - LenOfWords) / (len(userWords) - 1))
 }

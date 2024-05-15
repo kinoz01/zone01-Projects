@@ -1,31 +1,34 @@
 package asciiart
 
 import (
-	"fmt"
 	"os"
 	"strings"
 	"syscall"
 	"unsafe"
 )
 
-var stdoutFd int
-
-func init() {
-	if os.Getenv("test") != "" {
-		stdoutFd = int(os.Stdout.Fd()) // use export test=true for the test to work, setting stdoutFd to 1.
-	} else {
-		stdoutFd = int(os.Stdin.Fd()) // unset test for the | cat -e to work, setting stdoutFd to 0.
-	}
-}
-
-func GetAsciiTable(font string) [][]string {
+// This function check if a font is available at ./banners and at ../banners and lastely at ../fonts if found return its content as a slice of bytes else return nil.
+func GetAsciiTemplateByte(font string) []byte {
 	InitFontLines(font)
+
 	asciiTemplateByte, err := os.ReadFile("./banners/" + font + ".txt")
 	if err != nil {
-		fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nEX: go run . --output=<fileName.txt> something standard")
-		return nil
+		// If reading with fails try checking if there are any outside/user fonts in a folder along side the excutable called banners.
+		asciiTemplateByte, err = os.ReadFile("../banners/" + font + ".txt")
+		if err != nil {
+			asciiTemplateByte, err = os.ReadFile("../fonts/" + font + ".txt")
+			if err!= nil{
+				// If all three attempts fail return.
+				return nil
+			}			
+		}
 	}
-	asciiTemplate := strings.ReplaceAll(string(asciiTemplateByte), "\r", "")
+	return asciiTemplateByte
+}
+
+// Get an ascii table by transforming the font text from (file name------> slice of bytes------> slice of string (splited by \n\n)--------> 2D table (ready to print)).
+func GetAsciiTable(font string) [][]string {
+	asciiTemplate := strings.ReplaceAll(string(GetAsciiTemplateByte(font)), "\r", "")
 	asciiCharacters := strings.Split(string(asciiTemplate[1:]), "\n\n")
 	asciiTable := make([][]string, len(asciiCharacters))
 
@@ -36,62 +39,35 @@ func GetAsciiTable(font string) [][]string {
 	return asciiTable
 }
 
-// Function to get the current terminal width.
+// Get the current terminal width.
 func GetTerminalWidth() (int, error) {
-	var dimensions [4]uint16 
-	_, _, err := syscall.Syscall6(syscall.SYS_IOCTL, uintptr(stdoutFd), syscall.TIOCGWINSZ, uintptr(unsafe.Pointer(&dimensions)), 0, 0, 0) 
-	// put uintptr(syscall.Stdout) instead of 0 for testing
+	var dimensions [4]uint16
+	_, _, err := syscall.Syscall6(syscall.SYS_IOCTL, uintptr(2), syscall.TIOCGWINSZ, uintptr(unsafe.Pointer(&dimensions)), 0, 0, 0)
 	if err != 0 {
 		return 0, err
 	}
 	return int(dimensions[1]), nil
 }
 
+// Get the len of the first line of the printed ascii before justification/alignement.
 func GetAsciiLineLen(userLine string, asciiTable [][]string) int {
 	if userLine == "" {
 		return 0
 	}
 	var output string
-	for i := 0; i < fontLines; i++ {
-		for _, char := range userLine {
-			output += asciiTable[int(char-32)][i]
-		}
-		output += "\n"
+	for _, char := range userLine {
+		output += asciiTable[int(char-32)][0]
 	}
-	outputSlice := strings.Split(output, "\n")
-
-	return len([]rune(outputSlice[0])) // converting to []rune in case font contains special characters like zigzag.
+	return len([]rune(output)) // converting to []rune in case font contains special characters like "zigzag".
 }
 
-func GetCenterSpaces(terminalWidth, lenAscii int) string {
-	var spaces string
-	spacesNum := (terminalWidth - lenAscii) / 2
-	for i := 0; i < spacesNum; i++ {
-		spaces += " "
-	}
-	return spaces
-}
-
-func GetRightSpaces(terminalWidth, outputLen int) string {
-	var spaces string
-	spacesNum := (terminalWidth - outputLen)
-	for i := 0; i < spacesNum; i++ {
-		spaces += " "
-	}
-	return spaces
-}
-
+//Get Spaces to be placed AT EACH user input text space for justification.
 func GetJustifySpace(terminalWidth int, userLine string, asciiTable [][]string) string {
 	userWords := strings.Split(userLine, " ")
 	var LenOfWords int
-	var JustifySpace string
 	for _, userWord := range userWords {
 		LenOfWords += GetAsciiLineLen(userWord, asciiTable)
 	}
-	JustifySpaceWidth := (terminalWidth - LenOfWords) / (len(userWords) - 1)
-
-	for j := 0; j < JustifySpaceWidth; j++ {
-		JustifySpace += " "
-	}
-	return JustifySpace
+	return strings.Repeat(" ", (terminalWidth - LenOfWords) / (len(userWords) - 1))
 }
+

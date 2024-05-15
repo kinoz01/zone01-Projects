@@ -6,7 +6,6 @@ import (
 
 func PrintAsciiArt(userText, alignement string, asciiTable [][]string, terminalWidth int, colorMap map[string][]string) string {
 	var AsciiArt string
-	//var colorAll bool
 	for _, userLine := range strings.Split(userText, `\n`) {
 		if userLine == "" {
 			AsciiArt += "\n"
@@ -26,22 +25,23 @@ func PrintAsciiLine(userLine, alignement string, asciiTable [][]string, lenAscii
 		case "left":
 			output += ""
 		case "center":
-			output += GetCenterSpaces(terminalWidth, lenAscii)
+			output += strings.Repeat(" ", (terminalWidth-lenAscii)/2)
 		case "right":
-			output += GetRightSpaces(terminalWidth, lenAscii)
+			output += strings.Repeat(" ", terminalWidth-lenAscii)
 		case "justify":
 			justify = true
+			userLine = strings.Join(strings.Fields(userLine), " ")
 		}
 		for j, char := range userLine {
 			if char == ' ' && justify {
 				output += GetJustifySpace(terminalWidth, userLine, asciiTable)
 				continue
 			}
-			if color, paint := IsColorIndex(GetColoringIndex(colorMap, userLine), j); paint {
+			if color, paint := IsColorIndex(GetColoringIndices(colorMap, userLine), j); paint && asciiColor == "" {
 				output += color + asciiTable[int(char-32)][i] + reset
 				continue
 			}
-			output += asciiTable[int(char-32)][i]
+			output += asciiColor + asciiTable[int(char-32)][i]
 
 		}
 		output += "\n"

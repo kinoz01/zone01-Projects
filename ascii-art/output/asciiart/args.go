@@ -22,9 +22,11 @@ func UerArgs(args []string) (userText, font, outputFile string) {
 			userText = args[1]
 			font = "standard"
 			outputFile = reOutput.FindStringSubmatch(args[0])[1]
-		} else {
+		} else if !strings.HasPrefix(args[0], "--output"){
 			userText = args[0]
 			font = args[1]
+		} else {
+			fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nEX: go run . --output=<fileName.txt> something standard")
 		}
 	case 3:
 		if reOutput.MatchString(args[0]) {

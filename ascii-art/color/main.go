@@ -9,13 +9,12 @@ import (
 
 func main() {
 	args := os.Args[1:]
-	args, colorMap, quit := asciiart.GetColorMap(args)
+	userText, font, alignment, outputFile, reverseInput, colorMap, quit := asciiart.UserArgs(args)
 	if quit {
 		return
 	}
-	//fmt.Println(colorMap)
-	userText, font, outputFile, alignement := asciiart.UserArgs(args)
-	if userText == "" {
+	if reverseInput != "" {
+		fmt.Print(asciiart.ReverseArt(reverseInput))
 		return
 	}
 	userText, quit = asciiart.PrePrint(userText)
@@ -28,7 +27,7 @@ func main() {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
-	output := asciiart.PrintAsciiArt(userText, alignement, asciiart.GetAsciiTable(font), terminalWidth, colorMap)
+	output := asciiart.PrintAsciiArt(userText, alignment, asciiart.GetAsciiTable(font), terminalWidth, colorMap)
 
 	if outputFile == "" {
 		switch font {

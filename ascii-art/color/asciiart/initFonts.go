@@ -6,21 +6,14 @@ var fontLines int
 func InitFontLines(font string) {
 	switch font {
 	case "small":
-		fontLines = 5	
+		fontLines = 5
 	case "phoenix", "o2", "starwar", "stop":
 		fontLines = 7
 	case "standard", "shadow", "thinkertoy", "arob", "zigzag", "henry3D", "doom":
 		fontLines = 8
 	case "blocks":
 		fontLines = 11
+	default:
+		fontLines = 8
 	}
-}
-
-// These are available fonts.
-func IsBanner(str string) bool {
-	switch str {
-	case "small", "phoenix", "o2", "starwar", "stop", "standard", "shadow", "thinkertoy", "arob", "zigzag", "henry3D", "doom", "blocks":
-		return true
-	}
-	return false
 }

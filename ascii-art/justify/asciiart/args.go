@@ -6,7 +6,11 @@ import (
 	"strings"
 )
 
-func UserArgs(args []string) (userText, font, outputFile, alignement string) {
+const (
+	alignErr = "Usage: go run . [OPTION] [STRING] [BANNER]\n\nExample: go run . --align=right something standard"
+)
+
+func UserArgs(args []string) (userText, font, outputFile, alignement string, quit bool) {
 	alignement = "left"
 	font = "standard"
 	reOutput := regexp.MustCompile(`\A--output=(\S+.txt)$`)
@@ -15,15 +19,17 @@ func UserArgs(args []string) (userText, font, outputFile, alignement string) {
 	switch len(args) {
 	case 1:
 		if strings.HasPrefix(args[0], "--output") {
-			fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nEX: go run . --output=<fileName.txt> something standard")
+			fmt.Println(alignErr)
+			quit = true
 		} else if strings.HasPrefix(args[0], "--align") {
-			fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nExample: go run . --align=right something standard")
+			fmt.Println(alignErr)
 		} else {
 			userText = args[0]
 		}
 	case 2:
 		if (reOutput.MatchString(args[0]) && reAlign.MatchString(args[1])) || (reOutput.MatchString(args[1]) && reAlign.MatchString(args[0])){
-			fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nExample: go run . --align=right something standard")
+			fmt.Println(alignErr)
+			quit = true
 		} else if reOutput.MatchString(args[0]) && !strings.HasPrefix(args[1], "--align") {
 			outputFile = reOutput.FindStringSubmatch(args[0])[1]
 			userText = args[1]
@@ -31,12 +37,14 @@ func UserArgs(args []string) (userText, font, outputFile, alignement string) {
 			alignement = reAlign.FindStringSubmatch(args[0])[1]
 			userText = args[1]
 		} else {
+			fmt.Println("hey")
 			userText = args[0]
 			font = args[1]
 		}
 	case 3:
 		if !reOutput.MatchString(args[0]) && !reAlign.MatchString(args[0]){
-			fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nExample: go run . --align=right something standard")
+			fmt.Println(alignErr)
+			quit = true
 		} else if reOutput.MatchString(args[0]) && reAlign.MatchString(args[1]) {
 			outputFile = reOutput.FindStringSubmatch(args[0])[1]
 			alignement = reAlign.FindStringSubmatch(args[1])[1]
@@ -54,7 +62,8 @@ func UserArgs(args []string) (userText, font, outputFile, alignement string) {
 			userText = args[1]	
 			font = args[2]
 		} else {
-			fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nExample: go run . --align=right something standard")
+			fmt.Println(alignErr)
+			quit = true
 		}
 	case 4:
 		if reOutput.MatchString(args[0]) && reAlign.MatchString(args[1]){
@@ -68,10 +77,12 @@ func UserArgs(args []string) (userText, font, outputFile, alignement string) {
 			userText = args[2]	
 			font = args[3]			
 		} else {
-			fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nExample: go run . --align=right something standard")
+			fmt.Println(alignErr)
+			quit = true
 		}
 	default:
-		fmt.Println("Usage: go run . [OPTION] [STRING] [BANNER]\n\nExample: go run . --align=right something standard")
+		fmt.Println(alignErr)
+		quit = true
 	}
-	return userText, font, outputFile, alignement
+	return userText, font, outputFile, alignement, quit
 }

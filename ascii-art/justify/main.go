@@ -10,11 +10,12 @@ import (
 
 func main() {
 	args := os.Args[1:]
-	userText, font, outputFile, alignement := asciiart.UserArgs(args)
-	if userText == "" {
+	userText, font, outputFile, alignement, quit := asciiart.UserArgs(args)
+	fmt.Println(quit)
+	if userText == "" || quit{
 		return
 	}
-	userText, quit := asciiart.PrePrint(userText)
+	userText, quit = asciiart.PrePrint(userText)
 	if quit {
 		fmt.Print(userText)
 		return
