@@ -161,7 +161,7 @@ go run . --color=<color> <substring to be colored> string [banner]
 go run . --color=<color> <text to be colored> [banner]
 ```
 
-- You can also use as much color flags as you wish:
+- You can also use as much color flags as you like:
 
 ```console
 go run . --color=<color1> <substring1> --color=<color2> <substring2> ... --color=<colorN> <substringN> string [banner]
