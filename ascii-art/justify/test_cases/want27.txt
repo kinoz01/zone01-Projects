@@ -1,3 +1,0 @@
-Usage: go run . [OPTION] [STRING] [BANNER]
-
-Example: go run . --align=right something standard
