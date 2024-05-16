@@ -147,7 +147,7 @@ Assume the bars in the display below are the terminal borders:
 
 ### Color Output
 
-This option allows you to manipulate text colors using the command line interface. You can specify a color and choose which letters to colorize within a given string. It offers flexibility in choosing between coloring a single letter or a set of letters. Note that substrings don't support whitespaces (\n and spaces).
+This option allows you to manipulate text colors using the command line interface. You can specify a color and choose which letters to colorize within a given string. It offers flexibility in choosing between coloring a single letter or a set of letters. Note that substrings don't support newlines but support spaces characters.
 
 **Usage**
 
