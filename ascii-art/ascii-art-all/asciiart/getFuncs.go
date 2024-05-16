@@ -13,7 +13,7 @@ func GetAsciiTemplateByte(font string) []byte {
 
 	asciiTemplateByte, err := os.ReadFile("./banners/" + font + ".txt")
 	if err != nil {
-		// If reading with fails try checking if there are any outside/user fonts in a folder along side the excutable called banners.
+		// If reading with fails try checking if there are any outside/user fonts in a folder called banners along side the excutable program.
 		asciiTemplateByte, err = os.ReadFile("../banners/" + font + ".txt")
 		if err != nil {
 			asciiTemplateByte, err = os.ReadFile("../fonts/" + font + ".txt")
