@@ -273,7 +273,7 @@ func TestMainFunction(t *testing.T) {
 	}
 	// wantFiles := []string{./test_cases/want1.txt, ./test_cases/want2.txt....ect..../test_cases/want37.txt}
 
-	reOutput := regexp.MustCompile(`\A--output=(\S+.txt)$`)
+	reOutput := regexp.MustCompile(`\A--output=(\S+.txt)$`) // in case of match in args we get the "got" not from the stdout but from the txt created by the main().
 
 	for i, tc := range testCases {
 		var err error

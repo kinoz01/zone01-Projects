@@ -33,7 +33,7 @@ func ArgsErrors(args []string) (error, bool) {
 
 	argString := strings.Join(args, " ")
 
-	// Quit when a color flag is directly next to a color flag.
+	// Quit when a color flag is directly next to a flag (color flag without characters).
 	// Ex: --color=red --align=center "zone 01 oujda" o2
 	reError := regexp.MustCompile(`--color=(\S+) (--output|--align|--reverse|--color)`)
 	if reError.MatchString(argString) {
@@ -51,7 +51,7 @@ func ArgsErrors(args []string) (error, bool) {
 	}
 
 	InitFlagPatterns()
-	// we will remove duplicates with these.
+	// we will remove duplicates with these ints.
 	var a, o, r, c int 
 	// These patterns will either be flags or error.
 	reColorGeneral := regexp.MustCompile(`\A--color`)
@@ -60,6 +60,7 @@ func ArgsErrors(args []string) (error, bool) {
 	reReverseGeneral := regexp.MustCompile(`\A--reverse`)
 
 	// Ranging over args to find bad flags (flags specification/globalisation).
+	// first we match any starting flag pattern (wrong or correct) then we return if we find any wrong flag.
 	for _, arg := range args {
 		if reAlignGeneral.MatchString(arg) {
 			if reAlign.MatchString(arg) {

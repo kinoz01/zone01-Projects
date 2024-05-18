@@ -41,7 +41,7 @@ func GetAsciiTable(font string) [][]string {
 
 // Get the current terminal width.
 func GetTerminalWidth() (int, error) {
-	var dimensions [4]uint16
+	var dimensions [2]uint16
 	_, _, err := syscall.Syscall6(syscall.SYS_IOCTL, uintptr(2), syscall.TIOCGWINSZ, uintptr(unsafe.Pointer(&dimensions)), 0, 0, 0)
 	if err != 0 {
 		return 0, err
@@ -61,7 +61,7 @@ func GetAsciiLineLen(userLine string, asciiTable [][]string) int {
 	return len([]rune(output)) // converting to []rune in case font contains special characters like "zigzag".
 }
 
-//Get Spaces to be placed AT EACH user input text space for justification.
+//Get Spaces to be placed AT EACH user input text SPACE for justification.
 func GetJustifySpace(terminalWidth int, userLine string, asciiTable [][]string) string {
 	userWords := strings.Split(userLine, " ")
 	var LenOfWords int
@@ -73,4 +73,3 @@ func GetJustifySpace(terminalWidth int, userLine string, asciiTable [][]string) 
 	}
 	return ""
 }
-

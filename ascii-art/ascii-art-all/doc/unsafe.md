@@ -1,0 +1,5 @@
+## What is `unsafe.Pointer`?
+
+In Go, `unsafe.Pointer` is a special type of pointer. Unlike regular pointers (e.g., `*int`, `*string`), it's not associated with any specific data type. Think of it as a "raw" or "generic" pointer that can hold the memory address of any value.
+
+Go's `unsafe.Pointer` is the equivalent of a `void*` pointer in C. It allows Go programs to seamlessly interface with C libraries or low-level system calls, where generic pointers are often used to pass around data of varying types.

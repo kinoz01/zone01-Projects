@@ -19,13 +19,13 @@ func GetColoringIndices(colorMap map[string][]string, userText string) map[strin
 	return intColorMap
 }
 
-// Find indices of occurence of a substring (generally -but not always- colorChars) in a string (userText)
+// Find indices of occurence of a substring (coloring Characters) in a string (userText)
 func FindSubstringIndices(colorChars, userText string) []int { 
 	indices := []int{}
 	for i := 0; i < len(userText)-len(colorChars)+1; i++ {
 		if userText[i:i+len(colorChars)] == colorChars {
 			for j := i; j < i+len(colorChars); j++ {
-				indices = append(indices, j)
+				indices = append(indices, j) // just the normal index function but we add this loop to get the indice of each character.
 			}
 		}
 	}
@@ -43,22 +43,4 @@ func IsColorIndex(indexColorMap map[string][]int, j int) (string, bool) {
 		}
 	}
 	return "", false
-}
-
-// This function check if user entered same exact character(s)/values for two colors/map keys.
-// if true used to return an empty map in GetColorMap func and continue printing without colors.
-func SameStringForTwoColors(colorMap map[string][]string) bool {
-	seen := []string{}
-
-	for _, values := range colorMap {
-		for _, value := range values {
-			for _, seenStr := range seen {
-				if seenStr == value {
-					return true
-				}
-			}
-			seen = append(seen, value)
-		}
-	}
-	return false
 }
