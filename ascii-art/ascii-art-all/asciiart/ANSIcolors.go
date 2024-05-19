@@ -25,21 +25,21 @@ const (
 
 func IsValidColor(color string) (ansiColor string) {
 	switch color {
-	case "black", "(0, 0, 0)", "#000000", "hsl(0, 0%, 0%)":
+	case "black", "rgb(0, 0, 0)", "#000000", "hsl(0, 0%, 0%)":
 		ansiColor = black
-	case "red", "(255, 0, 0)", "#ff0000", "hsl(0, 100%, 50%)":
+	case "red", "rgb(255, 0, 0)", "#ff0000", "hsl(0, 100%, 50%)":
 		ansiColor = red
-	case "green", "(0, 255, 0)", "#00ff00", "hsl(120, 100%, 50%)":
+	case "green", "rgb(0, 255, 0)", "#00ff00", "hsl(120, 100%, 50%)":
 		ansiColor = green
-	case "yellow", "(255, 255, 0)", "#ffff00", "hsl(60, 100%, 50%)":
+	case "yellow", "rgb(255, 255, 0)", "#ffff00", "hsl(60, 100%, 50%)":
 		ansiColor = yellow
-	case "blue", "(0, 0, 255)", "#0000ff", "hsl(240, 100%, 50%)":
+	case "blue", "rgb(0, 0, 255)", "#0000ff", "hsl(240, 100%, 50%)":
 		ansiColor = blue
-	case "magenta", "(255, 0, 255)", "#ff00ff", "hsl(300, 100%, 50%)":
+	case "magenta", "rgb(255, 0, 255)", "#ff00ff", "hsl(300, 100%, 50%)":
 		ansiColor = magenta
-	case "cyan", "(0, 255, 255)", "#00ffff", "hsl(180, 100%, 50%)":
+	case "cyan", "rgb(0, 255, 255)", "#00ffff", "hsl(180, 100%, 50%)":
 		ansiColor = cyan
-	case "white", "(255, 255, 255)", "#ffffff", "hsl(0, 0%, 100%)":
+	case "white", "rgb(255, 255, 255)", "#ffffff", "hsl(0, 0%, 100%)":
 		ansiColor = white
 	case "sky":
 		ansiColor = sky
@@ -64,4 +64,3 @@ func IsValidColor(color string) (ansiColor string) {
 	}
 	return ansiColor
 }
-  

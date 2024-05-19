@@ -14,12 +14,13 @@ func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInpu
 	alignment = "left"
 	InitFlagPatterns()
 
-	if _, quit := ArgsErrors(args); quit { // Here I handle all (hopefully) possible input errors.
-		// fmt.Println("Error:", err)      // we are restricted to the banal error msg.
+	if err := ArgsErrors(args); err!=nil { // Here I handle all (hopefully) possible input errors.
+		// fmt.Println("Error:", err)      // commented this cuz we are restricted to the banal error msg.
 		fmt.Println(colorErr)
 		return "", "", "", "", "", nil, true
 	}
-	if reverse { // if reverse case we need only the ascii input file name to launch reversing mechanism.
+	// if reverse case we need only the ascii input file name to launch reversing mechanism.
+	if reverse { 
 		return userText, font, alignment, outputFile, strings.TrimPrefix(args[0], "--reverse="), nil, false
 	}
 
@@ -42,9 +43,9 @@ func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInpu
 	/*********************************************************************************************/
 	// here we use submatching to get string of the returns values we will work with. Since we don't have errors we only need to match submatching group with its return value.
 	for i, arg := range args {
-		if reColor.MatchString(arg) {
+		if reColorGeneral.MatchString(arg) {
 			// We find the Ansi color corresponding to the color string (invalid colors are already handled in args Error, this is just to get the Ansi color value)
-			color := IsValidColor(reColor.FindStringSubmatch(arg)[1])
+			color := IsValidColor(strings.TrimPrefix(arg, "--color="))
 			switch i {
 			case len(args) - 2: // --color=red hello
 				ColorAll = color // coloAll will be used to color all the string output (ascii Art) using "color" and skip coloring parts of the ascii.
