@@ -59,7 +59,7 @@ func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInpu
 					colorMap[color] = append(colorMap[color], args[i+1]) // map[key] = append(map[key], value) (in case of maping to a slice).
 					return args[i+2], font, alignment, outputFile, reverseInput, colorMap, false
 				}
-			default: // --color=red h --color=orange o --align=justify "hello There" o2
+			default: // --color=red h --color=orange o --align=justify "hello There" o2 (any case other than above)
 				colorMap[color] = append(colorMap[color], args[i+1])
 			}
 		} else if reAlign.MatchString(arg) {
