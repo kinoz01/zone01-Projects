@@ -17,12 +17,8 @@ func main() {
 	if len(userText) == 0 {
 		return
 	}
-	// these lines (20-->26) handle the cases of just new lines in the text.
-	if userText == `\n` {
-		fmt.Print("\n")
-		return
-	}
-	re := regexp.MustCompile(`\A((\\n)+)\\n$`)
+	// these lines (20-->24) handle the cases of just new lines in the text.
+	re := regexp.MustCompile(`\A((\\n)*)\\n$`)
 	userText = re.ReplaceAllString(userText, "$1")
 
 	asciiTemplateByte, err := os.ReadFile("./banners/standard.txt")
@@ -55,13 +51,12 @@ func main() {
 	// Printing mechanism.
 	var output string
 	userLine := strings.Split(userText, `\n`)
-	for _, newLine := range userLine {		
+	for _, newLine := range userLine {
 		if newLine == "" {
 			output += "\n"
 			continue
 		}
 		for i := 0; i < 8; i++ {
-			// output += "   " The basic idea of justify
 			for _, char := range newLine {
 				output += asciiTable[int(char)-32][i]
 			}

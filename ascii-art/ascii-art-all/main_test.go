@@ -278,7 +278,7 @@ func TestMainFunction(t *testing.T) {
 	for i, tc := range testCases {
 		var err error
 		got := ""
-		if i <= 36 { // read wants from text files only until test 37.
+		if i <= 36 { // read "wants" from text files only until test 37.
 			tc.want, err = readWantFile(wantFiles[i])
 			if err != nil {
 				fmt.Println(err)

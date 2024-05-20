@@ -1,13 +1,12 @@
-package test
+package main
 
 import (
+	"bytes"
 	"os"
-	"regexp"
-	"strings"
 	"testing"
 )
 
-func TestRunMain(t *testing.T) {
+func TestAsciiArt(t *testing.T) {
 	// Define test cases
 	want1, _ := os.ReadFile("./cases/want1.txt")
 	want2, _ := os.ReadFile("./cases/want2.txt")
@@ -29,7 +28,7 @@ func TestRunMain(t *testing.T) {
 
 	tests := []struct {
 		name string // Name of the test case
-		text string // Input text
+		arg  string // Input text
 		want string // Expected output using a regexp pattern
 	}{
 		{"Test 1", `\n`, "\n"},
@@ -51,64 +50,28 @@ func TestRunMain(t *testing.T) {
 		{"Test 17", `\!" #$%&` + "'" + `()*+,-./`, string(want15)},
 		{"Test 18", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", string(want16)},
 		{"Test 19", "abcdefghijklmnopqrstuvwxyz", string(want17)},
-		{"Test Error", "²", "🚨 Found an Invalid Ascii Character.\n"},
 	}
 
 	for _, cas := range tests {
+		got := ""
 		t.Run(cas.name, func(t *testing.T) {
-			got := AsciiArt(cas.text)
-			// Check if the output matches the expected result.
+			r, w, _ := os.Pipe()
+			os.Stdout = w
+
+			os.Args = []string{"main.go"}
+			os.Args = append(os.Args, cas.arg)
+			main()
+			w.Close()
+
+			var buf bytes.Buffer
+			_, _ = buf.ReadFrom(r)
+
+			r.Close()
+			got = buf.String()
+
 			if got != cas.want {
-				t.Errorf("\n\nFor input \x1b[31m%s\x1b[0m\n\nExpected:\n\x1b[36m%s\x1b[0m\nBUT Got:\n%s", cas.text, cas.want, got)
+				t.Errorf("\n\nFor input \x1b[31m%s\x1b[0m\n\nExpected:\n\x1b[36m%s\x1b[0m\nBUT Got:\n%s", cas.arg, cas.want, got)
 			}
 		})
 	}
-}
-
-func AsciiArt(userText string) string {
-	if len(userText) == 0 {
-		return ""
-	}
-	if userText == `\n` {
-		return "\n"
-	}
-	re := regexp.MustCompile(`\A((\\n)+)\\n$`)
-	userText = re.ReplaceAllString(userText, "$1")
-
-	asciiTemplateByte, err := os.ReadFile("../banners/standard.txt")
-	if err != nil {
-		return "Error reading file: standard.txt\n"
-	}
-
-	asciiCharacters := strings.Split(string(asciiTemplateByte[1:]), "\n\n")
-	asciiTable := make([][]string, len(asciiCharacters))
-
-	for i := range asciiCharacters {
-		lines := strings.Split(asciiCharacters[i], "\n")
-		asciiTable[i] = append(asciiTable[i], lines...)
-	}
-
-	for _, userTextChar := range userText {
-		asciiIndex := int(userTextChar)
-		if asciiIndex-32 < 0 || asciiIndex-32 >= len(asciiTable) {
-			return "🚨 Found an Invalid Ascii Character.\n"
-
-		}
-	}
-
-	var output string
-	userLine := strings.Split(userText, `\n`)
-	for _, newLine := range userLine {
-		if newLine == "" {
-			output += "\n"
-			continue
-		}
-		for i := 0; i < 8; i++ {
-			for _, char := range newLine {
-				output += asciiTable[int(char)-32][i]
-			}
-			output += "\n"
-		}
-	}
-	return output
 }

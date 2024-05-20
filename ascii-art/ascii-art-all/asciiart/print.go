@@ -49,7 +49,7 @@ func PrintAsciiLine(userLine, alignement string, asciiTable [][]string, lenAscii
 
 		}
 		output += "\n"
-
 	}
+
 	return output
 }

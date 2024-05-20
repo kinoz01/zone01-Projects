@@ -13,6 +13,7 @@ func main() {
 	if quit {
 		return
 	}
+
 	if reverseInput != "" {
 		fmt.Print(asciiart.ReverseArt(reverseInput))
 		return
@@ -34,7 +35,7 @@ func main() {
 		case "zigzag", "o2", "impossible", "univers":
 			for _, char := range output {
 				fmt.Print(string(char))
-				time.Sleep(3 * time.Second / time.Duration(len(output))) // just some printing "art" for this particular fonts.							
+				time.Sleep(3 * time.Second / time.Duration(len(output))) // just some printing "art" for this particular fonts.
 			}
 		default:
 			fmt.Print(output)
