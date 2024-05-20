@@ -16,10 +16,8 @@ func ReverseArt(inputAsciiFile string) string {
 		}
 	}
 
-	inputAscii := string(inputAsciiByte)
-
 	AsciiTemplate := strings.Split(string(GetAsciiTemplateByte("standard")), "\n\n")
-	inputAsciiLines := strings.Split(inputAscii, "\n")
+	inputAsciiLines := strings.Split(string(inputAsciiByte), "\n")
 
 	var spaceIndex int
 	var AsciiCharacter string
