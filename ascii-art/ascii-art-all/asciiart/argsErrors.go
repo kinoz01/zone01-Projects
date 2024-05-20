@@ -49,7 +49,6 @@ func ArgsErrors(args []string) error {
 		return err
 	}
 
-
 	InitFlagPatterns()
 	// we will remove duplicates with these ints.
 	var a, o, c int
@@ -146,6 +145,5 @@ func ArgsErrors(args []string) error {
 			return err
 		}
 	}
-
 	return nil
 }
