@@ -42,7 +42,7 @@ func GetAsciiTable(font string) [][]string {
 // Get the current terminal width.
 func GetTerminalWidth() (int, error) {
 	var dimensions [2]uint16
-	_, _, err := syscall.Syscall6(syscall.SYS_IOCTL, uintptr(2), syscall.TIOCGWINSZ, uintptr(unsafe.Pointer(&dimensions)), 0, 0, 0)
+	_, _, err := syscall.Syscall(syscall.SYS_IOCTL, uintptr(2), syscall.TIOCGWINSZ, uintptr(unsafe.Pointer(&dimensions)))
 	if err != 0 {
 		return 0, err
 	}
