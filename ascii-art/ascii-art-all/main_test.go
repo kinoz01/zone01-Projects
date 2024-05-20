@@ -297,7 +297,6 @@ func TestMainFunction(t *testing.T) {
 
 			var buf bytes.Buffer
 			_, _ = buf.ReadFrom(r)
-
 			r.Close()
 
 			if reOutput.MatchString(tc.args[0]) {
