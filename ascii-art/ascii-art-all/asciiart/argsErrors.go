@@ -42,10 +42,10 @@ func ArgsErrors(args []string) error {
 
 	// Quit when user args end with a flag.
 	// Ex: --color=red g --align=center
-	// But this will work --color=red g f--align=center (I considered a flag only something that begin with -- if i remove the space from the pattern it will give error)
+	// But this will work --color=red g f--align=center (I considered a flag only something that begin with --)
 	reError2 := regexp.MustCompile(`(\A--output=.+$|\A--align=.+$|\A--color=.+$)`)	
 	if reError2.MatchString(args[len(args)-1]) {
-		err := fmt.Errorf("you can't end your input with a flag.")
+		err := fmt.Errorf("you can't end your input with a flag")
 		return err
 	}
 
