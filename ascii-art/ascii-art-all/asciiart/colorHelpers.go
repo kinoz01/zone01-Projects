@@ -19,7 +19,7 @@ func GetColoringIndices(colorMap map[string][]string, userText string) map[strin
 	return intColorMap
 }
 
-// Find indices of occurence of a substring (coloring Characters) in a string (userText)
+// Find indices of occurence of a substring (Coloring Characters) in a string (userText)
 func FindSubstringIndices(colorChars, userText string) []int {
 	indices := []int{}
 	for i := 0; i < len(userText)-len(colorChars)+1; i++ {
