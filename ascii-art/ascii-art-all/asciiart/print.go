@@ -4,6 +4,7 @@ import (
 	"strings"
 )
 
+// construct the final ascii art string.
 func PrintAsciiArt(userText, alignement string, asciiTable [][]string, terminalWidth int, colorMap map[string][]string) string {
 	var AsciiArt string
 	for _, userLine := range strings.Split(userText, `\n`) {
@@ -17,6 +18,7 @@ func PrintAsciiArt(userText, alignement string, asciiTable [][]string, terminalW
 	return AsciiArt
 }
 
+// construct the user line ascii art using the asciiTable.
 func PrintAsciiLine(userLine, alignement string, asciiTable [][]string, lenAscii, terminalWidth int, colorMap map[string][]string) string {
 	var output string
 	var justify bool

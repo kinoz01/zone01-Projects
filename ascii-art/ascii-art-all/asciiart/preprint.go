@@ -2,12 +2,11 @@ package asciiart
 
 import "regexp"
 
+// Search for invalid ascii to avoid out of range panic, and remove one new line in case of just new lines in userInput.
 func PrePrint(userText string) (string, bool) {
-	
 	if len(userText) == 0 {
 		return "", true
 	}
-	// Searching for invalid ascii to avoid out of range panic.
 	for _, userTextChar := range userText {
 		asciiIndex := int(userTextChar)
 		if asciiIndex-32 < 0 || asciiIndex-32 >= 95 {

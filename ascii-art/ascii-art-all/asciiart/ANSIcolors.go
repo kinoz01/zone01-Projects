@@ -23,6 +23,7 @@ const (
 	emerald   = "\033[38;5;46m"
 )
 
+// IsValidColor will link a string color with an ansi color code. In case of invalid color it will return an empty string.
 func IsValidColor(color string) (ansiColor string) {
 	switch color {
 	case "black", "rgb(0, 0, 0)", "#000000", "hsl(0, 0%, 0%)":

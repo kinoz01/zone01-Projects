@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"os"
 )
-
-func CreateFile(output, outputFile string) {
+// takes the content and the file name, create the file and write the content (ascii art) in it.
+func CreateFile(output, outputFileName string) {
 	// Create a new file or truncate the existing file
-	file, err := os.Create(outputFile)
+	file, err := os.Create(outputFileName)
 	if err != nil {
 		fmt.Println("Error creating file:", err)
 		return
