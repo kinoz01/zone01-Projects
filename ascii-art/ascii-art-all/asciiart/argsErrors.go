@@ -36,8 +36,7 @@ func ArgsErrors(args []string) error {
 	// Ex: --color=red --align=center "zone 01 oujda" o2
 	reError := regexp.MustCompile(`--color=(\S+) (--output|--align|--reverse|--color)`)
 	if reError.MatchString(argString) {
-		err := fmt.Errorf("found a color flag with no value")
-		return err
+		return fmt.Errorf("found a color flag with no value")
 	}
 
 	// Quit when user args end with a flag.
@@ -45,8 +44,7 @@ func ArgsErrors(args []string) error {
 	// But this will work --color=red g f--align=center (I considered a flag only something that begin with --)
 	reError2 := regexp.MustCompile(`(\A--output=.+$|\A--align=.+$|\A--color=.+$)`)	
 	if reError2.MatchString(args[len(args)-1]) {
-		err := fmt.Errorf("you can't end your input with a flag")
-		return err
+		return fmt.Errorf("you can't end your input with a flag")
 	}
 
 	InitFlagPatterns()
@@ -66,8 +64,7 @@ func ArgsErrors(args []string) error {
 				a++
 				continue
 			} else {
-				err := fmt.Errorf("invalid flag: %s", arg)
-				return err
+				return fmt.Errorf("invalid flag: %s", arg)
 			}
 		}
 		if reOutputGeneral.MatchString(arg) {
@@ -75,8 +72,7 @@ func ArgsErrors(args []string) error {
 				o++
 				continue
 			} else {
-				err := fmt.Errorf("invalid flag: %s", arg)
-				return err
+				return fmt.Errorf("invalid flag: %s", arg)
 			}
 		}
 		if reReverseGeneral.MatchString(arg) {
@@ -84,8 +80,7 @@ func ArgsErrors(args []string) error {
 				reverse = true
 				continue
 			} else {
-				err := fmt.Errorf("invalid flag: %s", arg)
-				return err
+				return fmt.Errorf("invalid flag: %s", arg)
 			}
 		}
 		if reColor.MatchString(arg) {
@@ -94,24 +89,20 @@ func ArgsErrors(args []string) error {
 				c++
 				continue
 			} else {
-				err := fmt.Errorf("invalid flag: %s", arg)
-				return err
+				return fmt.Errorf("invalid flag: %s", arg)
 			}
 		}
 	}
 	// reverse situations could have only one argument.
 	if reverse && len(args) > 1 {
-		err := fmt.Errorf("please enter only one argument to reverse")
-		return err
+		return fmt.Errorf("please enter only one argument to reverse")
 	}
 	if o > 1 || a > 1 {
-		err := fmt.Errorf("too many flags") // only one output/align flag.
-		return err
+		return fmt.Errorf("too many flags") // only one output/align flag.
 	}
 	// if there is no color flag the max args we could have is 4.
 	if c == 0 && len(args) > 4 {
-		err := fmt.Errorf("too many arguments") 
-		return err
+		return fmt.Errorf("too many arguments") 
 	}
 
 	var rmStrings []string
@@ -128,21 +119,18 @@ func ArgsErrors(args []string) error {
 		// Ex: --align=center lol h hey
 		if (reOutput.MatchString(arg) || reAlign.MatchString(arg)) && i+1 < len(rmStrings) && i != len(rmStrings)-2 { 
 			if !reFlag.MatchString(rmStrings[i+1]) {
-				err := fmt.Errorf("wrong input: %s", rmStrings[i+1])
-				return err
+				return fmt.Errorf("wrong input: %s", rmStrings[i+1])
 			}
 		}
 		// Ex: --color=red h h y
 		if reColor.MatchString(arg) && i+2 < len(rmStrings) && i != len(rmStrings)-3 { 
 			if !reFlag.MatchString(rmStrings[i+2]) {
-				err := fmt.Errorf("wrong input: %s", rmStrings[i+2])
-				return err
+				return fmt.Errorf("wrong input: %s", rmStrings[i+2])
 			}
 		}
 		// Ex: hey hey // Ex2: hey --color=red h hey
 		if !reFlag.MatchString(rmStrings[0]) && len(rmStrings) > 1 {
-			err := fmt.Errorf("wrong input: %s", rmStrings[0])
-			return err
+			return fmt.Errorf("wrong input: %s", rmStrings[0])
 		}
 	}
 	return nil
