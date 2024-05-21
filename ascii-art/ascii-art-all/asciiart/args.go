@@ -9,7 +9,7 @@ var (
 	reverse  bool
 	ColorAll string
 )
-
+// Handle all user args and return strings data and a bool to quit if true.
 func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInput string, colorMap map[string][]string, quit bool) {
 	colorMap = make(map[string][]string)
 	font = "standard"
