@@ -173,7 +173,7 @@ green, yellow, blue, magenta, cyan, white, sky, orange, forest, ocean, lavender,
 ```
 
 **Note 1:**
-You can use `RGB` (ex: `(255, 0, 0)`), `HSL` (ex: `hsl(0, 100%, 50%)`) or hexadecimal notation (ex: `#00ff00`) to use basic colors.
+You can use `RGB` (ex: `rgb(255, 0, 0)`), `HSL` (ex: `hsl(0, 100%, 50%)`) or hexadecimal notation (ex: `#00ff00`) to use basic colors.
 
 **Note 2:**
 Be careful when using characters like single quotes and others, you will need to escape them so the program can work correctly!

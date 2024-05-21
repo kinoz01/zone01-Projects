@@ -5,10 +5,9 @@ import (
 	"strings"
 )
 
-var (
-	reverse  bool
-	ColorAll string
-)
+
+var	reverse  bool
+
 // Handle all user args and return strings data and a bool to quit if true.
 func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInput string, colorMap map[string][]string, quit bool) {
 	colorMap = make(map[string][]string)
@@ -60,18 +59,7 @@ func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInpu
 		if reColor.MatchString(arg) {
 			c++
 			color := IsValidColor(strings.TrimPrefix(arg, "--color="))
-			switch i {
-			case len(args) - 2: // --color=red hello
-				ColorAll = color
-			case len(args) - 3:
-				if GetAsciiTemplateByte(args[len(args)-1]) != nil { // --color=red hello shadow
-					ColorAll = color
-				} else { // --color=red h hello				
-					colorMap[color] = append(colorMap[color], args[i+1]) 
-				}
-			default: 
-				colorMap[color] = append(colorMap[color], args[i+1])
-			}
+			colorMap[color] = append(colorMap[color], args[i+1])
 		} else if reAlign.MatchString(arg) {
 			alignment = reAlign.FindStringSubmatch(arg)[1]
 		} else if reOutput.MatchString(arg) {
@@ -83,7 +71,6 @@ func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInpu
 	// If we have a color and output flags at the same time in arguments string we print little msg and continue without coloring (returning nil map).
 	if o >= 1 && c >= 1 {
 		fmt.Println("I can't color a txt output file!")
-		ColorAll = ""
 		return userText, font, alignment, outputFile, reverseInput, nil, false
 	}
 

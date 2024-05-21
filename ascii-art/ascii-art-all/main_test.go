@@ -10,6 +10,7 @@ import (
 )
 
 const (
+	reset  = "\033[0m"
 	red    = "\033[31m"
 	green  = "\033[32m"
 	yellow = "\033[33m"
@@ -178,38 +179,38 @@ func TestMainFunction(t *testing.T) {
 		{
 			name: "Test 39 (color red)",
 			args: []string{`--color=red`, `hello world`},
-			want: red + " _      " + red + "       " + red + " _  " + red + " _  " + red + "        " + red + "      " + red + "           " + red + "        " + red + "       " + red + " _  " + red + "     _  \n" +
-				red + "| |     " + red + "       " + red + "| | " + red + "| | " + red + "        " + red + "      " + red + "           " + red + "        " + red + "       " + red + "| | " + red + "    | | \n" +
-				red + "| |__   " + red + "  ___  " + red + "| | " + red + "| | " + red + "  ___   " + red + "      " + red + "__      __ " + red + "  ___   " + red + " _ __  " + red + "| | " + red + "  __| | \n" +
-				red + "|  _ \\  " + red + " / _ \\ " + red + "| | " + red + "| | " + red + " / _ \\  " + red + "      " + red + "\\ \\ /\\ / / " + red + " / _ \\  " + red + "| '__| " + red + "| | " + red + " / _` | \n" +
-				red + "| | | | " + red + "|  __/ " + red + "| | " + red + "| | " + red + "| (_) | " + red + "      " + red + " \\ V  V /  " + red + "| (_) | " + red + "| |    " + red + "| | " + red + "| (_| | \n" +
-				red + "|_| |_| " + red + " \\___| " + red + "|_| " + red + "|_| " + red + " \\___/  " + red + "      " + red + "  \\_/\\_/   " + red + " \\___/  " + red + "|_|    " + red + "|_| " + red + " \\__,_| \n" +
-				red + "        " + red + "       " + red + "    " + red + "    " + red + "        " + red + "      " + red + "           " + red + "        " + red + "       " + red + "    " + red + "        \n" +
-				red + "        " + red + "       " + red + "    " + red + "    " + red + "        " + red + "      " + red + "           " + red + "        " + red + "       " + red + "    " + red + "        \n",
+			want: red + " _      " + reset + red + "       " + reset + red + " _  " + reset + red + " _  " + reset + red + "        " + reset + red + "      " + reset + red + "           " + reset + red + "        " + reset + red + "       " + reset + red + " _  " + reset + red + "     _  " + reset + "\n" +
+				red + "| |     " + reset + red + "       " + reset + red + "| | " + reset + red + "| | " + reset + red + "        " + reset + red + "      " + reset + red + "           " + reset + red + "        " + reset + red + "       " + reset + red + "| | " + reset + red + "    | | " + reset + "\n" +
+				red + "| |__   " + reset + red + "  ___  " + reset + red + "| | " + reset + red + "| | " + reset + red + "  ___   " + reset + red + "      " + reset + red + "__      __ " + reset + red + "  ___   " + reset + red + " _ __  " + reset + red + "| | " + reset + red + "  __| | " + reset + "\n" +
+				red + "|  _ \\  " + reset + red + " / _ \\ " + reset + red + "| | " + reset + red + "| | " + reset + red + " / _ \\  " + reset + red + "      " + reset + red + "\\ \\ /\\ / / " + reset + red + " / _ \\  " + reset + red + "| '__| " + reset + red + "| | " + reset + red + " / _` | " + reset + "\n" +
+				red + "| | | | " + reset + red + "|  __/ " + reset + red + "| | " + reset + red + "| | " + reset + red + "| (_) | " + reset + red + "      " + reset + red + " \\ V  V /  " + reset + red + "| (_) | " + reset + red + "| |    " + reset + red + "| | " + reset + red + "| (_| | " + reset + "\n" +
+				red + "|_| |_| " + reset + red + " \\___| " + reset + red + "|_| " + reset + red + "|_| " + reset + red + " \\___/  " + reset + red + "      " + reset + red + "  \\_/\\_/   " + reset + red + " \\___/  " + reset + red + "|_|    " + reset + red + "|_| " + reset + red + " \\__,_| " + reset + "\n" +
+				red + "        " + reset + red + "       " + reset + red + "    " + reset + red + "    " + reset + red + "        " + reset + red + "      " + reset + red + "           " + reset + red + "        " + reset + red + "       " + reset + red + "    " + reset + red + "        " + reset + "\n" +
+				red + "        " + reset + red + "       " + reset + red + "    " + reset + red + "    " + reset + red + "        " + reset + red + "      " + reset + red + "           " + reset + red + "        " + reset + red + "       " + reset + red + "    " + reset + red + "        " + reset + "\n",
 		},
 		{
 			name: "Test 40 (color green)",
 			args: []string{`--color=green`, `1 + 1 = 2`},
-			want: green + "    " + green + "      " + green + "        " + green + "      " + green + "    " + green + "      " + green + "         " + green + "      " + green + "        \n" +
-				green + " _  " + green + "      " + green + "   _    " + green + "      " + green + " _  " + green + "      " + green + " ______  " + green + "      " + green + " ____   \n" +
-				green + "/ | " + green + "      " + green + " _| |_  " + green + "      " + green + "/ | " + green + "      " + green + "|______| " + green + "      " + green + "|___ \\  \n" +
-				green + "| | " + green + "      " + green + "|_   _| " + green + "      " + green + "| | " + green + "      " + green + " ______  " + green + "      " + green + "  __) | \n" +
-				green + "| | " + green + "      " + green + "  |_|   " + green + "      " + green + "| | " + green + "      " + green + "|______| " + green + "      " + green + " / __/  \n" +
-				green + "|_| " + green + "      " + green + "        " + green + "      " + green + "|_| " + green + "      " + green + "         " + green + "      " + green + "|_____| \n" +
-				green + "    " + green + "      " + green + "        " + green + "      " + green + "    " + green + "      " + green + "         " + green + "      " + green + "        \n" +
-				green + "    " + green + "      " + green + "        " + green + "      " + green + "    " + green + "      " + green + "         " + green + "      " + green + "        \n",
+			want: green + "    " + reset + green + "      " + reset + green + "        " + reset + green + "      " + reset + green + "    " + reset + green + "      " + reset + green + "         " + reset + green + "      " + reset + green + "        " + reset + "\n" +
+				green + " _  " + reset + green + "      " + reset + green + "   _    " + reset + green + "      " + reset + green + " _  " + reset + green + "      " + reset + green + " ______  " + reset + green + "      " + reset + green + " ____   " + reset + "\n" +
+				green + "/ | " + reset + green + "      " + reset + green + " _| |_  " + reset + green + "      " + reset + green + "/ | " + reset + green + "      " + reset + green + "|______| " + reset + green + "      " + reset + green + "|___ \\  " + reset + "\n" +
+				green + "| | " + reset + green + "      " + reset + green + "|_   _| " + reset + green + "      " + reset + green + "| | " + reset + green + "      " + reset + green + " ______  " + reset + green + "      " + reset + green + "  __) | " + reset + "\n" +
+				green + "| | " + reset + green + "      " + reset + green + "  |_|   " + reset + green + "      " + reset + green + "| | " + reset + green + "      " + reset + green + "|______| " + reset + green + "      " + reset + green + " / __/  " + reset + "\n" +
+				green + "|_| " + reset + green + "      " + reset + green + "        " + reset + green + "      " + reset + green + "|_| " + reset + green + "      " + reset + green + "         " + reset + green + "      " + reset + green + "|_____| " + reset + "\n" +
+				green + "    " + reset + green + "      " + reset + green + "        " + reset + green + "      " + reset + green + "    " + reset + green + "      " + reset + green + "         " + reset + green + "      " + reset + green + "        " + reset + "\n" +
+				green + "    " + reset + green + "      " + reset + green + "        " + reset + green + "      " + reset + green + "    " + reset + green + "      " + reset + green + "         " + reset + green + "      " + reset + green + "        " + reset + "\n",
 		},
 		{
 			name: "Test 41 (color yellow)",
 			args: []string{`--color=yellow`, `(%&) ??`},
-			want: yellow + "  __ " + yellow + " _   __ " + yellow + "         " + yellow + "__   " + yellow + "      " + yellow + " ___   " + yellow + " ___   \n" +
-				yellow + " / / " + yellow + "(_) / / " + yellow + "  ___    " + yellow + "\\ \\  " + yellow + "      " + yellow + "|__ \\  " + yellow + "|__ \\  \n" +
-				yellow + "| |  " + yellow + "   / /  " + yellow + " ( _ )   " + yellow + " | | " + yellow + "      " + yellow + "   ) | " + yellow + "   ) | \n" +
-				yellow + "| |  " + yellow + "  / /   " + yellow + " / _ \\/\\ " + yellow + " | | " + yellow + "      " + yellow + "  / /  " + yellow + "  / /  \n" +
-				yellow + "| |  " + yellow + " / / _  " + yellow + "| (_>  < " + yellow + " | | " + yellow + "      " + yellow + " |_|   " + yellow + " |_|   \n" +
-				yellow + "| |  " + yellow + "/_/ (_) " + yellow + " \\___/\\/ " + yellow + " | | " + yellow + "      " + yellow + " (_)   " + yellow + " (_)   \n" +
-				yellow + " \\_\\ " + yellow + "        " + yellow + "         " + yellow + "/_/  " + yellow + "      " + yellow + "       " + yellow + "       \n" +
-				yellow + "     " + yellow + "        " + yellow + "         " + yellow + "     " + yellow + "      " + yellow + "       " + yellow + "       \n",
+			want: yellow + "  __ " + reset + yellow + " _   __ " + reset + yellow + "         " + reset + yellow + "__   " + reset + yellow + "      " + reset + yellow + " ___   " + reset + yellow + " ___   " + reset + "\n" +
+				yellow + " / / " + reset + yellow + "(_) / / " + reset + yellow + "  ___    " + reset + yellow + "\\ \\  " + reset + yellow + "      " + reset + yellow + "|__ \\  " + reset + yellow + "|__ \\  " + reset + "\n" +
+				yellow + "| |  " + reset + yellow + "   / /  " + reset + yellow + " ( _ )   " + reset + yellow + " | | " + reset + yellow + "      " + reset + yellow + "   ) | " + reset + yellow + "   ) | " + reset + "\n" +
+				yellow + "| |  " + reset + yellow + "  / /   " + reset + yellow + " / _ \\/\\ " + reset + yellow + " | | " + reset + yellow + "      " + reset + yellow + "  / /  " + reset + yellow + "  / /  " + reset + "\n" +
+				yellow + "| |  " + reset + yellow + " / / _  " + reset + yellow + "| (_>  < " + reset + yellow + " | | " + reset + yellow + "      " + reset + yellow + " |_|   " + reset + yellow + " |_|   " + reset + "\n" +
+				yellow + "| |  " + reset + yellow + "/_/ (_) " + reset + yellow + " \\___/\\/ " + reset + yellow + " | | " + reset + yellow + "      " + reset + yellow + " (_)   " + reset + yellow + " (_)   " + reset + "\n" +
+				yellow + " \\_\\ " + reset + yellow + "        " + reset + yellow + "         " + reset + yellow + "/_/  " + reset + yellow + "      " + reset + yellow + "       " + reset + yellow + "       " + reset + "\n" +
+				yellow + "     " + reset + yellow + "        " + reset + yellow + "         " + reset + yellow + "     " + reset + yellow + "      " + reset + yellow + "       " + reset + yellow + "       " + reset + "\n",
 		},
 		{
 			name: "Test 42 (reverse 0)",
