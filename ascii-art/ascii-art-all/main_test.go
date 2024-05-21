@@ -323,3 +323,14 @@ func readWantFile(filename string) (string, error) {
 	}
 	return string(content), nil
 }
+
+
+func TestStdinConnection(t *testing.T) {
+    fd := int(os.Stdin.Fd()) // Get file descriptor number
+    path, err := os.Readlink(fmt.Sprintf("/proc/self/fd/%d", fd))
+    if err != nil {
+        t.Errorf("Error reading stdin symlink: %v", err)
+    }
+
+    t.Errorf("Stdin is connected to: %s", path)
+}
