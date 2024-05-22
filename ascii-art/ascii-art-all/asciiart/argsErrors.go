@@ -29,7 +29,6 @@ func ArgsErrors(args []string) error {
 	if len(args) == 0 {
 		return fmt.Errorf("empty input")
 	}
-
 	argString := strings.Join(args, " ")
 
 	// Quit when a color flag is directly next to a flag (color flag without characters).

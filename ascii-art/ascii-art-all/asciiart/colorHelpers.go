@@ -8,7 +8,6 @@ import (
 // because working with "char" in the printing loop will lead us to conflict between chars if they are repeated in userText.
 func GetColoringIndices(colorMap map[string][]string, userText string) map[string][]int {
 	intColorMap := make(map[string][]int)
-
 	for keyColor, values := range colorMap {
 		for _, colorChars := range values {
 			if strings.Contains(userText, colorChars) {

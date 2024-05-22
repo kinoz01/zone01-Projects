@@ -17,10 +17,10 @@ func GetAsciiTemplateByte(font string) []byte {
 		asciiTemplateByte, err = os.ReadFile("../banners/" + font + ".txt")
 		if err != nil {
 			asciiTemplateByte, err = os.ReadFile("../fonts/" + font + ".txt")
-			if err!= nil{
+			if err != nil {
 				// If all three attempts fail return.
 				return nil
-			}			
+			}
 		}
 	}
 	return asciiTemplateByte
@@ -69,7 +69,18 @@ func GetJustifySpace(terminalWidth int, userLine string, asciiTable [][]string) 
 		LenOfWords += GetAsciiLineLen(userWord, asciiTable)
 	}
 	if terminalWidth-LenOfWords > 0 { // remove out of range when len of the printed text is bigger than terminal (Ex: go run . --color=ocean 01 --align=right "zone 01 Oujda" impossible).
-		return strings.Repeat(" ", (terminalWidth - LenOfWords) / (len(userWords) - 1))
+		return strings.Repeat(" ", (terminalWidth-LenOfWords)/(len(userWords)-1))
 	}
 	return ""
+}
+
+func JustifyOneWordSpaces(userLine string) string {
+	if userLine[len(userLine)-1] == ' ' && userLine[0] == ' ' {
+		userLine = " " + strings.Fields(userLine)[0] + " "
+	} else if userLine[0] == ' ' {
+		userLine = " " + strings.Fields(userLine)[0]
+	} else if userLine[len(userLine)-1] == ' ' {
+		userLine = strings.Fields(userLine)[0] + " "
+	}
+	return userLine
 }

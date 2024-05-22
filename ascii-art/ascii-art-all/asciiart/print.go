@@ -36,7 +36,11 @@ func PrintAsciiLine(userLine, alignement string, asciiTable [][]string, lenAscii
 			}
 		case "justify":
 			justify = true
-			userLine = strings.Join(strings.Fields(userLine), " ")
+			if len(strings.Fields(userLine)) > 1 {
+				userLine = strings.Join(strings.Fields(userLine), " ")
+			} else {
+				userLine = JustifyOneWordSpaces(userLine)
+			}
 		}
 		for j, char := range userLine {
 			if char == ' ' && justify {
@@ -52,6 +56,5 @@ func PrintAsciiLine(userLine, alignement string, asciiTable [][]string, lenAscii
 		}
 		output += "\n"
 	}
-
 	return output
 }
