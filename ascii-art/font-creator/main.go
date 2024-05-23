@@ -19,8 +19,8 @@ func main() {
 		return
 	}
 	
-	 outputAsciiFile = strings.ReplaceAll(string(asciiTemplateByte), "@@", "\n")
-	 //outputAsciiFile = strings.ReplaceAll(string(asciiTemplateByte), "##", "\n")
+	outputAsciiFile = strings.ReplaceAll(string(asciiTemplateByte), "@@", "\n")
+	//outputAsciiFile = strings.ReplaceAll(string(asciiTemplateByte), "##", "\n")
 	outputAsciiFile = strings.ReplaceAll(outputAsciiFile, "$", " ")
 	//outputAsciiFile = strings.ReplaceAll(outputAsciiFile, "_", " ")
 
