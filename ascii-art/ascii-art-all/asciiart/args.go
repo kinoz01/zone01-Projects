@@ -5,8 +5,7 @@ import (
 	"strings"
 )
 
-
-var	reverse  bool
+var reverse bool
 
 // Handle all user args and return strings data and a bool to quit if true.
 func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInput string, colorMap map[string][]string, quit bool) {
@@ -16,9 +15,9 @@ func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInpu
 	InitFlagPatterns()
 
 	// Here I handle all (hopefully) possible input errors.
-	if err := ArgsErrors(args); err != nil {
+	if errMsg, err := ArgsErrors(args); err != nil {
 		// fmt.Println("Error:", err)      // we are restricted to the banal error msg.
-		fmt.Println(colorErr)
+		fmt.Println(errMsg)
 		return "", "", "", "", "", nil, true
 	}
 

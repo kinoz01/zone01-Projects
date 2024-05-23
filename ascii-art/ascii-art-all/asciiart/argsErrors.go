@@ -25,9 +25,9 @@ func InitFlagPatterns() {
 }
 
 // This function handle all possible arguments errors and quit the program if an error is found.
-func ArgsErrors(args []string) error {
+func ArgsErrors(args []string) (string, error) {
 	if len(args) == 0 {
-		return fmt.Errorf("empty input")
+		return fontErr, fmt.Errorf("empty input")
 	}
 	argString := strings.Join(args, " ")
 
@@ -35,15 +35,24 @@ func ArgsErrors(args []string) error {
 	// Ex: --color=red --align=center "zone 01 oujda" o2
 	reError := regexp.MustCompile(`--color=(\S+) (--output|--align|--reverse|--color)`)
 	if reError.MatchString(argString) {
-		return fmt.Errorf("found a color flag with no value")
+		return colorErr, fmt.Errorf("found a color flag with no value")
 	}
 
 	// Quit when user args end with a flag.
 	// Ex: --color=red g --align=center
 	// But this will work --color=red g f--align=center (I considered a flag only something that begin with --)
-	reError2 := regexp.MustCompile(`(\A--output=.+$|\A--align=.+$|\A--color=.+$)`)	
+	reError2 := regexp.MustCompile(`(\A--output=.+$|\A--align=.+$|\A--color=.+$)`)
 	if reError2.MatchString(args[len(args)-1]) {
-		return fmt.Errorf("you can't end your input with a flag")
+		errorFlag := ""
+		switch args[len(args)-1][2] {
+		case 'o':
+			errorFlag = outputErr
+		case 'a':
+			errorFlag = alignErr
+		case 'c':
+			errorFlag = colorErr
+		}
+		return errorFlag, fmt.Errorf("you can't end your input with a flag")
 	}
 
 	InitFlagPatterns()
@@ -63,7 +72,7 @@ func ArgsErrors(args []string) error {
 				a++
 				continue
 			} else {
-				return fmt.Errorf("invalid flag: %s", arg)
+				return alignErr, fmt.Errorf("invalid flag: %s", arg)
 			}
 		}
 		if reOutputGeneral.MatchString(arg) {
@@ -71,7 +80,7 @@ func ArgsErrors(args []string) error {
 				o++
 				continue
 			} else {
-				return fmt.Errorf("invalid flag: %s", arg)
+				return outputErr, fmt.Errorf("invalid flag: %s", arg)
 			}
 		}
 		if reReverseGeneral.MatchString(arg) {
@@ -79,36 +88,39 @@ func ArgsErrors(args []string) error {
 				reverse = true
 				continue
 			} else {
-				return fmt.Errorf("invalid flag: %s", arg)
+				return reverseErr, fmt.Errorf("invalid flag: %s", arg)
 			}
 		}
 		if reColor.MatchString(arg) {
-			// check if colors in color flags are valid and as consequence check the validity of the flag in general. 
-			if IsValidColor(strings.TrimPrefix(arg, "--color=")) != "" { 
+			// check if colors in color flags are valid and as consequence check the validity of the flag in general.
+			if IsValidColor(strings.TrimPrefix(arg, "--color=")) != "" {
 				c++
 				continue
 			} else {
-				return fmt.Errorf("invalid flag: %s", arg)
+				return colorErr, fmt.Errorf("invalid flag: %s", arg)
 			}
 		}
 	}
 	// reverse situations could have only one argument.
 	if reverse && len(args) > 1 {
-		return fmt.Errorf("please enter only one argument to reverse")
+		return reverseErr, fmt.Errorf("please enter only one argument to reverse")
 	}
-	if o > 1 || a > 1 {
-		return fmt.Errorf("too many flags") // only one output/align flag.
+	if a > 1 {
+		return alignErr, fmt.Errorf("please enter only one align flag")
+	}
+	if o > 1 {
+		return outputErr, fmt.Errorf("please enter only one output flag")
 	}
 	// if there is no color flag the max args we could have is 4.
 	if c == 0 && len(args) > 4 {
-		return fmt.Errorf("too many arguments") 
+		return fontErr, fmt.Errorf("too many arguments")
 	}
 
 	var rmStrings []string
 	// GetAsciiTemplateByte reads the font file and return a nil []byte in case of error.
 	// Next we remove the last arg if it's a font so it doesn't interfer with our strings/flags removing logic later.
 	if GetAsciiTemplateByte(args[len(args)-1]) != nil {
-		rmStrings = args[:len(args)-1] 
+		rmStrings = args[:len(args)-1]
 	} else {
 		rmStrings = args
 	}
@@ -116,21 +128,21 @@ func ArgsErrors(args []string) error {
 	// filtring out when strings are allowed (removing strings after a flag exept for color flag and at the end).
 	for i, arg := range rmStrings {
 		// Ex: --align=center lol h hey
-		if (reOutput.MatchString(arg) || reAlign.MatchString(arg)) && i+1 < len(rmStrings) && i != len(rmStrings)-2 { 
+		if (reOutput.MatchString(arg) || reAlign.MatchString(arg)) && i+1 < len(rmStrings) && i != len(rmStrings)-2 {
 			if !reFlag.MatchString(rmStrings[i+1]) {
-				return fmt.Errorf("wrong input: %s", rmStrings[i+1])
+				return colorErr, fmt.Errorf("wrong input: %s", rmStrings[i+1])
 			}
 		}
 		// Ex: --color=red h h y
-		if reColor.MatchString(arg) && i+2 < len(rmStrings) && i != len(rmStrings)-3 { 
+		if reColor.MatchString(arg) && i+2 < len(rmStrings) && i != len(rmStrings)-3 {
 			if !reFlag.MatchString(rmStrings[i+2]) {
-				return fmt.Errorf("wrong input: %s", rmStrings[i+2])
+				return colorErr, fmt.Errorf("wrong input: %s", rmStrings[i+2])
 			}
 		}
 		// Ex: hey hey // Ex2: hey --color=red h hey
 		if !reFlag.MatchString(rmStrings[0]) && len(rmStrings) > 1 {
-			return fmt.Errorf("wrong input: %s", rmStrings[0])
+			return colorErr, fmt.Errorf("wrong input: %s", rmStrings[0])
 		}
 	}
-	return nil
+	return "", nil
 }

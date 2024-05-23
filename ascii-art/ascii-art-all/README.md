@@ -2,7 +2,7 @@
 ### Overview
 
 <div align="center">
-  <img src="test_cases/example.gif" alt="Alt Text" width="1000">
+  <img src="doc/example.gif" alt="Alt Text" width="1000">
 </div>
 
 

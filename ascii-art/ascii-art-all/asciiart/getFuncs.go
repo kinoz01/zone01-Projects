@@ -1,6 +1,7 @@
 package asciiart
 
 import (
+	"fmt"
 	"os"
 	"strings"
 	"syscall"
@@ -51,9 +52,6 @@ func GetTerminalWidth() (int, error) {
 
 // Get the len of the first line of the printed ascii before justification/alignement.
 func GetAsciiLineLen(userLine string, asciiTable [][]string) int {
-	if userLine == "" {
-		return 0
-	}
 	var output string
 	for _, char := range userLine {
 		output += asciiTable[int(char-32)][0]
@@ -74,13 +72,10 @@ func GetJustifySpace(terminalWidth int, userLine string, asciiTable [][]string) 
 	return ""
 }
 
-func JustifyOneWordSpaces(userLine string) string {
-	if userLine[len(userLine)-1] == ' ' && userLine[0] == ' ' {
-		userLine = " " + strings.Fields(userLine)[0] + " "
-	} else if userLine[0] == ' ' {
-		userLine = " " + strings.Fields(userLine)[0]
-	} else if userLine[len(userLine)-1] == ' ' {
-		userLine = strings.Fields(userLine)[0] + " "
+// takes the content and the file name, create the file and write the content (ascii art) in it.
+func GetAsciiFile(output, outputFileName string) {
+	err := os.WriteFile(outputFileName, []byte(output), 0666)
+	if err != nil {
+		fmt.Println("Error writing to file:", err)
 	}
-	return userLine
 }

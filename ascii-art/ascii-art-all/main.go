@@ -41,6 +41,6 @@ func main() {
 			fmt.Print(output)
 		}
 	} else {
-		asciiart.CreateFile(output, outputFile)
+		asciiart.GetAsciiFile(output, outputFile)
 	}
 }
