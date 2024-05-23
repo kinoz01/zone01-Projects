@@ -11,11 +11,11 @@ func InitFontLines(font string) {
 		fontLines = 5
 	case "phoenix", "o2", "starwar", "stop", "varsity":
 		fontLines = 7
-	case "standard", "shadow", "thinkertoy", "arob", "zigzag", "henry3D", "doom", "tiles", "jacky", "catwalk":
+	case "standard", "shadow", "thinkertoy", "arob", "zigzag", "henry3D", "doom", "tiles", "jacky", "catwalk", "coins":
 		fontLines = 8
 	case "fire":
 		fontLines = 9
-	case "jazmine":
+	case "jazmine", "matrix":
 		fontLines = 10
 	case "blocks", "univers":
 		fontLines = 11

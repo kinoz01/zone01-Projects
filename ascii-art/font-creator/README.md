@@ -46,6 +46,7 @@ Suppose you want to convert the font file `standard.flf` into a text file named 
 
 - This program is based on the Golang programming language.
 - ASCII fonts are sourced from the [patorjk/figlet.js](https://github.com/patorjk/figlet.js/blob/main/fonts) repository.
+- [fonts](http://www.jave.de/figlet/fonts/overview.html)
 - [Asciiart EU](https://www.asciiart.eu/text-to-ascii-art)
 
 Feel free to modify and expand upon this README file as needed!
