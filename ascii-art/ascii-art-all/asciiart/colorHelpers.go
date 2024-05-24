@@ -6,8 +6,8 @@ import (
 
 // we start from color map to get indices of characters we need to color (as a []int -the string part of map will store the colors),
 // because working with "char" in the printing loop will lead us to conflict between chars if they are repeated in userText.
-func GetColoringIndices(colorMap map[string][]string, userText string) map[string][]int {
-	intColorMap := make(map[string][]int)
+func GetColoringIndices(colorMap map[string][]string, userText string) (intColorMap map[string][]int) {
+	intColorMap = make(map[string][]int)
 	for keyColor, values := range colorMap {
 		for _, colorChars := range values {
 			if strings.Contains(userText, colorChars) {
@@ -33,10 +33,10 @@ func FindSubstringIndices(colorChars, userText string) []int {
 
 // check if an indice corresponding to a char in printing loop is present in the intColorMap,
 // if found return the color corresponding to that indice (represented by the key in the map)
-func IsColorIndex(indexColorMap map[string][]int, j int) (string, bool) {
-	for color, intSlice := range indexColorMap {
-		for _, index := range intSlice {
-			if index == j {
+func IsColorIndex(indiceColorMap map[string][]int, j int) (string, bool) {
+	for color, intSlice := range indiceColorMap {
+		for _, indice := range intSlice {
+			if indice == j {
 				return color, true
 			}
 		}
