@@ -23,7 +23,7 @@ func ReverseArt(inputAsciiFile string) string {
 	var AsciiCharacter string
 	var result []rune
 	var foundSpace bool
-	var multiplespacesCounter int
+	var multipleSpacesCounter int
 
 	for i := 0; i < len(inputAsciiLines[0]); i++ {
 		if i+1 < len(inputAsciiLines[0]) && i-1 >= 0 && IsAsciiSpace(inputAsciiLines, i) && !IsAsciiSpace(inputAsciiLines, i-1) {
@@ -45,9 +45,9 @@ func ReverseArt(inputAsciiFile string) string {
 			foundSpace = true
 		}
 		if foundSpace {
-			multiplespacesCounter++
+			multipleSpacesCounter++
 		}
-		if multiplespacesCounter%6 == 0 {
+		if multipleSpacesCounter%6 == 0 {
 			foundSpace = false
 		}
 	}

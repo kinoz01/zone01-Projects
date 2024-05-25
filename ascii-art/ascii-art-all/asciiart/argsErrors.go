@@ -126,10 +126,10 @@ func ArgsErrors(args []string) (string, error) {
 	}
 
 	// filtring out when strings are allowed (removing strings after a flag exept for color flag and at the end).
-	for i, arg := range rmStrings {
-		msgErr := colorErr
+	for i, arg := range rmStrings {		
 		// Ex: --align=center lol h hey
 		if (reOutput.MatchString(arg) || reAlign.MatchString(arg)) && i+1 < len(rmStrings) && i != len(rmStrings)-2 {
+			msgErr := colorErr
 			if !reFlag.MatchString(rmStrings[i+1]) { // check if i+1 is a flag
 				if arg[2] == 'o' {
 					msgErr = outputErr
