@@ -65,7 +65,7 @@ func ArgsErrors(args []string) (string, error) {
 	reReverseGeneral := regexp.MustCompile(`\A--reverse`)
 
 	// Ranging over args to find bad flags (flags specification/globalisation).
-	// first we match any starting flag pattern (wrong or correct) then we return if it turns out it's a wrong flag.
+	// first we match any starting flag pattern (wrong or correct) we compare it with a correct flag and we return if it turns out it's a wrong flag.
 	for _, arg := range args {
 		if reAlignGeneral.MatchString(arg) {
 			if reAlign.MatchString(arg) {
