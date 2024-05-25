@@ -69,7 +69,7 @@ func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInpu
 
 	// If we have a color and output flags at the same time in arguments string we print little msg and continue without coloring (returning nil map).
 	if o >= 1 && c >= 1 {
-		fmt.Println("I can't color a txt output file!")
+		fmt.Println("You can't color a txt output file!")
 		return userText, font, alignment, outputFile, reverseInput, nil, false
 	}
 
