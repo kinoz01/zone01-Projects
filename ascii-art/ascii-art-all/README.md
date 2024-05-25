@@ -178,6 +178,9 @@ You can use `RGB` (ex: `rgb(255, 0, 0)`), `HSL` (ex: `hsl(0, 100%, 50%)`) or hex
 **Note 2:**
 Be careful when using characters like single quotes and others, you will need to escape them so the program can work correctly!
 
+**Note 3:**
+You can't use a substring that has a flag pattern as a color argument.
+
 
 **Extreme Example**
 
