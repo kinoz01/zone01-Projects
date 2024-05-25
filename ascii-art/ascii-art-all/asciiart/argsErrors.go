@@ -127,10 +127,16 @@ func ArgsErrors(args []string) (string, error) {
 
 	// filtring out when strings are allowed (removing strings after a flag exept for color flag and at the end).
 	for i, arg := range rmStrings {
+		msgErr := colorErr
 		// Ex: --align=center lol h hey
 		if (reOutput.MatchString(arg) || reAlign.MatchString(arg)) && i+1 < len(rmStrings) && i != len(rmStrings)-2 {
-			if !reFlag.MatchString(rmStrings[i+1]) {
-				return colorErr, fmt.Errorf("wrong input: %s", rmStrings[i+1])
+			if !reFlag.MatchString(rmStrings[i+1]) { // check if i+1 is a flag
+				if arg[2] == 'o' {
+					msgErr = outputErr
+				} else if arg[2] == 'a' {
+					msgErr = alignErr
+				}
+				return msgErr, fmt.Errorf("wrong input: %s", rmStrings[i+1])
 			}
 		}
 		// Ex: --color=red h h y
@@ -141,7 +147,7 @@ func ArgsErrors(args []string) (string, error) {
 		}
 		// Ex: hey hey // Ex2: hey --color=red h hey
 		if !reFlag.MatchString(rmStrings[0]) && len(rmStrings) > 1 {
-			return colorErr, fmt.Errorf("wrong input: %s", rmStrings[0])
+			return fontErr, fmt.Errorf("wrong input: %s", rmStrings[0])
 		}
 	}
 	return "", nil
