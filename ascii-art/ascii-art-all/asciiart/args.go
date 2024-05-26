@@ -23,7 +23,7 @@ func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInpu
 		return "", "", "", "", "", nil, true
 	}
 
-	// if reverse case we need only the ascii input file name to launch reversing mechanism.
+	// in reverse case we need only the ascii input file name to launch reversing mechanism.
 	if reverse {
 		return userText, font, alignment, outputFile, strings.TrimPrefix(args[0], "--reverse="), nil, false
 	}
