@@ -35,16 +35,12 @@ func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInpu
 	if len(args) == 1 {
 		return args[0], font, alignment, outputFile, reverseInput, nil, false
 	} else if len(args) >= 2 {
-		if GetAsciiTemplateByte(args[len(args)-1]) != nil {
-			if !reFlag.MatchString(args[len(args)-2]) {
-				// Ex: --color=red s sokasoka shadow
-				font = args[len(args)-1]
-				userText = args[len(args)-2]
-			} else {
-				// Ex: --color=red s --align=center shadow
-				userText = args[len(args)-1]
-			}
+		if GetAsciiTemplateByte(args[len(args)-1]) != nil && !reFlag.MatchString(args[len(args)-2]) {
+			// Ex: --color=red s sokasoka shadow
+			font = args[len(args)-1]
+			userText = args[len(args)-2]
 		} else {
+			// Ex: --color=red s --align=center shadow || Ex: --color=red s --align=center hey
 			userText = args[len(args)-1]
 		}
 	}
