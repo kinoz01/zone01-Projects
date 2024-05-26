@@ -43,11 +43,11 @@ func PrintAsciiLine(userLine, alignement string, asciiTable [][]string, lenAscii
 				output += GetJustifySpace(terminalWidth, userLine, asciiTable)
 				continue
 			}
-			if color, paint := IsColorIndex(GetColoringIndices(colorMap, userLine), j); paint {
+			if color, paint := IsColorIndex(GetColoringIndices(colorMap, userLine), j); paint && colorAll == "" {
 				output += color + asciiTable[int(char-32)][i] + reset
 				continue
 			}
-			output += asciiTable[int(char-32)][i]
+			output += colorAll + asciiTable[int(char-32)][i]
 
 		}
 		output += "\n"

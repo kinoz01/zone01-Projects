@@ -2,10 +2,12 @@ package asciiart
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 )
 
 var reverse bool
+var colorAll string
 
 // Handle all user args and return strings data and a bool to quit if true.
 func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInput string, colorMap map[string][]string, quit bool) {
@@ -52,13 +54,25 @@ func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInpu
 	// Here we use submatching to get string of the returns values we will work with. Since we don't have errors we only need to match submatching group with its return value.
 	// IsValidColor find the Ansi color corresponding to the color string (invalid colors are already handled in args Error, this is just to get the Ansi color value)
 	// coloAll will be used to color all the string output (ascii Art) using "color" and skip coloring parts of the ascii.
+	// colorAll turns out to be necessary to handle the case of "newlines (eg, \\n)" in user input. if we remove it we won't get the correct result since we are
+	// running "strings.Contains" after spliting with "\\n".
 	// we used []string map because we can have multiple strings matching a color. (Ex: --color=red o --color=red n "good morning")
 	// map[key] = append(map[key], value) (in case of maping to a slice).
 	for i, arg := range args {
 		if reColor.MatchString(arg) {
 			c++
 			color := IsValidColor(strings.TrimPrefix(arg, "--color="))
-			colorMap[color] = append(colorMap[color], args[i+1])
+			switch {
+			case i == len(args)-2, (i == len(args)-3 && GetAsciiTemplateByte(args[len(args)-1]) != nil):
+				colorAll = color
+			default:
+				if strings.Contains(args[i+1], `\n`) {
+					normalizedInput := regexp.MustCompile(`(\\n)+`).ReplaceAllString(args[i+1], `\n`)
+					colorMap[color] = append(colorMap[color], strings.Split(normalizedInput, `\n`)...)
+					continue
+				}
+				colorMap[color] = append(colorMap[color], args[i+1])
+			}
 		} else if reAlign.MatchString(arg) {
 			alignment = reAlign.FindStringSubmatch(arg)[1]
 		} else if reOutput.MatchString(arg) {
@@ -70,6 +84,7 @@ func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInpu
 	// If we have a color and output flags at the same time in arguments string we print little msg and continue without coloring (returning nil map).
 	if o >= 1 && c >= 1 {
 		fmt.Println("You can't color a txt output file!")
+		colorAll = ""
 		return userText, font, alignment, outputFile, reverseInput, nil, false
 	}
 
