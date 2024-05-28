@@ -118,7 +118,7 @@ func ArgsErrors(args []string) (string, error) {
 
 	var rmStrings []string
 	// GetAsciiTemplateByte reads the font file and return a nil []byte in case of error.
-	// Next we remove the last arg if it's a font so it doesn't interfer with our strings/flags removing logic later.
+	// Next we remove the last arg if it's a font so it doesn't interfer with our strings/flags error logic later.
 	if GetAsciiTemplateByte(args[len(args)-1]) != nil {
 		rmStrings = args[:len(args)-1]
 	} else {

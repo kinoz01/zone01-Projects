@@ -46,22 +46,22 @@ func IsColorIndex(indiceColorMap map[string][]int, j int) (string, bool) {
 
 func RemoveDuplicateIndices(intColorMap map[string][]int) map[string][]int {
 	result := make(map[string][]int)
-	coloredIndices := make(map[int]bool)
+	isIndiceFound := make(map[int]bool)
 
 	// Iterate over the map in reverse order
-	keys := make([]string, 0, len(intColorMap))
-	for key := range intColorMap {
-		keys = append(keys, key)
+	colors := make([]string, 0, len(intColorMap))
+	for color := range intColorMap {
+		colors = append(colors, color)
 	}
-	for i := len(keys) - 1; i >= 0; i-- {
-		color := keys[i]
+	for i := len(colors) - 1; i >= 0; i-- {
+		color := colors[i]
 		intSlice := intColorMap[color]
 		for j := len(intSlice) - 1; j >= 0; j-- {
 			indice := intSlice[j]
-			if _, present := coloredIndices[indice]; present {
+			if isIndiceFound[indice] {
 				continue
 			}
-			coloredIndices[indice] = true
+			isIndiceFound[indice] = true
 			// Prepend the index to maintain the original order in the result
 			result[color] = append([]int{indice}, result[color]...)
 		}

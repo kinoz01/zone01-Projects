@@ -317,8 +317,6 @@ func TestMainFunction(t *testing.T) {
 				t.Errorf("\n\nFor input \x1b[31m%s\x1b[0m\n\nExpected:\n\x1b[36m%s\x1b[0m\nBUT Got:\n%s", strings.Join(tc.args, " "), tc.want, got)
 			}
 		})
-		// fmt.Println(tc.name, green, ": Test Passed Successfully ", reset)
-		// time.Sleep(100* time.Millisecond )
 	}
 }
 
