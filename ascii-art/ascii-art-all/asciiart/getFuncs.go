@@ -74,7 +74,7 @@ func GetJustifySpace(terminalWidth int, userLine string, asciiTable [][]string) 
 
 // takes the content and the file name, create the file and write the content (ascii art) in it.
 func GetAsciiFile(output, outputFileName string) {
-	err := os.WriteFile(outputFileName, []byte(output), 0644)
+	err := os.WriteFile(outputFileName, []byte(output), 0o644)
 	if err != nil {
 		fmt.Println("Error writing to file:", err)
 	}
