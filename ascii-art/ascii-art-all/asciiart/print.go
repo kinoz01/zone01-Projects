@@ -20,6 +20,8 @@ func PrintAsciiArt(userText, alignement string, asciiTable [][]string, terminalW
 
 // construct the user line (splited by \n) to ascii art using the asciiTable.
 func PrintAsciiLine(userLine, alignement string, asciiTable [][]string, lenAscii, terminalWidth int, colorMap map[string][]string) string {
+	// initialize the value of the intColorMap
+	intColorMap := GetColoringIndices(colorMap, userLine)
 	var output string
 	var justify bool
 	for i := 0; i < fontLines; i++ {
@@ -43,12 +45,11 @@ func PrintAsciiLine(userLine, alignement string, asciiTable [][]string, lenAscii
 				output += GetJustifySpace(terminalWidth, userLine, asciiTable)
 				continue
 			}
-			if color, paint := IsColorIndex(GetColoringIndices(colorMap, userLine), j); paint && colorAll == "" {
+			if color, paint := IsColorIndex(intColorMap, j); paint && colorAll == "" {
 				output += color + asciiTable[int(char-32)][i] + reset
 				continue
 			}
 			output += colorAll + asciiTable[int(char-32)][i]
-
 		}
 		output += "\n"
 	}

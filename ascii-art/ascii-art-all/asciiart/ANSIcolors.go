@@ -1,5 +1,13 @@
 package asciiart
 
+import (
+	"fmt"
+	"math"
+	"regexp"
+	"strconv"
+	"strings"
+)
+
 // Here We define colors supported by the program.
 const (
 	reset     = "\033[0m"
@@ -23,45 +31,129 @@ const (
 	emerald   = "\033[38;5;46m"
 )
 
-// IsValidColor will link a string color with an ansi color code. In case of invalid color it will return an empty string.
-func IsValidColor(color string) (ansiColor string) {
-	switch color {
-	case "black", "rgb(0, 0, 0)", "#000000", "hsl(0, 0%, 0%)":
-		ansiColor = black
-	case "red", "rgb(255, 0, 0)", "#ff0000", "hsl(0, 100%, 50%)":
-		ansiColor = red
-	case "green", "rgb(0, 255, 0)", "#00ff00", "hsl(120, 100%, 50%)":
-		ansiColor = green
-	case "yellow", "rgb(255, 255, 0)", "#ffff00", "hsl(60, 100%, 50%)":
-		ansiColor = yellow
-	case "blue", "rgb(0, 0, 255)", "#0000ff", "hsl(240, 100%, 50%)":
-		ansiColor = blue
-	case "magenta", "rgb(255, 0, 255)", "#ff00ff", "hsl(300, 100%, 50%)":
-		ansiColor = magenta
-	case "cyan", "rgb(0, 255, 255)", "#00ffff", "hsl(180, 100%, 50%)":
-		ansiColor = cyan
-	case "white", "rgb(255, 255, 255)", "#ffffff", "hsl(0, 0%, 100%)":
-		ansiColor = white
-	case "sky":
-		ansiColor = sky
-	case "orange":
-		ansiColor = orange
-	case "forest":
-		ansiColor = forest
-	case "ocean":
-		ansiColor = ocean
-	case "lavender":
-		ansiColor = lavender
-	case "rose":
-		ansiColor = rose
-	case "lemon":
-		ansiColor = lemon
-	case "turquoise":
-		ansiColor = turquoise
-	case "cherry":
-		ansiColor = cherry
-	case "emerald":
-		ansiColor = emerald
+// IsValidColor converts any color format to an ANSI color code
+func IsValidColor(color string) string {
+	if strings.HasPrefix(color, "rgb") {
+		return ParseRGB(color)
+	} else if strings.HasPrefix(color, "#") {
+		return ParseHex(color)
+	} else if strings.HasPrefix(color, "hsl") {
+		return ParseHSL(color)
+	} else {
+		return ParseColorName(color)
 	}
-	return ansiColor
+}
+
+//case "black", "rgb(0, 0, 0)", "#000000", "hsl(0, 0%, 0%)":
+// ParseRGB converts an RGB string to an ANSI color code
+func ParseRGB(color string) string {
+	re := regexp.MustCompile(`\Argb\((\d+),\s*(\d+),\s*(\d+)\)$`)
+	matches := re.FindStringSubmatch(color)
+	if matches == nil {
+		return ""
+	}
+	r, _ := strconv.Atoi(matches[1])
+	g, _ := strconv.Atoi(matches[2])
+	b, _ := strconv.Atoi(matches[3])
+
+	return fmt.Sprintf("\033[38;2;%d;%d;%dm", r, g, b)
+}
+
+// ParseHex converts a Hex string to an ANSI color code
+func ParseHex(color string) string {
+	color = strings.TrimPrefix(color, "#")
+
+	if len(color) == 3 {
+		color = string(color[0]) + string(color[0]) +
+			string(color[1]) + string(color[1]) +
+			string(color[2]) + string(color[2])
+	} else if len(color) != 6 {
+		return ""
+	}
+	r64, _ := strconv.ParseInt(color[0:2], 16, 64)
+	g64, _ := strconv.ParseInt(color[2:4], 16, 64)
+	b64, _ := strconv.ParseInt(color[4:6], 16, 64)
+
+	r, g, b := int(r64), int(g64), int(b64)
+	return fmt.Sprintf("\033[38;2;%d;%d;%dm", r, g, b)
+}
+
+// ParseHSL converts an HSL string to an ANSI color code
+func ParseHSL(color string) string {
+	re := regexp.MustCompile(`\Ahsl\((\d+),\s*(\d+)%,\s*(\d+)%\)$`)
+	matches := re.FindStringSubmatch(color)
+	if matches == nil {
+		return ""
+	}
+	h_i, _ := strconv.Atoi(matches[1])
+	s_i, _ := strconv.Atoi(matches[2])
+	l_i, _ := strconv.Atoi(matches[3])
+	h, s, l := float64(h_i), float64(s_i), float64(l_i)
+
+	c := (1 - math.Abs(2*l/100-1)) * (s / 100)
+	x := c * (1 - math.Abs(float64(int(h/60)%2)-1))
+	m := l/100 - c/2
+
+	var r64, g64, b64 float64
+	switch {
+	case h < 60:
+		r64, g64, b64 = c, x, 0
+	case h < 120:
+		r64, g64, b64 = x, c, 0
+	case h < 180:
+		r64, g64, b64 = 0, c, x
+	case h < 240:
+		r64, g64, b64 = 0, x, c
+	case h < 300:
+		r64, g64, b64 = x, 0, c
+	case h < 360:
+		r64, g64, b64 = c, 0, x
+	}
+	r, g, b := int((r64+m)*255), int((g64+m)*255), int((b64+m)*255)
+
+	return fmt.Sprintf("\033[38;2;%d;%d;%dm", r, g, b)
+}
+
+// ParseColorName converts a color name to an ANSI color code
+func ParseColorName(color string) string {
+	switch strings.ToLower(color) {
+	case "black":
+		return black
+	case "red":
+		return red
+	case "green":
+		return green
+	case "yellow":
+		return yellow
+	case "blue":
+		return blue
+	case "magenta":
+		return magenta
+	case "cyan":
+		return cyan
+	case "white":
+		return white
+	case "sky":
+		return sky
+	case "orange":
+		return orange
+	case "forest":
+		return forest
+	case "ocean":
+		return ocean
+	case "lavender":
+		return lavender
+	case "rose":
+		return rose
+	case "lemon":
+		return lemon
+	case "turquoise":
+		return turquoise
+	case "cherry":
+		return cherry
+	case "emerald":
+		return emerald
+	default:
+		return ""
+	}
 }

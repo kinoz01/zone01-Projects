@@ -72,7 +72,7 @@ func ArgsErrors(args []string) (string, error) {
 				a++
 				continue
 			} else {
-				return alignErr, fmt.Errorf("invalid flag: %s", arg)
+				return alignErr, fmt.Errorf("invalid flag  <%s>", arg)
 			}
 		}
 		if reOutputGeneral.MatchString(arg) {
@@ -80,7 +80,7 @@ func ArgsErrors(args []string) (string, error) {
 				o++
 				continue
 			} else {
-				return outputErr, fmt.Errorf("invalid flag: %s", arg)
+				return outputErr, fmt.Errorf("invalid flag  <%s>", arg)
 			}
 		}
 		if reReverseGeneral.MatchString(arg) {
@@ -88,7 +88,7 @@ func ArgsErrors(args []string) (string, error) {
 				reverse = true
 				continue
 			} else {
-				return reverseErr, fmt.Errorf("invalid flag: %s", arg)
+				return reverseErr, fmt.Errorf("invalid flag  <%s>", arg)
 			}
 		}
 		if reColor.MatchString(arg) {
@@ -97,7 +97,7 @@ func ArgsErrors(args []string) (string, error) {
 				c++
 				continue
 			} else {
-				return colorErr, fmt.Errorf("invalid flag: %s", arg)
+				return colorErr, fmt.Errorf("invalid flag  <%s>", arg)
 			}
 		}
 	}
@@ -126,7 +126,7 @@ func ArgsErrors(args []string) (string, error) {
 	}
 
 	// filtring out when strings are allowed (removing strings after a flag exept for color flag and at the end).
-	for i, arg := range rmStrings {		
+	for i, arg := range rmStrings {
 		// Ex: --align=center lol h hey
 		if (reOutput.MatchString(arg) || reAlign.MatchString(arg)) && i+1 < len(rmStrings) && i != len(rmStrings)-2 {
 			msgErr := colorErr
@@ -136,18 +136,18 @@ func ArgsErrors(args []string) (string, error) {
 				} else if arg[2] == 'a' {
 					msgErr = alignErr
 				}
-				return msgErr, fmt.Errorf("wrong input: %s", rmStrings[i+1])
+				return msgErr, fmt.Errorf("wrong input  <%s>", rmStrings[i+1])
 			}
 		}
 		// Ex: --color=red h h y
 		if reColor.MatchString(arg) && i+2 < len(rmStrings) && i != len(rmStrings)-3 {
 			if !reFlag.MatchString(rmStrings[i+2]) {
-				return colorErr, fmt.Errorf("wrong input: %s", rmStrings[i+2])
+				return colorErr, fmt.Errorf("wrong input  <%s>", rmStrings[i+2])
 			}
 		}
 		// Ex: hey hey // Ex2: hey --color=red h hey
 		if !reFlag.MatchString(rmStrings[0]) && len(rmStrings) > 1 {
-			return fontErr, fmt.Errorf("wrong input: %s", rmStrings[0])
+			return fontErr, fmt.Errorf("wrong input  <%s>", rmStrings[0])
 		}
 	}
 	return "", nil

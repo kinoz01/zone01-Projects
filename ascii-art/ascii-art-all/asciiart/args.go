@@ -2,12 +2,13 @@ package asciiart
 
 import (
 	"fmt"
-	"regexp"
 	"strings"
 )
 
-var reverse bool
-var colorAll string
+var (
+	reverse  bool
+	colorAll string
+)
 
 // Handle all user args and return strings data and a bool to quit if true.
 func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInput string, colorMap map[string][]string, quit bool) {
@@ -62,11 +63,6 @@ func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInpu
 			case i == len(args)-2, (i == len(args)-3 && GetAsciiTemplateByte(args[len(args)-1]) != nil):
 				colorAll = color
 			default:
-				if strings.Contains(args[i+1], `\n`) {
-					normalizedInput := regexp.MustCompile(`(\\n)+`).ReplaceAllString(args[i+1], `\n`)
-					colorMap[color] = append(colorMap[color], strings.Split(normalizedInput, `\n`)...)
-					continue
-				}
 				colorMap[color] = append(colorMap[color], args[i+1])
 			}
 		} else if reAlign.MatchString(arg) {
@@ -83,6 +79,5 @@ func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInpu
 		colorAll = ""
 		return userText, font, alignment, outputFile, reverseInput, nil, false
 	}
-
 	return userText, font, alignment, outputFile, reverseInput, colorMap, false
 }

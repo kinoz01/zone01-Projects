@@ -51,7 +51,7 @@ func ReverseArt(inputAsciiFile string) string {
 			foundSpace = false
 		}
 	}
-	
+
 	return string(result) + "\n"
 }
 

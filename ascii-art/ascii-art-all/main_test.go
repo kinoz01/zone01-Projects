@@ -17,6 +17,7 @@ const (
 )
 
 func TestMainFunction(t *testing.T) {
+	t.Parallel()
 	// Define test cases
 	testCases := []struct {
 		name string
@@ -272,7 +273,7 @@ func TestMainFunction(t *testing.T) {
 	for i := range testCases {
 		wantFiles[i] = fmt.Sprintf("./test_cases/want%d.txt", i+1)
 	}
-	// wantFiles := []string{./test_cases/want1.txt, ./test_cases/want2.txt....ect..../test_cases/want37.txt}
+	// wantFiles := []string{./test_cases/want1.txt, ./test_cases/want2.txt, ....ect..., ./test_cases/want37.txt}
 
 	reOutput := regexp.MustCompile(`\A--output=(\S+.txt)$`) // in case of match in args we get the "got" not from the stdout but from the txt created by the main().
 
@@ -289,6 +290,7 @@ func TestMainFunction(t *testing.T) {
 
 		t.Run(tc.name, func(t *testing.T) {
 			r, w, _ := os.Pipe()
+			oldStdout := os.Stdout
 			os.Stdout = w
 
 			os.Args = []string{"main.go"}
@@ -309,11 +311,14 @@ func TestMainFunction(t *testing.T) {
 			} else {
 				got = buf.String()
 			}
+			os.Stdout = oldStdout
 
 			if got != tc.want {
 				t.Errorf("\n\nFor input \x1b[31m%s\x1b[0m\n\nExpected:\n\x1b[36m%s\x1b[0m\nBUT Got:\n%s", strings.Join(tc.args, " "), tc.want, got)
 			}
 		})
+		// fmt.Println(tc.name, green, ": Test Passed Successfully ", reset)
+		// time.Sleep(100* time.Millisecond )
 	}
 }
 
