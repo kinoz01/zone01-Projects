@@ -39,14 +39,10 @@ func GetAsciiTemplateByte(font string) []byte {
 		// in case of builded program we check banners folder.
 		asciiTemplateByte, err = os.ReadFile("./banners/" + font + ".txt")
 		if err != nil {
-			// if reading from "./banners" fails we try to read from "./fonts".
-			asciiTemplateByte, err = os.ReadFile("./fonts/" + font + ".txt")
-			if err != nil {
-				// If both attempts fail we return.
-				return nil
-			}
+			return nil
 		}
 		// if we find font but it's unsupportable.
+		// this will never be reached in case of "go run ." because the place we read from is the same contrary when built.
 		if len(strings.Split(string(asciiTemplateByte), "\n")) != 856 || regexp.MustCompile(`\n\n\n`).MatchString(string(asciiTemplateByte)) {
 			BadUserFont = true
 			return nil
@@ -55,7 +51,7 @@ func GetAsciiTemplateByte(font string) []byte {
 	return asciiTemplateByte
 }
 
-// Get the current terminal width.
+// Get the current terminal width using syscall request to the kernel.
 func GetTerminalWidth() (int, error) {
 	var dimensions [2]uint16
 	_, _, err := syscall.Syscall(syscall.SYS_IOCTL, uintptr(2), syscall.TIOCGWINSZ, uintptr(unsafe.Pointer(&dimensions)))
@@ -89,7 +85,7 @@ func GetJustifySpace(terminalWidth int, userLine string, asciiTable [][]string) 
 
 // takes the content and the file name, create the file and write the content (ascii art) in it.
 func GetAsciiFile(output, outputFileName string) {
-	err := os.WriteFile(outputFileName, []byte(output), 0o644)
+	err := os.WriteFile(outputFileName, []byte(output), 0644)
 	if err != nil {
 		fmt.Println("Error writing to file:", err)
 	}

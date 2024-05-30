@@ -31,7 +31,7 @@ const (
 	emerald   = "\033[38;5;46m"
 )
 
-// IsValidColor converts any color format to an ANSI color code
+// IsValidColor converts any color format to an ANSI color code.
 func IsValidColor(color string) string {
 	if strings.HasPrefix(color, "rgb") {
 		return ParseRGB(color)
@@ -45,7 +45,7 @@ func IsValidColor(color string) string {
 }
 
 // case "black", "rgb(0, 0, 0)", "#000000", "hsl(0, 0%, 0%)":
-// ParseRGB converts an RGB string to an ANSI color code
+// ParseRGB converts an RGB string to an ANSI color code.
 func ParseRGB(color string) string {
 	re := regexp.MustCompile(`\Argb\((\d+),\s*(\d+),\s*(\d+)\)$`)
 	matches := re.FindStringSubmatch(color)
@@ -63,7 +63,7 @@ func ParseRGB(color string) string {
 	return fmt.Sprintf("\033[38;2;%d;%d;%dm", r, g, b)
 }
 
-// ParseHex converts a Hex string to an ANSI color code
+// ParseHex converts a Hex string to an ANSI color code.
 func ParseHex(color string) string {
 	color = strings.TrimPrefix(color, "#")
 
@@ -85,7 +85,7 @@ func ParseHex(color string) string {
 	return fmt.Sprintf("\033[38;2;%d;%d;%dm", r, g, b)
 }
 
-// ParseHSL converts an HSL string to an ANSI color code
+// ParseHSL converts an HSL string to an ANSI color code.
 func ParseHSL(color string) string {
 	re := regexp.MustCompile(`\Ahsl\((\d+),\s*(\d+)%,\s*(\d+)%\)$`)
 	matches := re.FindStringSubmatch(color)
@@ -126,7 +126,7 @@ func ParseHSL(color string) string {
 	return fmt.Sprintf("\033[38;2;%d;%d;%dm", r, g, b)
 }
 
-// ParseColorName converts a color name to an ANSI color code
+// ParseColorName converts a color name to an ANSI color code.
 func ParseColorName(color string) string {
 	switch strings.ToLower(color) {
 	case "black":
