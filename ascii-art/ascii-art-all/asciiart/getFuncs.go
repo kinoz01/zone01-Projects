@@ -32,7 +32,7 @@ func GetAsciiTable(font string) [][]string {
 // This function check if a font is available at ./banners and at ../banners and lastely at ../fonts if found return its content as a slice of bytes else return nil.
 func GetAsciiTemplateByte(font string) []byte {
 	InitFontLines(font)
-
+	
 	// fs.ReadFile to read embedded floder both in build and run mode.
 	asciiTemplateByte, err := fs.ReadFile(banners, "banners/"+font+".txt")
 	if err != nil {
