@@ -46,7 +46,7 @@ Available fonts:
 "small", "phoenix", "o2", "starwar", "stop", "varsity", "standard", "shadow", "thinkertoy", "arob", "zigzag", "henry3D", "doom", "tiles", "jacky", "catwalk", "coins", "fire", "jazmine", "matrix", "blocks", "univers", "impossible", "georgi"
 ```
 
-You can also use your own fonts. Just put them along side the executable file on folder called fonts or banners and make sure they match the standard templates (only 8-lines font)!
+You can also use your own fonts. Just put them along side the executable file in a folder and name it "banners". Make sure they match the standard templates (only 8-lines font)!
 
 ### Example Using fonts
 
