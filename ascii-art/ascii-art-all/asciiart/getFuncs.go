@@ -42,7 +42,7 @@ func GetAsciiTemplateByte(font string) []byte {
 			return nil
 		}
 		// if we find font but it's unsupportable.
-		// this will never be reached in case of "go run ." because the place we read from don't change "./banners/" contrary when built.
+		// this will never be reached in case of "go run ." because the place we read from don't change---->"./banners/" contrary when built.
 		if len(strings.Split(string(asciiTemplateByte), "\n")) != 856 || regexp.MustCompile(`\n\n\n`).MatchString(string(asciiTemplateByte)) {
 			BadUserFont = true
 			return nil
