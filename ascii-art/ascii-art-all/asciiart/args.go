@@ -19,8 +19,11 @@ func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInpu
 
 	// Here I handle all (hopefully) possible input errors.
 	if errMsg, err := ArgsErrors(args); err != nil {
-		// fmt.Println("Error:", err)      
+		// fmt.Println("Error:", err)
 		fmt.Println(errMsg)
+		if BadUserFont {
+			fmt.Println(fmt.Errorf("only imported 8-lines fonts are supported"))
+		}	
 		return "", "", "", "", "", nil, true
 	}
 
@@ -52,7 +55,7 @@ func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInpu
 	// IsValidColor find the Ansi color corresponding to the color string (invalid colors are already handled in args Error, this is just to get the Ansi color value)
 	// coloAll will be used to color all the string output (ascii Art) using "color" and skip coloring parts of the ascii.
 	// colorAll turns out to be necessary to handle the case of "newlines (eg, \\n)" in user input. if we remove it we won't get the correct result since we are
-	// running "strings.Contains" after spliting with "\\n".
+	// running "strings.Contains" after spliting with "\\n" and now we are appending the whole userText to the ColorMap.
 	// we used []string map because we can have multiple strings matching a color. (Ex: --color=red o --color=red n "good morning")
 	// map[key] = append(map[key], value) (in case of maping to a slice).
 	for i, arg := range args {
@@ -79,5 +82,6 @@ func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInpu
 		colorAll = ""
 		return userText, font, alignment, outputFile, reverseInput, nil, false
 	}
+
 	return userText, font, alignment, outputFile, reverseInput, colorMap, false
 }

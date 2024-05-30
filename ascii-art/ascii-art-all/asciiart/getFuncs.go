@@ -1,31 +1,20 @@
 package asciiart
 
 import (
+	"embed"
 	"fmt"
+	"io/fs"
 	"os"
+	"regexp"
 	"strings"
 	"syscall"
 	"unsafe"
 )
 
-// This function check if a font is available at ./banners and at ../banners and lastely at ../fonts if found return its content as a slice of bytes else return nil.
-func GetAsciiTemplateByte(font string) []byte {
-	InitFontLines(font)
+//go:embed banners
+var banners embed.FS
 
-	asciiTemplateByte, err := os.ReadFile("./banners/" + font + ".txt")
-	if err != nil {
-		// If reading with fails try checking if there are any outside/user fonts in a folder called banners along side the excutable program.
-		asciiTemplateByte, err = os.ReadFile("../banners/" + font + ".txt")
-		if err != nil {
-			asciiTemplateByte, err = os.ReadFile("../fonts/" + font + ".txt")
-			if err != nil {
-				// If all three attempts fail return.
-				return nil
-			}
-		}
-	}
-	return asciiTemplateByte
-}
+var BadUserFont bool
 
 // Get an ascii table by transforming the font text from (file name------> slice of bytes------> slice of string (splited by \n\n)--------> 2D table (ready to print)).
 func GetAsciiTable(font string) [][]string {
@@ -38,6 +27,32 @@ func GetAsciiTable(font string) [][]string {
 		asciiTable[i] = append(asciiTable[i], lines...)
 	}
 	return asciiTable
+}
+
+// This function check if a font is available at ./banners and at ../banners and lastely at ../fonts if found return its content as a slice of bytes else return nil.
+func GetAsciiTemplateByte(font string) []byte {
+	InitFontLines(font)
+
+	// fs.ReadFile to read embedded floder both in build and run mode.
+	asciiTemplateByte, err := fs.ReadFile(banners, "banners/"+font+".txt")
+	if err != nil {
+		// in case of builded program we check banners folder.
+		asciiTemplateByte, err = os.ReadFile("./banners/" + font + ".txt")
+		if err != nil {
+			// if reading from "./banners" fails we try to read from "./fonts".
+			asciiTemplateByte, err = os.ReadFile("./fonts/" + font + ".txt")
+			if err != nil {
+				// If both attempts fail we return.
+				return nil
+			}
+		}
+		// if we find font but it's unsupportable.
+		if len(strings.Split(string(asciiTemplateByte), "\n")) != 856 || regexp.MustCompile(`\n\n\n`).MatchString(string(asciiTemplateByte)) {
+			BadUserFont = true
+			return nil
+		}
+	}
+	return asciiTemplateByte
 }
 
 // Get the current terminal width.
@@ -59,7 +74,7 @@ func GetAsciiLineLen(userLine string, asciiTable [][]string) int {
 	return len([]rune(output)) // converting to []rune in case font contains special characters like "zigzag".
 }
 
-//Get Spaces to be placed AT EACH user input text SPACE for justification.
+// Get Spaces to be placed AT EACH user input text SPACE for justification.
 func GetJustifySpace(terminalWidth int, userLine string, asciiTable [][]string) string {
 	userWords := strings.Split(userLine, " ")
 	var LenOfWords int

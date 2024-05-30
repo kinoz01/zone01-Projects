@@ -42,8 +42,11 @@ go run . "text" font
 
 Available fonts:
 
-Please checkout the `banners` folder.  
-You can also use your own fonts. Just put them on folder called fonts or banners and make sure they match the standard templates!
+```bash
+"small", "phoenix", "o2", "starwar", "stop", "varsity", "standard", "shadow", "thinkertoy", "arob", "zigzag", "henry3D", "doom", "tiles", "jacky", "catwalk", "coins", "fire", "jazmine", "matrix", "blocks", "univers", "impossible", "georgi"
+```
+
+You can also use your own fonts. Just put them along side the executable file on folder called fonts or banners and make sure they match the standard templates (only 8-lines font)!
 
 ### Example Using fonts
 
@@ -168,12 +171,11 @@ go run . --color=<color1> <substring1> --color=<color2> <substring2> ... --color
 ```
 
 **Supported colors:**
-```
-green, yellow, blue, magenta, cyan, white, sky, orange, forest, ocean, lavender, rose, lemon, turquoise, cherry, emerald
-```
 
-**Note 1:**
-You can use `RGB` (ex: `rgb(255, 0, 0)`), `HSL` (ex: `hsl(0, 100%, 50%)`) or hexadecimal notation (ex: `#00ff00`) to use basic colors.
+- string colors
+- RGB (ex: `rgb(255, 0, 0)`)
+- `HSL` (ex: `hsl(0, 100%, 50%)`)
+- Hexadecimal colors (ex: `#00ff00`)
 
 **Note 2:**
 Be careful when using characters like single quotes and others, you will need to escape them so the program can work correctly!

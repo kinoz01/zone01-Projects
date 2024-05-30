@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	
 	args := os.Args[1:]
 	userText, font, alignment, outputFile, reverseInput, colorMap, quit := asciiart.UserArgs(args)
 	if quit {

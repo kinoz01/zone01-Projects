@@ -44,6 +44,8 @@ func IsColorIndex(indiceColorMap map[string][]int, j int) (string, bool) {
 	return "", false
 }
 
+// This function remove duplicated indices from the intColorMap to solve
+// overlapping colors problem.
 func RemoveDuplicateIndices(intColorMap map[string][]int) map[string][]int {
 	result := make(map[string][]int)
 	isIndiceFound := make(map[int]bool)

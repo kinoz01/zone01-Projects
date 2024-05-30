@@ -44,7 +44,7 @@ func IsValidColor(color string) string {
 	}
 }
 
-//case "black", "rgb(0, 0, 0)", "#000000", "hsl(0, 0%, 0%)":
+// case "black", "rgb(0, 0, 0)", "#000000", "hsl(0, 0%, 0%)":
 // ParseRGB converts an RGB string to an ANSI color code
 func ParseRGB(color string) string {
 	re := regexp.MustCompile(`\Argb\((\d+),\s*(\d+),\s*(\d+)\)$`)
@@ -52,9 +52,13 @@ func ParseRGB(color string) string {
 	if matches == nil {
 		return ""
 	}
-	r, _ := strconv.Atoi(matches[1])
-	g, _ := strconv.Atoi(matches[2])
-	b, _ := strconv.Atoi(matches[3])
+	r, err1 := strconv.Atoi(matches[1])
+	g, err2 := strconv.Atoi(matches[2])
+	b, err3 := strconv.Atoi(matches[3])
+
+	if r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255 || err1 != nil || err2 != nil || err3 != nil {
+		return ""
+	}
 
 	return fmt.Sprintf("\033[38;2;%d;%d;%dm", r, g, b)
 }
@@ -70,11 +74,14 @@ func ParseHex(color string) string {
 	} else if len(color) != 6 {
 		return ""
 	}
-	r64, _ := strconv.ParseInt(color[0:2], 16, 64)
-	g64, _ := strconv.ParseInt(color[2:4], 16, 64)
-	b64, _ := strconv.ParseInt(color[4:6], 16, 64)
+	r64, err1 := strconv.ParseInt(color[0:2], 16, 64)
+	g64, err2 := strconv.ParseInt(color[2:4], 16, 64)
+	b64, err3 := strconv.ParseInt(color[4:6], 16, 64)
 
 	r, g, b := int(r64), int(g64), int(b64)
+	if r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255 || err1 != nil || err2 != nil || err3 != nil {
+		return ""
+	}
 	return fmt.Sprintf("\033[38;2;%d;%d;%dm", r, g, b)
 }
 
@@ -85,28 +92,33 @@ func ParseHSL(color string) string {
 	if matches == nil {
 		return ""
 	}
-	h_i, _ := strconv.Atoi(matches[1])
-	s_i, _ := strconv.Atoi(matches[2])
-	l_i, _ := strconv.Atoi(matches[3])
-	h, s, l := float64(h_i), float64(s_i), float64(l_i)
+	h_i, err1 := strconv.Atoi(matches[1])
+	s_i, err2 := strconv.Atoi(matches[2])
+	l_i, err3 := strconv.Atoi(matches[3])
 
-	c := (1 - math.Abs(2*l/100-1)) * (s / 100)
-	x := c * (1 - math.Abs(float64(int(h/60)%2)-1))
-	m := l/100 - c/2
+	if h_i < 0 || h_i > 360 || s_i < 0 || s_i > 100 || l_i < 0 || l_i > 100 || err1 != nil || err2 != nil || err3 != nil {
+		return ""
+	}
+
+	h, s, l := float64(h_i)/360, float64(s_i)/100, float64(l_i)/100
+
+	c := (1 - math.Abs(2*l-1)) * s
+	x := c * (1 - math.Abs(math.Mod(h*6, 2)-1))
+	m := l - c/2
 
 	var r64, g64, b64 float64
 	switch {
-	case h < 60:
+	case h < 1.0/6.0:
 		r64, g64, b64 = c, x, 0
-	case h < 120:
+	case h < 1.0/3.0:
 		r64, g64, b64 = x, c, 0
-	case h < 180:
+	case h < 0.5:
 		r64, g64, b64 = 0, c, x
-	case h < 240:
+	case h < 2.0/3.0:
 		r64, g64, b64 = 0, x, c
-	case h < 300:
+	case h < 5.0/6.0:
 		r64, g64, b64 = x, 0, c
-	case h < 360:
+	default:
 		r64, g64, b64 = c, 0, x
 	}
 	r, g, b := int((r64+m)*255), int((g64+m)*255), int((b64+m)*255)
