@@ -3,21 +3,47 @@ package asciiart
 import (
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 )
 
 func ReverseArt(inputAsciiFile string) string {
+	var output string
+
 	inputAsciiByte, err := os.ReadFile("./reverse_ex/" + inputAsciiFile)
 	if err != nil {
 		inputAsciiByte, err = os.ReadFile(inputAsciiFile)
 		if err != nil {
-			fmt.Println(colorErr)
+			fmt.Println(reverseErr)
 			return ""
 		}
 	}
 
+	asciiArtLine := make([]string, (len(strings.Split(string(inputAsciiByte), "\n"))-1)/8)
+	var j int
+	var ascii8Lines string
+
+	for i := 0; i < len(strings.Split(string(inputAsciiByte), "\n")); i++ {
+		ascii8Lines += strings.Split(string(inputAsciiByte), "\n")[i] + "\n"
+		if (i+1)%8 == 0 {
+			asciiArtLine[j] = ascii8Lines
+			ascii8Lines = ""
+			j++
+		}
+	}
+
+	for i := 0; i < len(asciiArtLine); i++ {
+		output += ReverseAsciiArtLine(asciiArtLine[i])
+	}
+
+	return output
+}
+
+func ReverseAsciiArtLine(inputAsciiLine string) string {
+
 	AsciiTemplate := strings.Split(string(GetAsciiTemplateByte("standard")), "\n\n")
-	inputAsciiLines := strings.Split(string(inputAsciiByte), "\n")
+	AsciiTemplate[len(AsciiTemplate)-1] = regexp.MustCompile(`\n\z`).ReplaceAllString(AsciiTemplate[len(AsciiTemplate)-1], "")
+	inputAsciiLines := strings.Split(string(inputAsciiLine), "\n")
 
 	var spaceIndex int
 	var AsciiCharacter string

@@ -19,7 +19,7 @@ func UserArgs(args []string) (userText, font, alignment, outputFile, reverseInpu
 
 	// Here I handle all (hopefully) possible input errors.
 	if errMsg, err := ArgsErrors(args); err != nil {
-		fmt.Println("Error:", err)
+		//fmt.Println("Error:", err)
 		fmt.Println(errMsg)
 		if BadUserFont {
 			fmt.Println(fmt.Errorf("only imported 8-lines fonts are supported"))
