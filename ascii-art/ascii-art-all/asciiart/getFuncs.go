@@ -29,7 +29,7 @@ func GetAsciiTable(font string) [][]string {
 	return asciiTable
 }
 
-// This function check if a font is available at ./banners and at ../banners and lastely at ../fonts if found return its content as a slice of bytes else return nil.
+// This function check if a font is available at ./banners (both in built and go run modes) if found return its content as a slice of bytes else return nil.
 func GetAsciiTemplateByte(font string) []byte {
 	InitFontLines(font)
 	

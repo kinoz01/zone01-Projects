@@ -77,7 +77,7 @@ func ReverseAsciiArtLine(inputAsciiLine string) string {
 			foundSpace = false
 		}
 	}
-
+	
 	return string(result) + "\n"
 }
 
