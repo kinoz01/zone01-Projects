@@ -3,7 +3,6 @@ package asciiart
 import (
 	"embed"
 	"fmt"
-	"io/fs"
 	"os"
 	"regexp"
 	"strings"
@@ -32,9 +31,9 @@ func GetAsciiTable(font string) [][]string {
 // This function check if a font is available at ./banners (both in built and go run modes) if found return its content as a slice of bytes else return nil.
 func GetAsciiTemplateByte(font string) []byte {
 	InitFontLines(font)
-	
+	asciiTemplateByte, err := banners.ReadFile("banners/" + font + ".txt")
 	// fs.ReadFile to read embedded floder both in build and run mode.
-	asciiTemplateByte, err := fs.ReadFile(banners, "banners/"+font+".txt")
+	// asciiTemplateByte, err := fs.ReadFile(banners, "banners/"+font+".txt")
 	if err != nil {
 		// in case of builded program we check banners folder.
 		asciiTemplateByte, err = os.ReadFile("./banners/" + font + ".txt")
@@ -85,7 +84,7 @@ func GetJustifySpace(terminalWidth int, userLine string, asciiTable [][]string) 
 
 // takes the content and the file name, create the file and write the content (ascii art) in it.
 func GetAsciiFile(output, outputFileName string) {
-	err := os.WriteFile(outputFileName, []byte(output), 0644)
+	err := os.WriteFile(outputFileName, []byte(output), 0o644)
 	if err != nil {
 		fmt.Println("Error writing to file:", err)
 	}
