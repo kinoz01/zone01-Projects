@@ -108,15 +108,15 @@ func ParseHSL(color string) string {
 
 	var r64, g64, b64 float64
 	switch {
-	case h < 1.0/6.0:
+	case h_i < 60:
 		r64, g64, b64 = c, x, 0
-	case h < 1.0/3.0:
+	case h_i < 120:
 		r64, g64, b64 = x, c, 0
-	case h < 0.5:
+	case h_i < 180:
 		r64, g64, b64 = 0, c, x
-	case h < 2.0/3.0:
+	case h_i < 240:
 		r64, g64, b64 = 0, x, c
-	case h < 5.0/6.0:
+	case h_i < 300:
 		r64, g64, b64 = x, 0, c
 	default:
 		r64, g64, b64 = c, 0, x
