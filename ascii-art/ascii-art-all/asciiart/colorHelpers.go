@@ -65,7 +65,6 @@ func RemoveDuplicateIndices(intColorMap map[string][]int) map[string][]int {
 			result[colors[i]] = append(result[colors[i]], intSlice[j])
 			isIndiceFound[intSlice[j]] = true
 		}
-
 	}
 	return result
 }
