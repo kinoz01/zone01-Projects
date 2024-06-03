@@ -57,7 +57,6 @@ func GetTerminalWidth() (int, error) {
 	if err != 0 {
 		return 0, err
 	}
-	fmt.Println(dimensions[2])
 	return int(dimensions[1]), nil
 }
 
