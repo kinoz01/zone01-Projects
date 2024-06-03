@@ -52,11 +52,12 @@ func GetAsciiTemplateByte(font string) []byte {
 
 // Get the current terminal width using syscall request to the kernel.
 func GetTerminalWidth() (int, error) {
-	var dimensions [2]uint16
+	var dimensions [4]uint16
 	_, _, err := syscall.Syscall(syscall.SYS_IOCTL, uintptr(2), syscall.TIOCGWINSZ, uintptr(unsafe.Pointer(&dimensions)))
 	if err != 0 {
 		return 0, err
 	}
+	fmt.Println(dimensions[2])
 	return int(dimensions[1]), nil
 }
 
