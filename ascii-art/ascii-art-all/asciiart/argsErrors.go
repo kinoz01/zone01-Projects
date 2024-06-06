@@ -26,6 +26,8 @@ func InitFlagPatterns() {
 
 // This function handle all possible arguments errors and quit the program if an error is found.
 func ArgsErrors(args []string) (string, error) {
+	reverse = false // The test reads this global variable as true so I explicitly put it to false
+	
 	if len(args) == 0 {
 		return fontErr, fmt.Errorf("empty input")
 	}
@@ -84,7 +86,7 @@ func ArgsErrors(args []string) (string, error) {
 			}
 		}
 		if reReverseGeneral.MatchString(arg) {
-			if reReverse.MatchString(arg) {
+			if reReverse.MatchString(arg) {			
 				reverse = true
 				continue
 			} else {
@@ -107,13 +109,6 @@ func ArgsErrors(args []string) (string, error) {
 	}
 	if a > 1 {
 		return alignErr, fmt.Errorf("please enter only one align flag")
-	}
-	if o > 1 {
-		return outputErr, fmt.Errorf("please enter only one output flag")
-	}
-	// if there is no color flag the max args we could have is 4.
-	if c == 0 && len(args) > 4 {
-		return fontErr, fmt.Errorf("too many arguments")
 	}
 
 	var rmStrings []string

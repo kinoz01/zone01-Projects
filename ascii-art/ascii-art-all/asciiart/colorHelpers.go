@@ -26,6 +26,7 @@ func FindSubstringIndices(colorChars, userText string) []int {
 			for j := i; j < i+len(colorChars); j++ {
 				indices = append(indices, j) // just the normal index function but we add this loop to get the indice of each character.
 			}
+			i += len(colorChars)-1 // added to fix --color=red ll llllllop
 		}
 	}
 	return indices
@@ -68,3 +69,13 @@ func RemoveDuplicateIndices(intColorMap map[string][]int) map[string][]int {
 	}
 	return result
 }
+
+// func GetNewLinesColorMapIndices(ColorChars, UserText string) map[int][]int{
+// 	ColorCharsSlice := strings.Split(ColorChars, `\n`)
+// 	UserTextSlice := strings.Split(UserText, `\n`)
+// 	for i:=0; i<len(UserTextSlice); i++ {
+// 		if ColorCharsSlice[i] == UserTextSlice[i] {
+// 			continue
+// 		}
+// 	}
+// }

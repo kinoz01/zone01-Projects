@@ -1,6 +1,7 @@
 package main
 
 import (
+	"asciiArt/asciiart"
 	"bytes"
 	"fmt"
 	"os"
@@ -14,6 +15,8 @@ const (
 	red    = "\033[31m"
 	green  = "\033[32m"
 	yellow = "\033[33m"
+	orange = "\033[38;5;208m"
+	blue   = "\033[34m"
 )
 
 func TestMainFunction(t *testing.T) {
@@ -267,6 +270,30 @@ func TestMainFunction(t *testing.T) {
 			args: []string{`--reverse=example09.txt`},
 			want: "    cat     reverse    tere    \n",
 		},
+		{
+			name: "Test 52 (color orange)",
+			args: []string{"--color=orange", "GuYs", "HeY GuYs?"},
+			want: " _    _         __     __       " + orange + "  _____  " + reset + orange + "        " + reset + orange + "__     __ " + reset + orange + "      " + reset + " ___   " + "\n" +
+				"| |  | |        \\ \\   / /       " + orange + " / ____| " + reset + orange + "        " + reset + orange + "\\ \\   / / " + reset + orange + "      " + reset + "|__ \\  " + "\n" +
+				"| |__| |   ___   \\ \\_/ /        " + orange + "| |  __  " + reset + orange + " _   _  " + reset + orange + " \\ \\_/ /  " + reset + orange + " ___  " + reset + "   ) | " + "\n" +
+				"|  __  |  / _ \\   \\   /         " + orange + "| | |_ | " + reset + orange + "| | | | " + reset + orange + "  \\   /   " + reset + orange + "/ __| " + reset + "  / /  " + "\n" +
+				"| |  | | |  __/    | |          " + orange + "| |__| | " + reset + orange + "| |_| | " + reset + orange + "   | |    " + reset + orange + "\\__ \\ " + reset + " |_|   " + "\n" +
+				"|_|  |_|  \\___|    |_|          " + orange + " \\_____| " + reset + orange + " \\__,_| " + reset + orange + "   |_|    " + reset + orange + "|___/ " + reset + " (_)   " + "\n" +
+				"                                " + orange + "         " + reset + orange + "        " + reset + orange + "          " + reset + orange + "      " + reset + "       " + "\n" +
+				"                                " + orange + "         " + reset + orange + "        " + reset + orange + "          " + reset + orange + "      " + reset + "       " + "\n",
+		},
+		{
+			name: "Test 53 (color blur)",
+			args: []string{"--color=orange", "GuYs", "HeY GuYs?"},
+			want: " _    _         __     __       " + orange + "  _____  " + reset + orange + "        " + reset + orange + "__     __ " + reset + orange + "      " + reset + " ___   " + "\n" +
+				"| |  | |        \\ \\   / /       " + orange + " / ____| " + reset + orange + "        " + reset + orange + "\\ \\   / / " + reset + orange + "      " + reset + "|__ \\  " + "\n" +
+				"| |__| |   ___   \\ \\_/ /        " + orange + "| |  __  " + reset + orange + " _   _  " + reset + orange + " \\ \\_/ /  " + reset + orange + " ___  " + reset + "   ) | " + "\n" +
+				"|  __  |  / _ \\   \\   /         " + orange + "| | |_ | " + reset + orange + "| | | | " + reset + orange + "  \\   /   " + reset + orange + "/ __| " + reset + "  / /  " + "\n" +
+				"| |  | | |  __/    | |          " + orange + "| |__| | " + reset + orange + "| |_| | " + reset + orange + "   | |    " + reset + orange + "\\__ \\ " + reset + " |_|   " + "\n" +
+				"|_|  |_|  \\___|    |_|          " + orange + " \\_____| " + reset + orange + " \\__,_| " + reset + orange + "   |_|    " + reset + orange + "|___/ " + reset + " (_)   " + "\n" +
+				"                                " + orange + "         " + reset + orange + "        " + reset + orange + "          " + reset + orange + "      " + reset + "       " + "\n" +
+				"                                " + orange + "         " + reset + orange + "        " + reset + orange + "          " + reset + orange + "      " + reset + "       " + "\n",
+		},
 	}
 
 	wantFiles := make([]string, len(testCases))
@@ -289,13 +316,17 @@ func TestMainFunction(t *testing.T) {
 		}
 
 		t.Run(tc.name, func(t *testing.T) {
+
 			r, w, _ := os.Pipe()
 			oldStdout := os.Stdout
 			os.Stdout = w
 
 			os.Args = []string{"main.go"}
 			os.Args = append(os.Args, tc.args...)
+			asciiart.ColorAll = "" // To fix ColorAll when called using the test
 			main()
+			os.Stdout = oldStdout
+
 			w.Close()
 
 			var buf bytes.Buffer
@@ -311,7 +342,6 @@ func TestMainFunction(t *testing.T) {
 			} else {
 				got = buf.String()
 			}
-			os.Stdout = oldStdout
 
 			if got != tc.want {
 				t.Errorf("\n\nFor input \x1b[31m%s\x1b[0m\n\nExpected:\n\x1b[36m%s\x1b[0m\nBUT Got:\n%s", strings.Join(tc.args, " "), tc.want, got)

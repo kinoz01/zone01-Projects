@@ -9,9 +9,9 @@ import (
 )
 
 func main() {
-	
+
 	args := os.Args[1:]
-	userText, font, alignment, outputFile, reverseInput, colorMap, quit := asciiart.UserArgs(args)
+	userText, font, alignment, reverseInput, outputFiles, colorMap, quit := asciiart.UserArgs(args)
 	if quit {
 		return
 	}
@@ -32,7 +32,7 @@ func main() {
 	}
 	output := asciiart.PrintAsciiArt(userText, alignment, asciiart.GetAsciiTable(font), terminalWidth, colorMap)
 
-	if outputFile == "" {
+	if outputFiles == nil {
 		switch font {
 		case "zigzag", "o2", "impossible", "univers":
 			for _, char := range output {
@@ -43,6 +43,8 @@ func main() {
 			fmt.Print(output)
 		}
 	} else {
-		asciiart.GetAsciiFile(output, outputFile)
+		for _, outputFile := range outputFiles {
+			asciiart.GetAsciiFile(output, outputFile)
+		}		
 	}
 }
