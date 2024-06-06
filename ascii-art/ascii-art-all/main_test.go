@@ -272,15 +272,15 @@ func TestMainFunction(t *testing.T) {
 		},
 		{
 			name: "Test 52 (color orange)",
-			args: []string{"--color=orange", "GuYs", "HeY GuYs?"},
-			want: " _    _         __     __       " + orange + "  _____  " + reset + orange + "        " + reset + orange + "__     __ " + reset + orange + "      " + reset + " ___   " + "\n" +
-				"| |  | |        \\ \\   / /       " + orange + " / ____| " + reset + orange + "        " + reset + orange + "\\ \\   / / " + reset + orange + "      " + reset + "|__ \\  " + "\n" +
-				"| |__| |   ___   \\ \\_/ /        " + orange + "| |  __  " + reset + orange + " _   _  " + reset + orange + " \\ \\_/ /  " + reset + orange + " ___  " + reset + "   ) | " + "\n" +
-				"|  __  |  / _ \\   \\   /         " + orange + "| | |_ | " + reset + orange + "| | | | " + reset + orange + "  \\   /   " + reset + orange + "/ __| " + reset + "  / /  " + "\n" +
-				"| |  | | |  __/    | |          " + orange + "| |__| | " + reset + orange + "| |_| | " + reset + orange + "   | |    " + reset + orange + "\\__ \\ " + reset + " |_|   " + "\n" +
-				"|_|  |_|  \\___|    |_|          " + orange + " \\_____| " + reset + orange + " \\__,_| " + reset + orange + "   |_|    " + reset + orange + "|___/ " + reset + " (_)   " + "\n" +
-				"                                " + orange + "         " + reset + orange + "        " + reset + orange + "          " + reset + orange + "      " + reset + "       " + "\n" +
-				"                                " + orange + "         " + reset + orange + "        " + reset + orange + "          " + reset + orange + "      " + reset + "       " + "\n",
+			args: []string{"--color=blue", "B", `RGB()`},
+			want: " _____     _____  " + blue + " ____   " + reset + "  __ __   \n" +
+				"|  __ \\   / ____| " + blue + "|  _ \\  " + reset + " / / \\ \\  \n" +
+				"| |__) | | |  __  " + blue + "| |_) | " + reset + "| |   | | \n" +
+				"|  _  /  | | |_ | " + blue + "|  _ <  " + reset + "| |   | | \n" +
+				"| | \\ \\  | |__| | " + blue + "| |_) | " + reset + "| |   | | \n" +
+				"|_|  \\_\\  \\_____| " + blue + "|____/  " + reset + "| |   | | \n" +
+				"                  " + blue + "        " + reset + " \\_\\ /_/  \n" +
+				"                  " + blue + "        " + reset + "          \n",
 		},
 		{
 			name: "Test 53 (color blur)",
