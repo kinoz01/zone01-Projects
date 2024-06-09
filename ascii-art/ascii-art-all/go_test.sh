@@ -9,7 +9,7 @@ RESET='\033[0m'
 # Function to center-align text with color
 text() {
    local text="$1"
-   local color='\033[0;31m'
+   local color="\033[38;5;208m"
    #local width=$(( ($(tput cols) + ${#text}) / 2))
    #printf "%*s\n" $width "$(echo -e "${color}${text}${RESET}")"
    printf "$(echo -e "${color}${text}${RESET}")\n"
@@ -87,7 +87,7 @@ test_errors() {
     go run . '--color=hsl(-1, 50%, 40%)' "Hello World"
     sleep 0.3
 
-    text "Test 3"
+    text 'Test 3: <hey '--color=red' green "Hello World">'
     go run . hey '--color=red' green "Hello World"
     sleep 0.3
 
