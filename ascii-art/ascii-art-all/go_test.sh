@@ -64,9 +64,21 @@ run_go_commands() {
 
     text "Test 12"
     go run . '--color=lemon' "Hello\nWorld"
+    sleep 0.3
 
     text "Test 13"
-    go run . '--color=lemon' "Hello\nWorld"
+    go run . --align=center '--color=rgb(100, 210, 40)' "Hello\nWorld"
+    sleep 0.3
+}
+
+test_errors() {
+    text "Test 1"
+    go run . '--color=rgb(2503, 210, 40)' "Hello World"
+    sleep 0.3
+
+    text "Test 2"
+    go run . '--color=hsl(-1, 50%, 40%)' "Hello World"
+    sleep 0.3
 }
 
 test_reverse() {
@@ -86,6 +98,22 @@ test_reverse() {
     sleep 0.3
 }
 
+test_align() {
+    text "Test 1"
+    go run . --align=justify "Hello World"
+    sleep 0.3
+
+    text "Test 2"
+    go run . --align=right "Hello World"
+    sleep 0.3
+
+    text "Test 3"
+    go run . --align=center "Hello World"
+    sleep 0.3
+}
+
 # Define an alias that calls the functions
 alias rgc='run_go_commands'
 alias reverse='test_reverse'
+alias align='test_align'
+alias error='test_errors'
