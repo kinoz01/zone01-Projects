@@ -27,7 +27,7 @@ func InitFlagPatterns() {
 // This function handle all possible arguments errors and quit the program if an error is found.
 func ArgsErrors(args []string) (string, error) {
 	reverse = false // The test reads this global variable as true so I explicitly put it to false
-	
+
 	if len(args) == 0 {
 		return fontErr, fmt.Errorf("empty input")
 	}

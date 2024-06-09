@@ -5,28 +5,31 @@ import (
 )
 
 // construct the final ascii art string.
-func PrintAsciiArt(userText, alignement string, asciiTable [][]string, terminalWidth int, colorMap map[string][]string) string {
+func PrintAsciiArt(userText, alignement string, asciiTable [][]string, terminalWidth int) string {
 	var AsciiArt string
+	var ColorIndex int // Instead of using a global variable I can use a pointer.
 	for _, userLine := range strings.Split(userText, `\n`) {
 		if userLine == "" {
 			AsciiArt += "\n"
+			ColorIndex += 2
 			continue
 		}
 		lenAscii := GetAsciiLineLen(userLine, asciiTable)
-		AsciiArt += PrintAsciiLine(userLine, alignement, asciiTable, lenAscii, terminalWidth, colorMap)
+		AsciiArt += PrintAsciiLine(userLine, alignement, asciiTable, lenAscii, terminalWidth, &ColorIndex)
+		ColorIndex += 2
 	}
 	return AsciiArt
 }
 
 // construct the user line (splited by \n) to ascii art using the asciiTable.
-func PrintAsciiLine(userLine, alignement string, asciiTable [][]string, lenAscii, terminalWidth int, colorMap map[string][]string) string {
-	// initialize the value of the intColorMap
-	//fmt.Println(colorMap)
-	intColorMap := GetColoringIndices(colorMap, userLine)
-	//fmt.Println("ey", ColorAll, "hey")
+func PrintAsciiLine(userLine, alignement string, asciiTable [][]string, lenAscii, terminalWidth int, ColorIndex *int) string {
+
+	temp := *ColorIndex
+
 	var output string
 	var justify bool
 	for i := 0; i < fontLines; i++ {
+		*ColorIndex = temp
 		switch alignement {
 		case "left":
 			output += ""
@@ -42,16 +45,17 @@ func PrintAsciiLine(userLine, alignement string, asciiTable [][]string, lenAscii
 			justify = true
 			userLine = strings.Join(strings.Fields(userLine), " ")
 		}
-		for j, char := range userLine {
+		for _, char := range userLine {
 			if char == ' ' && justify {
 				output += GetJustifySpace(terminalWidth, userLine, asciiTable)
 				continue
 			}
-			if color, paint := IsColorIndex(intColorMap, j); paint && ColorAll == "" {
-				output += color + asciiTable[int(char-32)][i] + reset
-				continue
-			}
-			output += ColorAll + asciiTable[int(char-32)][i]
+			if ColorSliceEmpty() {
+				output += asciiTable[int(char-32)][i]
+			} else {
+				output += ColorSlice[*ColorIndex] + asciiTable[int(char-32)][i] + reset
+				*ColorIndex++
+			}			
 		}
 		output += "\n"
 	}

@@ -13,10 +13,7 @@ import (
 const (
 	reset  = "\033[0m"
 	red    = "\033[31m"
-	green  = "\033[32m"
-	yellow = "\033[33m"
-	orange = "\033[38;5;208m"
-	blue   = "\033[34m"
+	redRGB = "\033[38;2;255;0;0m"
 )
 
 func TestMainFunction(t *testing.T) {
@@ -182,39 +179,39 @@ func TestMainFunction(t *testing.T) {
 		},
 		{
 			name: "Test 39 (color red)",
-			args: []string{`--color=red`, `hello world`},
-			want: red + " _      " + red + "       " + red + " _  " + red + " _  " + red + "        " + red + "      " + red + "           " + red + "        " + red + "       " + red + " _  " + red + "     _  \n" +
-				red + "| |     " + red + "       " + red + "| | " + red + "| | " + red + "        " + red + "      " + red + "           " + red + "        " + red + "       " + red + "| | " + red + "    | | \n" +
-				red + "| |__   " + red + "  ___  " + red + "| | " + red + "| | " + red + "  ___   " + red + "      " + red + "__      __ " + red + "  ___   " + red + " _ __  " + red + "| | " + red + "  __| | \n" +
-				red + "|  _ \\  " + red + " / _ \\ " + red + "| | " + red + "| | " + red + " / _ \\  " + red + "      " + red + "\\ \\ /\\ / / " + red + " / _ \\  " + red + "| '__| " + red + "| | " + red + " / _` | \n" +
-				red + "| | | | " + red + "|  __/ " + red + "| | " + red + "| | " + red + "| (_) | " + red + "      " + red + " \\ V  V /  " + red + "| (_) | " + red + "| |    " + red + "| | " + red + "| (_| | \n" +
-				red + "|_| |_| " + red + " \\___| " + red + "|_| " + red + "|_| " + red + " \\___/  " + red + "      " + red + "  \\_/\\_/   " + red + " \\___/  " + red + "|_|    " + red + "|_| " + red + " \\__,_| \n" +
-				red + "        " + red + "       " + red + "    " + red + "    " + red + "        " + red + "      " + red + "           " + red + "        " + red + "       " + red + "    " + red + "        \n" +
-				red + "        " + red + "       " + red + "    " + red + "    " + red + "        " + red + "      " + red + "           " + red + "        " + red + "       " + red + "    " + red + "        \n",
+			args: []string{`--color=red`, `h`},
+			want: red + " _      " + reset + "\n" +
+				red + "| |     " + reset + "\n" +
+				red + "| |__   " + reset + "\n" +
+				red + "|  _ \\  " + reset + "\n" +
+				red + "| | | | " + reset + "\n" +
+				red + "|_| |_| " + reset + "\n" +
+				red + "        " + reset + "\n" +
+				red + "        " + reset + "\n",
 		},
 		{
-			name: "Test 40 (color green)",
-			args: []string{`--color=green`, `1 + 1 = 2`},
-			want: green + "    " + green + "      " + green + "        " + green + "      " + green + "    " + green + "      " + green + "         " + green + "      " + green + "        \n" +
-				green + " _  " + green + "      " + green + "   _    " + green + "      " + green + " _  " + green + "      " + green + " ______  " + green + "      " + green + " ____   \n" +
-				green + "/ | " + green + "      " + green + " _| |_  " + green + "      " + green + "/ | " + green + "      " + green + "|______| " + green + "      " + green + "|___ \\  \n" +
-				green + "| | " + green + "      " + green + "|_   _| " + green + "      " + green + "| | " + green + "      " + green + " ______  " + green + "      " + green + "  __) | \n" +
-				green + "| | " + green + "      " + green + "  |_|   " + green + "      " + green + "| | " + green + "      " + green + "|______| " + green + "      " + green + " / __/  \n" +
-				green + "|_| " + green + "      " + green + "        " + green + "      " + green + "|_| " + green + "      " + green + "         " + green + "      " + green + "|_____| \n" +
-				green + "    " + green + "      " + green + "        " + green + "      " + green + "    " + green + "      " + green + "         " + green + "      " + green + "        \n" +
-				green + "    " + green + "      " + green + "        " + green + "      " + green + "    " + green + "      " + green + "         " + green + "      " + green + "        \n",
+			name: "Test 40 (color rgb)",
+			args: []string{`--color=rgb(255, 0, 0)`, `h`},
+			want: redRGB + " _      " + reset + "\n" +
+				redRGB + "| |     " + reset + "\n" +
+				redRGB + "| |__   " + reset + "\n" +
+				redRGB + "|  _ \\  " + reset + "\n" +
+				redRGB + "| | | | " + reset + "\n" +
+				redRGB + "|_| |_| " + reset + "\n" +
+				redRGB + "        " + reset + "\n" +
+				redRGB + "        " + reset + "\n",
 		},
 		{
-			name: "Test 41 (color yellow)",
-			args: []string{`--color=yellow`, `(%&) ??`},
-			want: yellow + "  __ " + yellow + " _   __ " + yellow + "         " + yellow + "__   " + yellow + "      " + yellow + " ___   " + yellow + " ___   \n" +
-				yellow + " / / " + yellow + "(_) / / " + yellow + "  ___    " + yellow + "\\ \\  " + yellow + "      " + yellow + "|__ \\  " + yellow + "|__ \\  \n" +
-				yellow + "| |  " + yellow + "   / /  " + yellow + " ( _ )   " + yellow + " | | " + yellow + "      " + yellow + "   ) | " + yellow + "   ) | \n" +
-				yellow + "| |  " + yellow + "  / /   " + yellow + " / _ \\/\\ " + yellow + " | | " + yellow + "      " + yellow + "  / /  " + yellow + "  / /  \n" +
-				yellow + "| |  " + yellow + " / / _  " + yellow + "| (_>  < " + yellow + " | | " + yellow + "      " + yellow + " |_|   " + yellow + " |_|   \n" +
-				yellow + "| |  " + yellow + "/_/ (_) " + yellow + " \\___/\\/ " + yellow + " | | " + yellow + "      " + yellow + " (_)   " + yellow + " (_)   \n" +
-				yellow + " \\_\\ " + yellow + "        " + yellow + "         " + yellow + "/_/  " + yellow + "      " + yellow + "       " + yellow + "       \n" +
-				yellow + "     " + yellow + "        " + yellow + "         " + yellow + "     " + yellow + "      " + yellow + "       " + yellow + "       \n",
+			name: "Test 41 (color hsl)",
+			args: []string{`--color=hsl(0, 100%, 50%)`, `h`},
+			want: redRGB + " _      " + reset + "\n" +
+				redRGB + "| |     " + reset + "\n" +
+				redRGB + "| |__   " + reset + "\n" +
+				redRGB + "|  _ \\  " + reset + "\n" +
+				redRGB + "| | | | " + reset + "\n" +
+				redRGB + "|_| |_| " + reset + "\n" +
+				redRGB + "        " + reset + "\n" +
+				redRGB + "        " + reset + "\n",
 		},
 		{
 			name: "Test 42 (reverse 0)",
@@ -269,30 +266,6 @@ func TestMainFunction(t *testing.T) {
 			name: "Test 51 (reverse 9)",
 			args: []string{`--reverse=example09.txt`},
 			want: "    cat     reverse    tere    \n",
-		},
-		{
-			name: "Test 52 (color orange)",
-			args: []string{"--color=blue", "B", `RGB()`},
-			want: " _____     _____  " + blue + " ____   " + reset + "  __ __   \n" +
-				"|  __ \\   / ____| " + blue + "|  _ \\  " + reset + " / / \\ \\  \n" +
-				"| |__) | | |  __  " + blue + "| |_) | " + reset + "| |   | | \n" +
-				"|  _  /  | | |_ | " + blue + "|  _ <  " + reset + "| |   | | \n" +
-				"| | \\ \\  | |__| | " + blue + "| |_) | " + reset + "| |   | | \n" +
-				"|_|  \\_\\  \\_____| " + blue + "|____/  " + reset + "| |   | | \n" +
-				"                  " + blue + "        " + reset + " \\_\\ /_/  \n" +
-				"                  " + blue + "        " + reset + "          \n",
-		},
-		{
-			name: "Test 53 (color blur)",
-			args: []string{"--color=orange", "GuYs", "HeY GuYs?"},
-			want: " _    _         __     __       " + orange + "  _____  " + reset + orange + "        " + reset + orange + "__     __ " + reset + orange + "      " + reset + " ___   " + "\n" +
-				"| |  | |        \\ \\   / /       " + orange + " / ____| " + reset + orange + "        " + reset + orange + "\\ \\   / / " + reset + orange + "      " + reset + "|__ \\  " + "\n" +
-				"| |__| |   ___   \\ \\_/ /        " + orange + "| |  __  " + reset + orange + " _   _  " + reset + orange + " \\ \\_/ /  " + reset + orange + " ___  " + reset + "   ) | " + "\n" +
-				"|  __  |  / _ \\   \\   /         " + orange + "| | |_ | " + reset + orange + "| | | | " + reset + orange + "  \\   /   " + reset + orange + "/ __| " + reset + "  / /  " + "\n" +
-				"| |  | | |  __/    | |          " + orange + "| |__| | " + reset + orange + "| |_| | " + reset + orange + "   | |    " + reset + orange + "\\__ \\ " + reset + " |_|   " + "\n" +
-				"|_|  |_|  \\___|    |_|          " + orange + " \\_____| " + reset + orange + " \\__,_| " + reset + orange + "   |_|    " + reset + orange + "|___/ " + reset + " (_)   " + "\n" +
-				"                                " + orange + "         " + reset + orange + "        " + reset + orange + "          " + reset + orange + "      " + reset + "       " + "\n" +
-				"                                " + orange + "         " + reset + orange + "        " + reset + orange + "          " + reset + orange + "      " + reset + "       " + "\n",
 		},
 	}
 

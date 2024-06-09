@@ -11,16 +11,15 @@ import (
 func main() {
 
 	args := os.Args[1:]
-	userText, font, alignment, reverseInput, outputFiles, colorMap, quit := asciiart.UserArgs(args)
+	userText, font, alignment, reverseInput, outputFiles, quit := asciiart.UserArgs(args)
 	if quit {
 		return
 	}
-
 	if reverseInput != "" {
 		fmt.Print(asciiart.ReverseArt(reverseInput))
 		return
 	}
-	userText, quit = asciiart.PrePrint(userText)
+	userText, quit = asciiart.GetPrePrint(userText)
 	if quit {
 		fmt.Print(userText)
 		return
@@ -30,7 +29,7 @@ func main() {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
-	output := asciiart.PrintAsciiArt(userText, alignment, asciiart.GetAsciiTable(font), terminalWidth, colorMap)
+	output := asciiart.PrintAsciiArt(userText, alignment, asciiart.GetAsciiTable(font), terminalWidth)
 
 	if outputFiles == nil {
 		switch font {

@@ -50,6 +50,22 @@ func GetAsciiTemplateByte(font string) []byte {
 	return asciiTemplateByte
 }
 
+// Quit in case of empty string "", search for invalid ascii to avoid out of range panic, and remove one new line in case of just new lines in userInput.
+func GetPrePrint(userText string) (string, bool) {
+	if len(userText) == 0 {
+		return "", true
+	}
+	for _, userTextChar := range userText {
+		asciiIndex := int(userTextChar)
+		if asciiIndex-32 < 0 || asciiIndex-32 >= 95 {
+			return "🚨 Found an Invalid Ascii Character.\n", true
+		}
+	}
+	re := regexp.MustCompile(`\A((\\n)*)\\n$`)
+	userText = re.ReplaceAllString(userText, "$1")
+	return userText, false
+}
+
 // Get the current terminal width using syscall request to the kernel.
 func GetTerminalWidth() (int, error) {
 	var dimensions [4]uint16
@@ -80,6 +96,36 @@ func GetJustifySpace(terminalWidth int, userLine string, asciiTable [][]string) 
 		return strings.Repeat(" ", (terminalWidth-LenOfWords)/(len(userWords)-1))
 	}
 	return ""
+}
+
+// Modify the slice of colors, that will be used while printing
+func GetColorSlice(color, colorChars, userText string) {
+	indices := []int{}
+	if !strings.Contains(userText, colorChars) {
+		return
+	} else {
+		for i := 0; i < len(userText)-len(colorChars)+1; i++ {
+			if userText[i:i+len(colorChars)] == colorChars {
+				for j := i; j < i+len(colorChars); j++ {
+					indices = append(indices, j) // just the normal index function but we add this loop to get the indice of each character.
+				}
+				i += len(colorChars) - 1 // added to fix --color=red ll llllllop
+			}
+		}
+	}
+	for _, indexToColor := range indices {
+		ColorSlice[indexToColor] = color
+	}
+}
+
+// This func is to solve the go test errors when there is no colors.
+func ColorSliceEmpty() bool {
+	for _, str := range ColorSlice{
+		if str != ""{
+			return false
+		}
+	}
+	return true
 }
 
 // takes the content and the file name, create the file and write the content (ascii art) in it.
