@@ -79,6 +79,14 @@ test_errors() {
     text "Test 2"
     go run . '--color=hsl(-1, 50%, 40%)' "Hello World"
     sleep 0.3
+
+    text "Test 3"
+    go run . hey '--color=red' green "Hello World"
+    sleep 0.3
+
+    text 'Test 4: <--color=red green green "Hello World">'
+    go run . '--color=red' green green "Hello World"
+    sleep 0.3
 }
 
 test_reverse() {
