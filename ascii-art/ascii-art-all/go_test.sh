@@ -15,6 +15,15 @@ text() {
    printf "$(echo -e "${color}${text}${RESET}")\n"
 }
 
+# Function to center-align text with color
+redtext() {
+   local text="$1"
+   local color='\033[0;31m'
+   #local width=$(( ($(tput cols) + ${#text}) / 2))
+   #printf "%*s\n" $width "$(echo -e "${color}${text}${RESET}")"
+   printf "$(echo -e "${color}${text}${RESET}")\n"
+}
+
 # Testing Color and output.
 run_go_commands() {
     text "Test 1"
@@ -114,16 +123,170 @@ test_reverse() {
 }
 
 test_align() {
-    text "Test 1"
+    text 'Test 1 <--align=justify "Hello World">'
     go run . --align=justify "Hello World"
     sleep 0.3
 
-    text "Test 2"
+    text 'Test 2 <--align=right "Hello World">'
     go run . --align=right "Hello World"
     sleep 0.3
 
-    text "Test 3"
+    text 'Test 3 <--align=center "Hello World">'
     go run . --align=center "Hello World"
+    sleep 0.3
+
+    text 'Test 4 <--align=justify "Hello World">'
+    go run . --align=justify "Hello World"
+    sleep 0.3
+
+    text 'Test 5'
+    go run . --align=justify "Hello World\nHey There How\nare You"
+    sleep 0.3
+
+    text 'Test 6'
+    go run . --align=right "Hello World\nHey There How\nare You"
+    sleep 0.3
+
+    text 'Test 7'
+    go run . --align=center "Hello World\nHey There How\nare You"
+    sleep 0.3
+
+    text 'Test 8 <--align=center hello | cat -n>'
+    go run . --align=center hello | cat -e
+    sleep 0.3
+
+    text 'Test 9 <--align=right hey>'
+    go run . --align=right hey
+    sleep 0.3
+
+    text 'Test 10'
+    go run . "\n\n\n" | cat -n
+    sleep 0.3
+
+    text 'Test 11 "" | cat -n'
+    go run . "" | cat -n
+    sleep 0.3
+
+    text 'Test 12'
+    go run . --align=left "Hello World\nHey There How\nare You"
+    sleep 0.3
+
+    text 'Test 13 <--align=justify "     Hello              Hey     There    ">'
+    go run . --align=justify "     Hello              Hey     There    "
+    sleep 0.3
+
+    text 'Test 14 <--align=justify " t            g        g    ">'
+    go run . --align=justify " t            g        g    "
+    sleep 0.3
+
+    text 'Test 15'
+    go run . --align=justify " t            g        g   \n  hey    g g "
+    sleep 0.3
+
+    text 'Test 16 <Testing two align flags>'
+    go run . --align=justify --align=left "Hey There"
+    sleep 0.3
+
+    text 'Test 17---> 20 <Testing long Input>'
+    go run . --align=justify "This is a very very very long text\nHello World"
+    sleep 0.3
+
+    text 'Test 18'
+    go run . --align=center "This is a very very very long text\nHello World"
+    sleep 0.3
+
+    text 'Test 19'
+    go run . --align=right "This is a very very very long text\nHello World"
+    sleep 0.3
+
+    text 'Test 20'
+    go run . --align=left "This is a very very very long text\nHello World"
+    sleep 0.3
+
+    text 'Test 21 <--align=center "Hey there" shadow>'
+    go run . --align=center "Hey there" shadow
+    sleep 0.3
+
+    text 'Test 22 <--align=right "Hey there" thinkertoy>'
+    go run . --align=right "Hey there" thinkertoy
+    sleep 0.3
+
+    text 'Test 23 <Testing All Asciis>'
+    go run . --align=center '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' thinkertoy
+    sleep 0.3
+
+    redtext 'Test 24 <hey --align=center Hello>'
+    go run . hey --align=center Hello
+    sleep 0.3
+
+    text 'Test 25 <--align=center shadow shadow>'
+    go run . --align=center shadow shadow
+    sleep 0.3
+
+    redtext 'Test 25 <--align=center shadow hey>'
+    go run . --align=center shadow hey
+    sleep 0.3
+
+    redtext 'Test 26 <--align=center hello hey whatssup>'
+    go run . --align=center hello hey whatssup
+    sleep 0.3
+
+    text 'Test 27 <-->'
+    go run . --
+    sleep 0.3
+
+    text 'Test 28 <--align>'
+    go run . --align
+    sleep 0.3
+
+    text 'Test 29 <--align=>'
+    go run . --align=
+    sleep 0.3
+
+    text 'Test 30 <--align=what>'
+    go run . --align=what
+    sleep 0.3
+
+    text 'Test 31 <--align=center>'
+    go run . --align=center 
+    sleep 0.3
+
+    text 'Test 32 <--align=what hey>'
+    go run . --align=what hey
+    sleep 0.3
+
+    text 'Test 33 <--alig>'
+    go run . --alig
+    sleep 0.3
+}
+
+test_fs() {
+    text 'Test 1 <shadow shadow>'
+    go run . shadow shadow
+    sleep 0.3
+
+    text 'Test 2 <hey standard.txt>'
+    go run . hey standard.txt
+    sleep 0.3
+
+    text 'Test 3 <hey shadow.txt>'
+    go run . hey shadow.txt
+    sleep 0.3
+
+    text 'Test 4 <standard.txt>'
+    go run . standard.txt
+    sleep 0.3
+
+    text 'Test 5 <standard shadow>'
+    go run . standard shadow
+    sleep 0.3
+
+    text 'Test 6 <shadow standard>'
+    go run . shadow standard
+    sleep 0.3
+
+    redtext 'Test 7 <hello hey wassup what what>'
+    go run . hello hey wassup what what
     sleep 0.3
 }
 
@@ -132,3 +295,4 @@ alias rgc='run_go_commands'
 alias reverse='test_reverse'
 alias align='test_align'
 alias error='test_errors'
+alias fonts='test_fs'

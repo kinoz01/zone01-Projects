@@ -55,7 +55,7 @@ func PrintAsciiLine(userLine, alignement string, asciiTable [][]string, lenAscii
 			} else {
 				output += ColorSlice[*ColorIndex] + asciiTable[int(char-32)][i] + reset
 				*ColorIndex++
-			}			
+			}
 		}
 		output += "\n"
 	}
