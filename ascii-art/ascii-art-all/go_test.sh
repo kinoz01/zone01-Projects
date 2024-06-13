@@ -288,6 +288,18 @@ test_fs() {
     redtext 'Test 7 <hello hey wassup what what>'
     go run . hello hey wassup what what
     sleep 0.3
+
+    text 'Test 8'
+    go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' thinkertoy
+    sleep 0.3
+
+    text 'Test 9'
+    go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' shadow
+    sleep 0.3
+
+    text 'Test 10'
+    go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' standard
+    sleep 0.3
 }
 
 # Define an alias that calls the functions
