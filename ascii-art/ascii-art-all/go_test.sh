@@ -251,7 +251,7 @@ test_align() {
     go run . --align=center 
     sleep 0.3
 
-    text 'Test 32 <--align=what hey>'
+    redtext 'Test 32 <--align=what hey>'
     go run . --align=what hey
     sleep 0.3
 
