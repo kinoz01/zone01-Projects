@@ -10,7 +10,7 @@ var fontLines int
 // ASCIIArt function simulates your existing ASCII art generation logic.
 func ASCIIArt(userText, banner string) (string, error) {
 	var AsciiArt string
-	for _, userLine := range strings.Split(userText, `\n`) {
+	for _, userLine := range strings.Split(userText, "\r\n") {
 		if userLine == "" {
 			AsciiArt += "\n"
 			continue
