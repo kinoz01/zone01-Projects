@@ -1,13 +1,13 @@
 package main
 
 import (
+	"asciiArt/server"
 	"log"
 	"net/http"
-	"asciiArt/server"
 )
 
 func main() {
-	
+
 	http.HandleFunc("/", server.HomeHandler)
 	http.HandleFunc("/ascii-art", server.AsciiArtHandler)
 
