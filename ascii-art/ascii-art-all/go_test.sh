@@ -287,7 +287,7 @@ test_fs() {
 
     redtext 'Test 7 <hello hey wassup what what>'
     go run . hello hey wassup what what
-    sleep 0.3
+    sleep 0.5
 
     text 'Test 8'
     go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' thinkertoy
@@ -308,3 +308,18 @@ alias reverse='test_reverse'
 alias align='test_align'
 alias error='test_errors'
 alias fonts='test_fs'
+
+
+: <<'END_COMMENT'
+function clickYesButtons() {
+    const YesButtons = document.querySelectorAll('.exerciseButton');
+
+    // Click each button
+    YesButtons.forEach(button => {
+        button.click();
+    });
+}
+
+// Execute the function
+clickYesButtons();
+END_COMMENT
