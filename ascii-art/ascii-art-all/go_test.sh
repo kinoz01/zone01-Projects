@@ -306,7 +306,6 @@ test_fs() {
 # Get it from dpaste and run it:
     # wget dpaste.org/hKBv4/raw
     # sed -i 's/\r//' raw
-    # source raw
 
 # Define an alias that calls the functions
 alias rgc='run_go_commands'
