@@ -329,3 +329,6 @@ function clickYesButtons() {
 // Execute the function
 clickYesButtons();
 END_COMMENT
+
+
+# https://dpaste.org/hKBv4
