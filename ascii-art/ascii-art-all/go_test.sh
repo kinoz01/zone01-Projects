@@ -111,7 +111,6 @@ test_errors() {
 
     text 'Test 4: <--color=red green green "Hello World">'
     go run . '--color=red' green green "Hello World"
-    wait_for_key
 }
 
 test_reverse() {
@@ -128,7 +127,6 @@ test_reverse() {
     text "Test 3"
     go run . --output=test2.txt " hey \n   What? " 
     go run . --reverse=test2.txt | cat -e
-    wait_for_key
 }
 
 test_align() {
@@ -266,7 +264,6 @@ test_align() {
 
     text 'Test 33 <--alig>'
     go run . --alig
-    wait_for_key
 }
 
 test_fs() {
@@ -308,7 +305,6 @@ test_fs() {
 
     text 'Test 10'
     go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' standard
-    wait_for_key
 }
 
 
