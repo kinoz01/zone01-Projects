@@ -16,7 +16,7 @@ func PrintAsciiArt(userText, alignement string, asciiTable [][]string, terminalW
 		}
 		lenAscii := GetAsciiLineLen(userLine, asciiTable)
 		AsciiArt += PrintAsciiLine(userLine, alignement, asciiTable, lenAscii, terminalWidth, &ColorIndex)
-		ColorIndex += 2
+		ColorIndex += 2 // to skip '\n'
 	}
 	return AsciiArt
 }
