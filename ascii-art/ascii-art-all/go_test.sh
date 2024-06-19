@@ -22,7 +22,7 @@ redtext() {
 
 wait_for_key() {
     while true; do
-        read -rsn 3 key </dev/tty
+        read -rsn 3 key < /dev/tty
         if [[ "$key" == $'\e[C' ]] || [[ "$key" == $'\e[D' ]] || [[ "$key" == $'\e[B' ]]; then
             break
         fi
@@ -304,6 +304,7 @@ test_fs() {
 }
 
 # Get it from dpaste and run it:
+    # unset HISTFILE
     # wget dpaste.org/hKBv4/raw
     # sed -i 's/\r//' raw
 
