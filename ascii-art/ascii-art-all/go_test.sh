@@ -10,8 +10,6 @@ RESET='\033[0m'
 text() {
    local text="$1"
    local color="\033[38;5;208m"
-   #local width=$(( ($(tput cols) + ${#text}) / 2))
-   #printf "%*s\n" $width "$(echo -e "${color}${text}${RESET}")"
    printf "$(echo -e "${color}${text}${RESET}")\n"
 }
 
@@ -19,8 +17,6 @@ text() {
 redtext() {
    local text="$1"
    local color='\033[0;31m'
-   #local width=$(( ($(tput cols) + ${#text}) / 2))
-   #printf "%*s\n" $width "$(echo -e "${color}${text}${RESET}")"
    printf "$(echo -e "${color}${text}${RESET}")\n"
 }
 
@@ -307,6 +303,10 @@ test_fs() {
     go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' standard
 }
 
+# Get it from dpaste and run it:
+    # wget dpaste.org/hKBv4/raw
+    # sed -i 's/\r//' raw
+    # source raw
 
 # Define an alias that calls the functions
 alias rgc='run_go_commands'
@@ -329,6 +329,3 @@ function clickYesButtons() {
 // Execute the function
 clickYesButtons();
 END_COMMENT
-
-
-# https://dpaste.org/hKBv4
