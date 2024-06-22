@@ -21,6 +21,7 @@ redtext() {
 }
 
 wait_for_key() {
+
     while true; do
         read -rsn 3 key < /dev/tty
         if [[ "$key" == $'\e[C' ]] || [[ "$key" == $'\e[D' ]] || [[ "$key" == $'\e[B' ]]; then
@@ -29,100 +30,49 @@ wait_for_key() {
     done
 }
 
-# Testing Color and output.
-run_go_commands() {
-    text "Test 1"
-    go run . hello | cat -n
+test_fs() {
+    text 'Test 1 <shadow shadow>'
+    go run . shadow shadow
     wait_for_key
 
-    text "Test 2"
-    go run . hey
+    text 'Test 2 <hey standard.txt>'
+    go run . hey standard.txt
     wait_for_key
 
-    text "Test 3"
-    go run . --color=red ll lllHello
+    text 'Test 3 <hey shadow.txt>'
+    go run . hey shadow.txt
     wait_for_key
 
-    text "Test 4"
-    go run . "\n\n\n" | cat -n
+    text 'Test 4 <standard.txt>'
+    go run . standard.txt
     wait_for_key
 
-    text "Test 5"
-    go run . "--color=orange" "GuYs" "HeY GuYs?"
+    text 'Test 5 <standard shadow>'
+    go run . standard shadow
     wait_for_key
 
-    text "Test 6"
-    go run . "--color=blue" "B" 'RGB()'
+    text 'Test 6 <shadow standard>'
+    go run . shadow standard
     wait_for_key
 
-    text "Test 7"
-    go run . '--color=yellow' '(%&) ??'
+    redtext 'Test 7 <hello hey wassup what what>'
+    go run . hello hey wassup what what
     wait_for_key
 
-    text "Test 8"
-    go run . '--color=green' '1 + 1 = 2'
+    text 'Test 8'
+    go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' thinkertoy
     wait_for_key
 
-    text "Test 9"
-    go run . --color=blue shadow shadow shadow
+    text 'Test 9'
+    go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' shadow
     wait_for_key
 
-    text "Test 10"
-    go run . '--color=red' 'hello world'
-    wait_for_key
-
-    text "Test 11"
-    go run . '--color=blue' hey --output=h.txt "hey Hello"
-    cat h.txt
-    wait_for_key
-
-    text "Test 12"
-    go run . '--color=lemon' "Hello\nWorld"
-    wait_for_key
-
-    text "Test 13"
-    go run . --align=center '--color=rgb(100, 210, 40)' "Hello\nWorld"
-    wait_for_key
-
-    text "Test 14"
-    go run . --color=green '!' --color=yellow '"' --color=blue '#' --color=magenta '$' --color=cyan '%' --color=white '&' --color=sky "'" --color=orange '(' --color=forest ')' --color=lavender '*' --color=rose '+' --color=lemon , --color=turquoise '-' --color=cherry '.' --color=emerald '/' --color=red 0 --color=green 1 --color=yellow 2 --color=blue 3 --color=magenta 4 --color=cyan 5 --color=white 6 --color=sky 7 --color=orange 8 --color=forest 9 --color=ocean ':' --color=lavender ';' --color=rose '<' --color=lemon = --color=turquoise '>' --color=cherry '?' --color=emerald '@' --color=red A --color=green B --color=yellow C --color=blue D --color=magenta E --color=cyan F --color=white G --color=sky H --color=orange I --color=forest J --color=ocean K --color=lavender L --color=rose M --color=lemon N --color=turquoise O --color=cherry P --color=emerald Q --color=red R --color=green S --color=yellow T --color=blue U --color=magenta V --color=cyan W --color=white X --color=sky Y --color=orange Z --color=forest '[' --color=ocean '\' --color=lavender ']' --color=rose '^' --color=lemon _ --color=turquoise '`' --color=cherry a --color=emerald b --color=red c --color=green d --color=yellow e --color=blue f --color=magenta g --color=cyan h --color=white i --color=sky j --color=orange k --color=forest l --color=ocean m --color=lavender n --color=rose o --color=lemon p --color=turquoise q --color=cherry r --color=emerald s --color=red t --color=green u --color=yellow v --color=blue w --color=magenta x --color=cyan y --color=white z --color=sky '{' --color=orange '|' --color=forest '}' --color=ocean '~' '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~'
-    wait_for_key
-
-    text 'Test 15: <--color=red he --color=green ey hey>'
-    go run . --color=red he --color=green ey hey
+    text 'Test 10'
+    go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' standard
 }
 
-test_errors() {
-    text "Test 1"
-    go run . '--color=rgb(2503, 210, 40)' "Hello World"
-    wait_for_key
+test_output() {
 
-    text "Test 2"
-    go run . '--color=hsl(-1, 50%, 40%)' "Hello World"
-    wait_for_key
-
-    text 'Test 3: <hey '--color=red' green "Hello World">'
-    go run . hey '--color=red' green "Hello World"
-    wait_for_key
-
-    text 'Test 4: <--color=red green green "Hello World">'
-    go run . '--color=red' green green "Hello World"
-}
-
-test_reverse() {
-    text "Test 1"
-    go run . --output=test1.txt "       hey     hello  "
-    go run . --reverse=test1.txt | cat -e
-    wait_for_key
-
-    text "Test 2"
-    go run . --output=test2.txt '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~'
-    go run . --reverse=test2.txt
-    wait_for_key
-
-    text "Test 3"
-    go run . --output=test2.txt " hey \n   What? " 
-    go run . --reverse=test2.txt | cat -e
 }
 
 test_align() {
@@ -142,15 +92,15 @@ test_align() {
     go run . --align=justify "Hello World"
     wait_for_key
 
-    text 'Test 5'
+    text 'Test 5 <justify>'
     go run . --align=justify "Hello World\nHey There How\nare You"
     wait_for_key
 
-    text 'Test 6'
+    text 'Test 6 <right>'
     go run . --align=right "Hello World\nHey There How\nare You"
     wait_for_key
 
-    text 'Test 7'
+    text 'Test 7 <center>'
     go run . --align=center "Hello World\nHey There How\nare You"
     wait_for_key
 
@@ -162,7 +112,7 @@ test_align() {
     go run . --align=right hey
     wait_for_key
 
-    text 'Test 10'
+    text 'Test 10 (three "new lines")'
     go run . "\n\n\n" | cat -n
     wait_for_key
 
@@ -262,59 +212,112 @@ test_align() {
     go run . --alig
 }
 
-test_fs() {
-    text 'Test 1 <shadow shadow>'
-    go run . shadow shadow
+
+test_color() {
+    text 'Test 1'
+    go run . hello | cat -n
     wait_for_key
 
-    text 'Test 2 <hey standard.txt>'
-    go run . hey standard.txt
+    text 'Test 2'
+    go run . hey
     wait_for_key
 
-    text 'Test 3 <hey shadow.txt>'
-    go run . hey shadow.txt
+    text 'Test 3'
+    go run . --color=red ll lllHello
     wait_for_key
 
-    text 'Test 4 <standard.txt>'
-    go run . standard.txt
+    text 'Test 4'
+    go run . "\n\n\n" | cat -n
     wait_for_key
 
-    text 'Test 5 <standard shadow>'
-    go run . standard shadow
+    text 'Test 5'
+    go run . "--color=orange" "GuYs" "HeY GuYs?"
     wait_for_key
 
-    text 'Test 6 <shadow standard>'
-    go run . shadow standard
+    text 'Test 6'
+    go run . "--color=blue" "B" 'RGB()'
     wait_for_key
 
-    redtext 'Test 7 <hello hey wassup what what>'
-    go run . hello hey wassup what what
-    sleep 0.5
+    text 'Test 7'
+    go run . '--color=yellow' '(%&) ??'
+    wait_for_key
 
     text 'Test 8'
-    go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' thinkertoy
+    go run . '--color=green' '1 + 1 = 2'
     wait_for_key
 
     text 'Test 9'
-    go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' shadow
+    go run . --color=blue shadow shadow shadow
     wait_for_key
 
     text 'Test 10'
-    go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' standard
+    go run . '--color=red' 'hello world'
+    wait_for_key
+
+    text 'Test 11'
+    go run . '--color=blue' hey --output=h.txt "hey Hello"
+    cat h.txt
+    wait_for_key
+
+    text 'Test 12'
+    go run . '--color=lemon' "Hello\nWorld"
+    wait_for_key
+
+    text 'Test 13'
+    go run . --align=center '--color=rgb(100, 210, 40)' "Hello\nWorld"
+    wait_for_key
+
+    text 'Test 14'
+    go run . --color=green '!' --color=yellow '"' --color=blue '#' --color=magenta '$' --color=cyan '%' --color=white '&' --color=sky "'" --color=orange '(' --color=forest ')' --color=lavender '*' --color=rose '+' --color=lemon , --color=turquoise '-' --color=cherry '.' --color=emerald '/' --color=red 0 --color=green 1 --color=yellow 2 --color=blue 3 --color=magenta 4 --color=cyan 5 --color=white 6 --color=sky 7 --color=orange 8 --color=forest 9 --color=ocean ':' --color=lavender ';' --color=rose '<' --color=lemon = --color=turquoise '>' --color=cherry '?' --color=emerald '@' --color=red A --color=green B --color=yellow C --color=blue D --color=magenta E --color=cyan F --color=white G --color=sky H --color=orange I --color=forest J --color=ocean K --color=lavender L --color=rose M --color=lemon N --color=turquoise O --color=cherry P --color=emerald Q --color=red R --color=green S --color=yellow T --color=blue U --color=magenta V --color=cyan W --color=white X --color=sky Y --color=orange Z --color=forest '[' --color=ocean '\' --color=lavender ']' --color=rose '^' --color=lemon _ --color=turquoise '`' --color=cherry a --color=emerald b --color=red c --color=green d --color=yellow e --color=blue f --color=magenta g --color=cyan h --color=white i --color=sky j --color=orange k --color=forest l --color=ocean m --color=lavender n --color=rose o --color=lemon p --color=turquoise q --color=cherry r --color=emerald s --color=red t --color=green u --color=yellow v --color=blue w --color=magenta x --color=cyan y --color=white z --color=sky '{' --color=orange '|' --color=forest '}' --color=ocean '~' '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~'
+    wait_for_key
+
+    text 'Test 15: <--color=red he --color=green ey hey>'
+    go run . --color=red he --color=green ey hey
+    wait_for_key
+
+    redtext 'Test 16'
+    go run . '--color=rgb(2503, 210, 40)' "Hello World"
+    wait_for_key
+
+    redtext 'Test 17'
+    go run . '--color=hsl(-1, 50%, 40%)' "Hello World"
+    wait_for_key
+
+    redtext 'Test 18: <hey '--color=red' green "Hello World">'
+    go run . hey '--color=red' green "Hello World"
+    wait_for_key
+
+    redtext 'Test 19: <--color=red green green "Hello World">'
+    go run . '--color=red' green green "Hello World"
+}
+
+
+test_reverse() {
+    text 'Test 1'
+    go run . --output=test1.txt "       hey     hello  "
+    go run . --reverse=test1.txt | cat -e
+    wait_for_key
+
+    text 'Test 2'
+    go run . --output=test2.txt '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~'
+    go run . --reverse=test2.txt
+    wait_for_key
+
+    text 'Test 3'
+    go run . --output=test2.txt " hey \n   What? " 
+    go run . --reverse=test2.txt | cat -e
 }
 
 # Get it from dpaste and run it:
     # unset HISTFILE
-    # wget dpaste.org/hKBv4/raw
-    # sed -i 's/\r//' raw
+    # wget rentry.co/aat911a/raw
 
-# Define an alias that calls the functions
-alias rgc='run_go_commands'
-alias reverse='test_reverse'
+
+alias fst='test_fs'
+alias out='test_output'
 alias align='test_align'
-alias error='test_errors'
-alias fonts='test_fs'
-
+alias color='test_color'
+alias reverse='test_reverse'
 
 : <<'END_COMMENT'
 function clickYesButtons() {
@@ -329,3 +332,5 @@ function clickYesButtons() {
 // Execute the function
 clickYesButtons();
 END_COMMENT
+
+# sed -i 's/\r//' raw
