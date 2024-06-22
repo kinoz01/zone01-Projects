@@ -1,14 +1,25 @@
 package asciiart
 
 import (
-	"os"
+	"embed"
+	"fmt"
+	"regexp"
 	"strings"
 )
 
+//go:embed banners
+var banners embed.FS
+
+var BadUserFont bool
+
 var fontLines int
 
-// ASCIIArt function simulates your existing ASCII art generation logic.
+// ASCIIArt function generate Ascii Art.
 func ASCIIArt(userText, banner string) (string, error) {
+	msg, quit := GetPrePrint(userText, banner)
+	if quit {
+		return msg, fmt.Errorf(msg)
+	}
 	var AsciiArt string
 	for _, userLine := range strings.Split(userText, "\r\n") {
 		if userLine == "" {
@@ -35,18 +46,9 @@ func PrintAsciiLine(userLine string, asciiTable [][]string) string {
 // This function check if a font is available at ./banners and at ../banners and lastely at ../fonts if found return its content as a slice of bytes else return nil.
 func GetAsciiTemplateByte(font string) []byte {
 	InitFontLines(font)
-
-	asciiTemplateByte, err := os.ReadFile("./asciiart/banners/" + font + ".txt")
+	asciiTemplateByte, err := banners.ReadFile("banners/" + font + ".txt")
 	if err != nil {
-		// If reading with fails try checking if there are any outside/user fonts in a folder called banners along side the excutable program.
-		asciiTemplateByte, err = os.ReadFile("./banners/" + font + ".txt")
-		if err != nil {
-			asciiTemplateByte, err = os.ReadFile("./fonts/" + font + ".txt")
-			if err != nil {
-				// If all three attempts fail return.
-				return nil
-			}
-		}
+		return nil
 	}
 	return asciiTemplateByte
 }
@@ -85,7 +87,24 @@ func InitFontLines(font string) {
 		fontLines = 12
 	case "georgi":
 		fontLines = 16
-	default:
-		fontLines = 8
 	}
+}
+
+// Quit in case of empty string "", search for invalid ascii to avoid out of range panic, and remove one new line in case of just new lines in userInput.
+func GetPrePrint(userText, banner string) (string, bool) {
+	if GetAsciiTemplateByte(banner) == nil {
+		return "🚨 Invalid Banner.\n", true
+	}
+	if len(userText) == 0 {
+		return "", true
+	}
+	for _, userTextChar := range userText {
+		asciiIndex := int(userTextChar)
+		if asciiIndex-32 < 0 || asciiIndex-32 >= 95 {
+			return "🚨 Found an Invalid Ascii Character.\n", true
+		}
+	}
+	re := regexp.MustCompile(`\A((\\n)*)\\n$`)
+	userText = re.ReplaceAllString(userText, "$1")
+	return userText, false
 }

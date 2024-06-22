@@ -2,7 +2,6 @@ package api
 
 import (
 	"asciiArt/asciiart"
-	"fmt"
 	"net/http"
 	"text/template"
 )
@@ -13,9 +12,13 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if r.Method != http.MethodGet {
+		http.Error(w, "Bad Request: Only GET method is allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
 	tmpl, err := template.ParseFiles("templates/index.html")
 	if err != nil {
-		fmt.Println("hey")
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
@@ -42,7 +45,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		http.Error(w, "Bad Request: Only POST method is allowed", http.StatusBadRequest)
+		http.Error(w, "Bad Request: Only POST method is allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -62,7 +65,7 @@ func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 
 	art, err := asciiart.ASCIIArt(text, banner)
 	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		http.Error(w, art, http.StatusInternalServerError)
 		return
 	}
 
