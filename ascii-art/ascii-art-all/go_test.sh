@@ -30,7 +30,13 @@ wait_for_key() {
     done
 }
 
+
+
 test_fs() {
+    text 'Test  0 <HELLO standard>'
+    go run . HELLO standard
+    wait_for_key
+
     text 'Test 1 <shadow shadow>'
     go run . shadow shadow
     wait_for_key
@@ -69,10 +75,119 @@ test_fs() {
 
     text 'Test 10 <all chars>'
     go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' standard
+    wait_for_key
+
+    redtext 'Test 11 <Hello standard shadow>'
+    go run . Hello standard shadow
+    wait_for_key
+
+    redtext 'Test 12 <éâ thinkertoy>'
+    go run . éâ thinkertoy
+    wait_for_key
+
+    redtext 'Test 13 <\_n\_n\_n thinkertoy>'
+    go run . "\n\n\n" thinkertoy | cat -n
+    wait_for_key
+
+    redtext 'Test 14 <"">'
+    go run . "" thinkertoy | cat -n
+
 }
 
 test_output() {
-    go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' standard
+    text 'Test 1 <-output=outl.txt Hello>'
+    go run . --output=outl.txt Hello 
+    cat -e outl.txt 
+    rm outl.txt 
+    wait_for_key
+
+    text 'Test 2 <--output=outl.txt \_n\_n\_n>'
+    go run . --output=outl.txt "\n\n\n"
+    cat -e outl.txt 
+    rm outl.txt
+    wait_for_key
+
+    text 'Test 3 <--output=outl.txt Hello\_nHey shadow>'
+    go run . --output=outl.txt "Hello\nHey" shadow
+    cat -e outl.txt 
+    rm outl.txt
+    wait_for_key
+
+    text 'Test 4 <--output=outl.txt --output=hey.txt Hello\_nHey thinkertoy>'
+    go run . --output=outl.txt --output=hey.txt "Hello\nHey" thinkertoy
+    cat -e outl.txt 
+    rm outl.txt && rm hey.txt
+    wait_for_key
+
+    text 'Test 5 <--output=outl.txt hello --output=hey.txt Hello thinkertoy>'
+    go run . --output=outl.txt hello --output=hey.txt Hello thinkertoy
+    cat -e outl.txt 
+    rm outl.txt
+    wait_for_key
+
+    text 'Test 6 <--output=outl.txt "">'
+    go run . --output=outl.txt ""
+    cat -e outl.txt && rm outl.txt
+    wait_for_key
+
+    text 'Test 7 <--output=.txt hey thinkertoy>'
+    go run . --output=.txt "hey" thinkertoy
+    cat -e .txt && rm .txt
+    wait_for_key
+
+    text 'Test 8 <--output=outl hey shadow>'
+    go run . --output=outl hey shadow
+    cat -e outl && rm outl
+    wait_for_key
+
+    text 'Test 9 <--output=txt>'
+    go run . --output=txt
+    wait_for_key
+
+    text 'Test 10 <--output=>'
+    go run . --output=
+    wait_for_key
+
+    text 'Test 11 <--output>'
+    go run . --output=
+    wait_for_key
+
+    text 'Test 12 <--o>'
+    go run . --o
+    wait_for_key
+
+    text 'Test 13 <-->'
+    go run . --
+    wait_for_key
+
+    redtext 'Test 14 <--output=outl.txt "éâ">'
+    go run . --output=outl.txt "éâ"
+    wait_for_key
+
+    text 'Test 15 <all chars>'
+    go run . --output=outl.txt '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' thinkertoy
+    cat -e outl.txt && rm outl.txt
+    wait_for_key
+
+    text 'Test 16 <--output=outl.txt \_n>'
+    go run . --output=outl.txt "\n"
+    cat -e outl.txt && rm outl.txt
+    wait_for_key
+
+    text 'Test 17 <--output=outl.txt --output=outl.txt>'
+    go run . --output=outl.txt --output=outl.txt
+    cat -e outl.txt && rm outl.txt
+    wait_for_key
+
+    text 'Test 18 <--output=outl.txt --output>'
+    go run . --output=outl.txt --output
+    cat -e outl.txt && rm outl.txt
+    wait_for_key
+
+    redtext 'Test 19 <hello --output=outl.txt hey>'
+    go run . hello --output=outl.txt hey
+    cat -e outl.txt && rm outl.txt
+
 }
 
 test_align() {
@@ -212,7 +327,6 @@ test_align() {
     go run . --alig
     wait_for_key
 
-
 }
 
 
@@ -253,7 +367,7 @@ test_color() {
     go run . --color=blue shadow shadow shadow
     wait_for_key
 
-    redtext 'Test 10 <invalid string color>'
+    redtext 'Test 10 <invalid color>'
     go run . --color=string 'hello world'
     wait_for_key
 
@@ -350,6 +464,11 @@ test_reverse() {
     text 'Test 11 <\_n\_nhey\_n\_n\_n\_nlol\_n\_n>'
     go run . --output=testR.txt "\n\nhey\n\n\n\nlol\n\n" 
     go run . --reverse=testR.txt | cat -e
+    wait_for_key
+
+    redtext 'Test 12 <--reverse=testR.txt shadow>'
+    go run . --output=testR.txt "\n\nhey\n\n\n\nlol\n\n" 
+    go run . --reverse=testR.txt shadow | cat -e
     rm testR.txt
 }
 
