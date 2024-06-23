@@ -97,11 +97,11 @@ test_fs() {
     go run . éâ thinkertoy
     wait_for_key
 
-    text 'Test 13 <\_n\_n\_n thinkertoy>'
+    redtext 'Test 13 <\_n\_n\_n thinkertoy>'
     go run . "\n\n\n" thinkertoy | cat -n
     wait_for_key
 
-    text 'Test 14 <"">'
+    redtext 'Test 14 <"">'
     go run . "" thinkertoy | cat -n
 
 }
