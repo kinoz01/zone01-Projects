@@ -59,20 +59,20 @@ test_fs() {
     go run . hello hey wassup what what
     wait_for_key
 
-    text 'Test 8'
+    text 'Test 8 <all chars>'
     go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' thinkertoy
     wait_for_key
 
-    text 'Test 9'
+    text 'Test 9 <all chars>'
     go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' shadow
     wait_for_key
 
-    text 'Test 10'
+    text 'Test 10 <all chars>'
     go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' standard
 }
 
 test_output() {
-
+    go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' standard
 }
 
 test_align() {
@@ -210,64 +210,68 @@ test_align() {
 
     text 'Test 33 <--alig>'
     go run . --alig
+    wait_for_key
+
+
 }
 
 
 test_color() {
-    text 'Test 1'
-    go run . hello | cat -n
+    text 'Test 1 <--color=blue hello>'
+    go run . --color=blue hello 
     wait_for_key
 
-    text 'Test 2'
-    go run . hey
+    text 'Test 2 <--color=blue o hello>'
+    go run . --color=blue o hello
     wait_for_key
 
-    text 'Test 3'
+    text 'Test 3 <--color=red ll lllHello>'
     go run . --color=red ll lllHello
     wait_for_key
 
-    text 'Test 4'
-    go run . "\n\n\n" | cat -n
+    text 'Test 4 <--color=yellow "HEY  what" "yay HEy  whatssup">'
+    go run . --color=yellow "HEY  what" "yay HEY  whatssup HEY"
     wait_for_key
 
-    text 'Test 5'
-    go run . "--color=orange" "GuYs" "HeY GuYs?"
+    text 'Test 5 <--color=orange "GuYs" "HeY\_nGuYs?>'
+    go run . "--color=orange" "GuYs" "HeY\nGuYs?"
     wait_for_key
 
-    text 'Test 6'
+    text 'Test 6 <--color=blue "B" RGB()>'
     go run . "--color=blue" "B" 'RGB()'
     wait_for_key
 
-    text 'Test 7'
-    go run . '--color=yellow' '(%&) ??'
+    text 'Test 7 <--color=yellow "  HEY  what" "y  HEY  whatsup HEY">'
+    go run . --color=yellow "  HEY  what" "y  HEY  whatsup HEY"
     wait_for_key
 
-    text 'Test 8'
-    go run . '--color=green' '1 + 1 = 2'
+    text 'Test 8 <--color=red HeyHey HeyHeyHeyYoYouHey>'
+    go run . --color=red HeyHey HeyHeyHeyYoYouHey
     wait_for_key
 
-    text 'Test 9'
+    text 'Test 9 <--color=blue shadow shadow shadow>'
     go run . --color=blue shadow shadow shadow
     wait_for_key
 
-    text 'Test 10'
-    go run . '--color=red' 'hello world'
+    redtext 'Test 10 <invalid string color>'
+    go run . --color=string 'hello world'
     wait_for_key
 
-    text 'Test 11'
-    go run . '--color=blue' hey --output=h.txt "hey Hello"
+    text 'Test 11 <--color=blue hey --output=h.txt "hey Hello" | cat h.txt>'
+    go run . --color=blue hey --output=h.txt "hey Hello"
     cat h.txt
+    rm h.txt
     wait_for_key
 
-    text 'Test 12'
-    go run . '--color=lemon' "Hello\nWorld"
+    text 'Test 12 <--color=lemon "Hello\_nWorld">'
+    go run . --color=lemon "Hello\nWorld"
     wait_for_key
 
-    text 'Test 13'
-    go run . --align=center '--color=rgb(100, 210, 40)' "Hello\nWorld"
+    text 'Test 13 <testing rgb color>'
+    go run . '--color=rgb(100, 210, 40)' "Hello\nWorld"
     wait_for_key
 
-    text 'Test 14'
+    text 'Test 14 <multiple color flags>'
     go run . --color=green '!' --color=yellow '"' --color=blue '#' --color=magenta '$' --color=cyan '%' --color=white '&' --color=sky "'" --color=orange '(' --color=forest ')' --color=lavender '*' --color=rose '+' --color=lemon , --color=turquoise '-' --color=cherry '.' --color=emerald '/' --color=red 0 --color=green 1 --color=yellow 2 --color=blue 3 --color=magenta 4 --color=cyan 5 --color=white 6 --color=sky 7 --color=orange 8 --color=forest 9 --color=ocean ':' --color=lavender ';' --color=rose '<' --color=lemon = --color=turquoise '>' --color=cherry '?' --color=emerald '@' --color=red A --color=green B --color=yellow C --color=blue D --color=magenta E --color=cyan F --color=white G --color=sky H --color=orange I --color=forest J --color=ocean K --color=lavender L --color=rose M --color=lemon N --color=turquoise O --color=cherry P --color=emerald Q --color=red R --color=green S --color=yellow T --color=blue U --color=magenta V --color=cyan W --color=white X --color=sky Y --color=orange Z --color=forest '[' --color=ocean '\' --color=lavender ']' --color=rose '^' --color=lemon _ --color=turquoise '`' --color=cherry a --color=emerald b --color=red c --color=green d --color=yellow e --color=blue f --color=magenta g --color=cyan h --color=white i --color=sky j --color=orange k --color=forest l --color=ocean m --color=lavender n --color=rose o --color=lemon p --color=turquoise q --color=cherry r --color=emerald s --color=red t --color=green u --color=yellow v --color=blue w --color=magenta x --color=cyan y --color=white z --color=sky '{' --color=orange '|' --color=forest '}' --color=ocean '~' '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~'
     wait_for_key
 
@@ -275,15 +279,15 @@ test_color() {
     go run . --color=red he --color=green ey hey
     wait_for_key
 
-    redtext 'Test 16'
+    redtext 'Test 16 <"--color=rgb(2503, 210, 40)" "Hello World">'
     go run . '--color=rgb(2503, 210, 40)' "Hello World"
     wait_for_key
 
-    redtext 'Test 17'
+    redtext 'Test 17 <--color=hsl(-1, 50, 40) "Hello World">'
     go run . '--color=hsl(-1, 50%, 40%)' "Hello World"
     wait_for_key
 
-    redtext 'Test 18: <hey '--color=red' green "Hello World">'
+    redtext 'Test 18: <hey "--color=red" green "Hello World">'
     go run . hey '--color=red' green "Hello World"
     wait_for_key
 
@@ -293,19 +297,60 @@ test_color() {
 
 
 test_reverse() {
-    text 'Test 1'
-    go run . --output=test1.txt "       hey     hello  "
-    go run . --reverse=test1.txt | cat -e
+    text 'Test 1 <--output=testR.txt "       hey     hello  ">'
+    go run . --output=testR.txt "       hey     hello  "
+    go run . --reverse=testR.txt | cat -e
     wait_for_key
 
-    text 'Test 2'
-    go run . --output=test2.txt '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~'
-    go run . --reverse=test2.txt
+    text 'Test 2 <all chars with new lines>' 
+    go run . --output=testR.txt '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~'
+    go run . --reverse=testR.txt | cat -e
     wait_for_key
 
-    text 'Test 3'
-    go run . --output=test2.txt " hey \n   What? " 
-    go run . --reverse=test2.txt | cat -e
+    text 'Test 3 <--output=testR.txt " hey \_n   What? ">'
+    go run . --output=testR.txt " hey \n   What? " 
+    go run . --reverse=testR.txt | cat -e
+    wait_for_key
+
+    text 'Test 4 <--output=testR.txt "hello how are you!">'
+    go run . --output=testR.txt "hello how are you!" 
+    go run . --reverse=testR.txt | cat -e
+    wait_for_key
+
+    text 'Test 5 <only spaces>'
+    go run . --output=testR.txt "  " 
+    go run . --reverse=testR.txt | cat -e
+    wait_for_key
+
+    text 'Test 6 <only one \_n>'
+    go run . --output=testR.txt "\n" 
+    go run . --reverse=testR.txt | cat -e
+    wait_for_key
+
+    text 'Test 7 <Three \_n>'
+    go run . --output=testR.txt "\n\n\n" 
+    go run . --reverse=testR.txt | cat -e
+    wait_for_key
+
+    text 'Test 8 <nothing>'
+    go run . --output=testR.txt "" 
+    go run . --reverse=testR.txt | cat -e
+    wait_for_key
+
+    text 'Test 9 <hey\_n\_n\_n\_nlol>'
+    go run . --output=testR.txt "hey\n\n\n\nlol" 
+    go run . --reverse=testR.txt | cat -e
+    wait_for_key
+
+    text 'Test 10 <\_n\_n\_nhey\_n\_n\_n\_n>'
+    go run . --output=testR.txt "\n\n\nhey\n\n\n\n" 
+    go run . --reverse=testR.txt | cat -e
+    wait_for_key
+
+    text 'Test 11 <\_n\_nhey\_n\_n\_n\_nlol\_n\_n>'
+    go run . --output=testR.txt "\n\nhey\n\n\n\nlol\n\n" 
+    go run . --reverse=testR.txt | cat -e
+    rm testR.txt
 }
 
 # Get it from dpaste and run it:

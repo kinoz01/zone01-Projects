@@ -19,7 +19,7 @@ func main() {
 		fmt.Print(asciiart.ReverseArt(reverseInput))
 		return
 	}
-	userText, quit = asciiart.GetPrePrint(userText)
+	userText, quit = asciiart.GetPrePrint(userText, outputFiles)
 	if quit {
 		fmt.Print(userText)
 		return

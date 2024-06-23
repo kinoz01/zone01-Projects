@@ -19,30 +19,34 @@ func ReverseArt(inputAsciiFile string) string {
 		}
 	}
 
-	asciiArtLine := make([]string, (len(strings.Split(string(inputAsciiByte), "\n"))-1)/8)
+	inputAscii := string(inputAsciiByte)
+	inputAscii = regexp.MustCompile(`(?m)^\n`).ReplaceAllString(inputAscii, "*\n*\n*\n*\n*\n*\n*\n*\n") // to treat multiple new lines.
+
+	asciiArtLines := make([]string, len(strings.Split(inputAscii, "\n"))/8)
 	var j int
 	var ascii8Lines string
 
-	for i := 0; i < len(strings.Split(string(inputAsciiByte), "\n")); i++ {
-		ascii8Lines += strings.Split(string(inputAsciiByte), "\n")[i] + "\n"
+	for i := 0; i < len(strings.Split(inputAscii, "\n")); i++ {
+		ascii8Lines += strings.Split(inputAscii, "\n")[i] + "\n"
 		if (i+1)%8 == 0 {
-			asciiArtLine[j] = ascii8Lines
+			asciiArtLines[j] = ascii8Lines
 			ascii8Lines = ""
 			j++
 		}
 	}
-
-	for i := 0; i < len(asciiArtLine); i++ {
-		output += ReverseAsciiArtLine(asciiArtLine[i])
+	for i := 0; i < len(asciiArtLines); i++ {
+		output += ReverseAsciiArtLine(asciiArtLines[i])
 	}
 
 	return output
 }
 
 func ReverseAsciiArtLine(inputAsciiLine string) string {
-
+	if inputAsciiLine == "*\n*\n*\n*\n*\n*\n*\n*\n" {
+		return "\n"
+	}
 	AsciiTemplate := strings.Split(string(GetAsciiTemplateByte("standard")), "\n\n")
-	AsciiTemplate[len(AsciiTemplate)-1] = regexp.MustCompile(`\n\z`).ReplaceAllString(AsciiTemplate[len(AsciiTemplate)-1], "")
+	AsciiTemplate[len(AsciiTemplate)-1] = regexp.MustCompile(`\n\z`).ReplaceAllString(AsciiTemplate[len(AsciiTemplate)-1], "") // remove the last newline in the tidle
 	inputAsciiLines := strings.Split(string(inputAsciiLine), "\n")
 
 	var spaceIndex int
@@ -77,7 +81,6 @@ func ReverseAsciiArtLine(inputAsciiLine string) string {
 			foundSpace = false
 		}
 	}
-	
 	return string(result) + "\n"
 }
 

@@ -51,8 +51,11 @@ func GetAsciiTemplateByte(font string) []byte {
 }
 
 // Quit in case of empty string "", search for invalid ascii to avoid out of range panic, and remove one new line in case of just new lines in userInput.
-func GetPrePrint(userText string) (string, bool) {
+func GetPrePrint(userText string, outputFiles []string) (string, bool) {
 	if len(userText) == 0 {
+		for _, outputFile := range outputFiles {
+			GetAsciiFile("", outputFile)
+		}
 		return "", true
 	}
 	for _, userTextChar := range userText {
@@ -120,8 +123,8 @@ func GetColorSlice(color, colorChars, userText string) {
 
 // This func is to solve the go test errors when there is no colors.
 func ColorSliceEmpty() bool {
-	for _, str := range ColorSlice{
-		if str != ""{
+	for _, str := range ColorSlice {
+		if str != "" {
 			return false
 		}
 	}
