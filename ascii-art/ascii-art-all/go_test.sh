@@ -481,7 +481,6 @@ test_color() {
 
 }
 
-
 test_reverse() {
     text 'Test 1 <--output=testR.txt "       hey     hello  ">'
     go run . --output=testR.txt "       hey     hello  "
