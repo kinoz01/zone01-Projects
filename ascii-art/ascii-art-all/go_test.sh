@@ -70,7 +70,7 @@ test_fs() {
     wait_for_key
 
     text 'Test 6 <shadow standard>'
-    go run . shadow standard
+    go run . shadow standard | cat -e
     wait_for_key
 
     redtext 'Test 7 <hello hey wassup what what>'
@@ -78,15 +78,15 @@ test_fs() {
     wait_for_key
 
     text 'Test 8 <all chars>'
-    go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' thinkertoy
+    go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' thinkertoy 
     wait_for_key
 
     text 'Test 9 <all chars>'
-    go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' shadow
+    go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' shadow | cat -e
     wait_for_key
 
     text 'Test 10 <all chars>'
-    go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' standard
+    go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' standard | cat -e
     wait_for_key
 
     redtext 'Test 11 <Hello standard shadow>'
@@ -389,8 +389,8 @@ test_color() {
     rm h.txt
     wait_for_key
 
-    text 'Test 12 <--color=lemon "Hello\_nWorld">'
-    go run . --color=lemon "Hello\nWorld"
+    text 'Test 12 <--color=yellow "Hello\_nWorld">'
+    go run . --color=yellow "Hello\nWorld"
     wait_for_key
 
     text 'Test 13 <testing rgb color>'
@@ -419,6 +419,14 @@ test_color() {
 
     redtext 'Test 19: <--color=red green green "Hello World">'
     go run . '--color=red' green green "Hello World"
+    wait_for_key
+
+    redtext 'Test 20: <--color= green "Hello World">'
+    go run . '--color=red' green green "Hello World"
+    wait_for_key
+
+    text 'Test 21: <--color=red "o\nWo" "Hello\_nWorld">'
+    go run . --color=red "o\nWo" "Hello\nWorld"
 }
 
 
