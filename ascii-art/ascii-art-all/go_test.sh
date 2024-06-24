@@ -31,17 +31,51 @@ wait_for_key() {
 }
 
 test_ascii() {
-    text 'Test 0 <HELLO standard>'
-    go run . HELLO standard
+    text 'Test 0 <HELLO>'
+    go run . HELLO | cat -e
     wait_for_key
 
-    text 'Test 1 <shadow shadow>'
-    go run . shadow shadow
+    text 'Test 1 <all chars>'
+    go run . '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~' | cat -e
     wait_for_key
 
-    text 'Test 2 <hey standard.txt>'
-    go run . hey standard.txt
+    text 'Test 2 <HELLO\_n\_nHow Are YOU>'
+    go run . 'HELLO\n\nHow Are YOU' | cat -e
     wait_for_key
+
+    text 'Test 3 <\_nHEY THERE\_n>'
+    go run . '\nHEY THERE\n' | cat -e
+    wait_for_key
+
+    text 'Test 4 <"">'
+    go run . ""
+    wait_for_key
+
+    text 'Test 5 <"\_n\_n\_n">'
+    go run . "\n\n\n" | cat -n
+    wait_for_key
+
+    text 'Test 6 <"hey hey">'
+    go run . "hey hey" | cat -e
+    wait_for_key
+
+    text 'Test 7 <some Bash special variables>'
+    go run . $$
+    go run . $PPID
+    go run . $SHELL
+    go run . $BASH_VERSION
+    go run . $RANDOM
+    go run . $SECONDS
+    wait_for_key
+
+    text 'Test 8 <some emojis>'
+    go run . '<0>..<0>' | cat -e && wait_for_key
+    go run . '^j^' | cat -e && wait_for_key
+    go run . ':-@' | cat -e && wait_for_key
+    go run . 'D<'  | cat -e && wait_for_key
+    go run . '@_@' | cat -e && wait_for_key
+    go run . ':=8)'| cat -e 
+    
 }
 
 test_fs() {
@@ -339,6 +373,19 @@ test_align() {
     go run . --alig
     wait_for_key
 
+    text 'Test 34 <--output=hello.txt --align=center Hey>'
+    go run . --output=hello.txt --align=center Hey
+    cat hello.txt && rm hello.txt
+    wait_for_key
+
+    text 'Test 35 <--align=center --output=hello.txt Hey>'
+    go run . --output=hello.txt --align=center Hey
+    cat hello.txt && rm hello.txt
+    wait_for_key
+
+    redtext 'Test 36 <--align= center Hey>'
+    go run . --align= center Hey
+
 }
 
 
@@ -427,6 +474,16 @@ test_color() {
 
     text 'Test 21: <--color=red "o\nWo" "Hello\_nWorld">'
     go run . --color=red "o\nWo" "Hello\nWorld"
+    wait_for_key
+
+    text 'Test 22 <--color=red --align=center Hey>'
+    go run . --color=red --align=center Hey
+    wait_for_key
+
+    text 'Test 23 <--color=red H --align=center Hey>'
+    go run . --color=red H --align=center Hey
+    cat hello.txt && rm hello.txt
+    
 }
 
 
