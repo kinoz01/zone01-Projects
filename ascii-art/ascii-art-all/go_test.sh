@@ -30,6 +30,7 @@ wait_for_key() {
     done
 }
 
+
 test_ascii() {
     text 'Test 0 <HELLO>'
     go run . HELLO | cat -e
@@ -77,6 +78,7 @@ test_ascii() {
     go run . ':=8)'| cat -e 
     
 }
+
 
 test_fs() {
     text 'Test 0 <HELLO standard>'
@@ -139,6 +141,7 @@ test_fs() {
     go run . "" thinkertoy | cat -n
 
 }
+
 
 test_output() {
     text 'Test 1 <-output=outl.txt Hello>'
@@ -231,6 +234,7 @@ test_output() {
     cat -e outl.txt && rm outl.txt
 
 }
+
 
 test_align() {
     text 'Test 1 <--align=justify "Hello World">'
@@ -480,6 +484,7 @@ test_color() {
     go run . --color=red H --align=center Hey
 
 }
+
 
 test_reverse() {
     text 'Test 1 <--output=testR.txt "       hey     hello  ">'
