@@ -10,16 +10,26 @@ import (
 //go:embed banners
 var banners embed.FS
 
-var BadUserFont bool
-
 var fontLines int
 
 // ASCIIArt function generate Ascii Art.
 func ASCIIArt(userText, banner string) (string, error) {
-	msg, quit := GetPrePrint(userText, banner)
-	if quit {
-		return msg, fmt.Errorf(msg)
+	
+	if GetAsciiTemplateByte(banner) == nil {
+		return "", fmt.Errorf("invalid banner")
 	}
+	if len(userText) == 0 {
+		return "", nil
+	}
+	for _, userTextChar := range userText {
+		asciiIndex := int(userTextChar)
+		if asciiIndex-32 < 0 || asciiIndex-32 >= 95 {
+			return "Non-ASCII characters aren't supported.\n", nil
+		}
+	}
+	re := regexp.MustCompile(`\A((\\n)*)\\n$`)
+	userText = re.ReplaceAllString(userText, "$1")
+
 	var AsciiArt string
 	for _, userLine := range strings.Split(userText, "\r\n") {
 		if userLine == "" {
@@ -88,23 +98,4 @@ func InitFontLines(font string) {
 	case "georgi":
 		fontLines = 16
 	}
-}
-
-// Quit in case of empty string "", search for invalid ascii to avoid out of range panic, and remove one new line in case of just new lines in userInput.
-func GetPrePrint(userText, banner string) (string, bool) {
-	if GetAsciiTemplateByte(banner) == nil {
-		return "🚨 Invalid Banner.\n", true
-	}
-	if len(userText) == 0 {
-		return "", true
-	}
-	for _, userTextChar := range userText {
-		asciiIndex := int(userTextChar)
-		if asciiIndex-32 < 0 || asciiIndex-32 >= 95 {
-			return "🚨 Found an Invalid Ascii Character.\n", true
-		}
-	}
-	re := regexp.MustCompile(`\A((\\n)*)\\n$`)
-	userText = re.ReplaceAllString(userText, "$1")
-	return userText, false
 }

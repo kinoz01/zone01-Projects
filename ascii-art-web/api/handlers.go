@@ -58,14 +58,14 @@ func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	text := r.FormValue("text")
 	banner := r.FormValue("banner")
 
-	if text == "" || banner == "" {
+	if banner == "" {
 		http.Error(w, "Bad Request", http.StatusBadRequest)
 		return
 	}
 
 	art, err := asciiart.ASCIIArt(text, banner)
 	if err != nil {
-		http.Error(w, art, http.StatusInternalServerError)
+		http.Error(w, art, http.StatusBadRequest)
 		return
 	}
 
