@@ -14,7 +14,7 @@ var fontLines int
 
 // ASCIIArt function generate Ascii Art.
 func ASCIIArt(userText, banner string) (string, error) {
-	
+
 	if GetAsciiTemplateByte(banner) == nil {
 		return "", fmt.Errorf("invalid banner")
 	}
@@ -23,7 +23,7 @@ func ASCIIArt(userText, banner string) (string, error) {
 	}
 	for _, userTextChar := range userText {
 		asciiIndex := int(userTextChar)
-		if asciiIndex-32 < 0 || asciiIndex-32 >= 95 {
+		if (asciiIndex < 32 || asciiIndex >= 127) && asciiIndex != 10 && asciiIndex != 13 {
 			return "Non-ASCII characters aren't supported.\n", nil
 		}
 	}

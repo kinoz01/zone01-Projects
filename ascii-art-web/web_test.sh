@@ -86,8 +86,8 @@ test_web() {
     wait_for_key
 
     text "Test 11 POST /ascii-art (Large Payload)"
-    curl -X POST http://127.0.0.1:8080/ascii-art -d "text=$(head -c 10000 < /dev/urandom | base64)&banner=standard" -D - -o /dev/null | colorize_pattern
-    wait_for_key
+    curl -X POST http://127.0.0.1:8080/ascii-art -d "text=$(wget rentry.co/xxll/raw)&banner=standard" -D - -o /dev/null | colorize_pattern
+    rm raw.1 && wait_for_key
 
     text "Test 12 POST /ascii-art (Invalid Characters)"
     curl -X POST http://127.0.0.1:8080/ascii-art -d "text=éâ&banner=standard" -D - -o /dev/null | colorize_pattern
