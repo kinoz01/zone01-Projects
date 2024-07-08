@@ -45,6 +45,9 @@ func PrintAsciiLine(userLine string, asciiTable [][]string) string {
 	var output string
 	for i := 0; i < fontLines; i++ {
 		for _, char := range userLine {
+			if char == '\n' || char == '\r' {
+				continue
+			}
 			output += asciiTable[int(char-32)][i]
 
 		}
