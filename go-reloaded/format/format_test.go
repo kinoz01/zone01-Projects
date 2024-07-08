@@ -1,36 +1,9 @@
 package format
 
 import (
-	"fmt"
-	"os"
 	"regexp"
 	"testing"
 )
-
-func TestMain(t *testing.T) {
-	testcases := []struct {
-		res         string
-		expectedRes string
-	}{
-		{"tests/test1.txt", "tests/result1.txt"},
-		{"tests/testStandard.txt", "tests/resultStandard.txt"},
-	}
-	for _, tc := range testcases {
-		res_file, err := os.ReadFile(tc.res)
-		if err != nil {
-			fmt.Println("Error: ", err)
-		}
-		resStr := string(res_file)
-		expected_res, err := os.ReadFile(tc.expectedRes)
-		if err != nil {
-			fmt.Println("Error: ", err)
-		}
-		expectedStr := string(expected_res)
-		if resStr != expectedStr {
-			t.Errorf("For result file %s:\nExpected\n%s\nbut got\n%s", tc.res, expectedStr, resStr)
-		}
-	}
-}
 
 // TestHelloName calls greetings.Hello with a name, checking
 // for a valid return value.
@@ -127,14 +100,41 @@ func TestFormat(t *testing.T) {
 	}
 }
 
-
 // Format run all function in the main.go file
 func Format(text string) string {
 	text = FlagsWrongUsage(text)
 	text = Flags(text)
 	text = Apostrophe(text)
-	text = BasicGrammar(text)	
+	text = BasicGrammar(text)
 	text = Punctuation(text)
 	text = CleanText(text)
 	return text
 }
+
+
+
+// func TestMain(t *testing.T) {
+// 	testcases := []struct {
+// 		res         string
+// 		expectedRes string
+// 	}{
+// 		{"tests/test1.txt", "tests/result1.txt"},
+// 		{"tests/testStandard.txt", "tests/resultStandard.txt"},
+// 	}
+// 	for _, tc := range testcases {
+// 		res_file, err := os.ReadFile(tc.res)
+// 		if err != nil {
+// 			fmt.Println("Error: ", err)
+// 		}
+// 		resStr := string(res_file)
+// 		expected_res, err := os.ReadFile(tc.expectedRes)
+// 		if err != nil {
+// 			fmt.Println("Error: ", err)
+// 		}
+// 		expectedStr := string(expected_res)
+// 		if resStr != expectedStr {
+// 			t.Errorf("For result file %s:\nExpected\n%s\nbut got\n%s", tc.res, expectedStr, resStr)
+// 		}
+// 	}
+// }
+
