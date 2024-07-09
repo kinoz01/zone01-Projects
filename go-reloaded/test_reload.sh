@@ -129,8 +129,11 @@ run_tests() {
     run_single_test 20 " 'eee' 'e e e' ' e e e ' 'e e e ' ' e e e'  (up,2)" " 'eee' 'e e e' 'e e e' 'e e e' 'e E E'" "'eee' 'e e e' 'e e e' 'e e e' 'e E E'" "'eee' 'e e e' 'e e e' 'e e e' 'e e e' (up,2)"
     wait_for_key
     run_single_test 21 "a b (cap, 2)" "A B"
-
-
+    wait_for_key
+    run_single_test 22 "' . . . ' ' . . . ' ' . . . ' ' . . . ' '. . . '" "'...' '...' '...' '...' '...'"
+    wait_for_key
+    run_single_test 23 "' . . . ' ' . . . '"$'\n'"' . . . ' ' . . . ' '. . . '" "'...' '...'"$'\n'"'...' '...' '...'"
+    
     # Clean up temporary files
     rm sample_test.txt result_test.txt
 }
