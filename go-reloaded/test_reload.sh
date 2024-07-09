@@ -126,7 +126,10 @@ run_tests() {
     wait_for_key
     run_single_test 19 "(A     universe is loading" "(An     universe is loading" "(An universe is loading"
     wait_for_key
-    
+    run_single_test 20 " 'eee' 'e e e' ' e e e ' 'e e e ' ' e e e'  (up,2)" " 'eee' 'e e e' 'e e e' 'e e e' 'e E E'" "'eee' 'e e e' 'e e e' 'e e e' 'e E E'" "'eee' 'e e e' 'e e e' 'e e e' 'e e e' (up,2)"
+    wait_for_key
+    run_single_test 21 "a b (cap, 2)" "A B"
+
 
     # Clean up temporary files
     rm sample_test.txt result_test.txt
