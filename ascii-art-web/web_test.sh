@@ -155,6 +155,16 @@ function clickYesButtons() {
     });
 }
 clickYesButtons();
+
+function selectYesRadioButtons() {
+    const yesRadios = document.querySelectorAll('input[type="radio"][value="yes"]');
+    yesRadios.forEach(radio => {
+        radio.checked = true;
+    });
+}
+
+// Call the function to select all "Yes" radio buttons
+selectYesRadioButtons();
 END_COMMENT
 
 # sed -i -E 's/(curl.+-d.+null)/\1 -d "submit=show"/' raw
