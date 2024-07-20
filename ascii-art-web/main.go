@@ -4,16 +4,28 @@ import (
 	"asciiArt/api"
 	"log"
 	"net/http"
+	"time"
 )
 
 func main() {
 
-	http.HandleFunc("/", api.HomeHandler)
-	http.HandleFunc("/ascii-art", api.AsciiArtHandler)
+	mux := http.NewServeMux() // Create a ServeMux
 
-	log.Println("Starting server on http://127.0.0.1:8080")
-	err := http.ListenAndServe(":8080", nil)
-	if err != nil {
-		log.Fatalf("Server failed to start: %v", err)
-	}
+    srv := &http.Server{
+        Addr:         ":8088",
+        Handler:      mux,       // Attach the ServeMux to the server
+        ReadTimeout:  5 * time.Second,
+        WriteTimeout: 5 * time.Second,
+        IdleTimeout:  5 * time.Second,
+    }
+
+    // Register handlers with the ServeMux
+    mux.HandleFunc("/", api.HomeHandler)
+    mux.HandleFunc("/ascii-art", api.AsciiArtHandler)
+
+    log.Println("Starting server on http://127.0.0.1:8088")
+    err := srv.ListenAndServe()
+    if err != nil {
+        log.Fatalf("Server failed to start: %v", err)
+    }
 }
