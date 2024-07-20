@@ -14,9 +14,9 @@ func main() {
     srv := &http.Server{
         Addr:         ":8088",
         Handler:      mux,       // Attach the ServeMux to the server
-        ReadTimeout:  5 * time.Second,
-        WriteTimeout: 5 * time.Second,
-        IdleTimeout:  5 * time.Second,
+        ReadTimeout:  3 * time.Second,
+        WriteTimeout: 3 * time.Second,
+        IdleTimeout:  3 * time.Second,
     }
 
     // Register handlers with the ServeMux
