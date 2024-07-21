@@ -2,6 +2,7 @@ package api
 
 import (
 	"asciiArt/asciiart"
+	"fmt"
 	"net/http"
 	"text/template"
 )
@@ -57,6 +58,7 @@ func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 
 	text := r.FormValue("text")
 	banner := r.FormValue("banner")
+	fmt.Println(banner)
 
 	if banner == "" {
 		http.Error(w, "Bad Request", http.StatusBadRequest)
