@@ -144,7 +144,7 @@ run_tests() {
     rm sample_test.txt result_test.txt
 }
 
-alias grl='run_tests'
+alias goo='run_tests'
 
 # Get it from rentry and run it:
     # unset HISTFILE
