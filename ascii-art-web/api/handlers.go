@@ -2,7 +2,6 @@ package api
 
 import (
 	"asciiArt/asciiart"
-	"fmt"
 	"net/http"
 	"text/template"
 )
