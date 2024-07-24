@@ -6,29 +6,31 @@ import (
 	"text/template"
 )
 
+type WebPageData struct {
+	Text   string
+	Banner string
+	Art    string
+	Fonts  []string
+}
+
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" && r.URL.Path != "/ascii-art" {
-		NotFoundHandler(w)
+		Error404(w)
 		return
 	}
 
 	if r.Method != http.MethodGet {
-		http.Error(w, "Bad Request: Only GET method is allowed", http.StatusMethodNotAllowed)
+		Error405(w, "GET")
 		return
 	}
 
 	tmpl, err := template.ParseFiles("templates/index.html")
 	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		Error500(w)
 		return
 	}
 
-	data := struct {
-		Text   string
-		Banner string
-		Art    string
-		Fonts  []string
-	}{
+	data := WebPageData{
 		Text:   "Hello World!",
 		Banner: "standard",
 		Art:    "",
@@ -40,18 +42,20 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	tmpl.Execute(w, data)
+	if err := tmpl.Execute(w, data); err != nil {
+		Error500(w)
+		return
+	}
 }
 
 func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		http.Error(w, "Bad Request: Only POST method is allowed", http.StatusMethodNotAllowed)
+		Error405(w, "POST")
 		return
 	}
 
-	err := r.ParseForm()
-	if err != nil {
-		http.Error(w, "Bad Request", http.StatusBadRequest)
+	if err := r.ParseForm(); err != nil {
+		Error400(w)
 		return
 	}
 
@@ -59,22 +63,17 @@ func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	banner := r.FormValue("banner")
 
 	if banner == "" {
-		http.Error(w, "Bad Request", http.StatusBadRequest)
+		Error400(w)
 		return
 	}
 
 	art, err := asciiart.ASCIIArt(text, banner)
 	if err != nil {
-		http.Error(w, art, http.StatusBadRequest)
+		Error400(w)
 		return
 	}
 
-	data := struct {
-		Text   string
-		Banner string
-		Art    string
-		Fonts  []string
-	}{
+	data := WebPageData{
 		Text:   text,
 		Banner: banner,
 		Art:    art,
@@ -88,19 +87,12 @@ func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 
 	tmpl, err := template.ParseFiles("templates/index.html")
 	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		Error500(w)
 		return
 	}
 
-	tmpl.Execute(w, data)
-}
-
-func NotFoundHandler(w http.ResponseWriter) {
-	tmpl, err := template.ParseFiles("templates/404.html")
-	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	if err := tmpl.Execute(w, data); err != nil {
+		Error500(w)
 		return
 	}
-	w.WriteHeader(http.StatusNotFound)
-	tmpl.Execute(w, nil)
 }

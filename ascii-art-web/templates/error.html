@@ -4,27 +4,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> ASCII-ART 404</title>
+  <title> ASCII-ART {{.StatusCode}}</title>
 </head>
 
 
-<section class="page_404">
+<section class="page_status">
   <div class="container">
     <div class="row">
       <div class="col-sm-12 ">
         <div class="col-sm-10 col-sm-offset-1  text-center">
-          <div class="four_zero_four_bg">
-            <h1 class="text-center">404</h1>
+          <div class="status_code_bg">
+            <h1 class="text-center">{{.StatusCode}}</h1>
           </div>
 
-          <div class="contant_box_404">
+          <div class="contant_status">
             <h3 class="h2">
-              Look like you're lost
+              {{.Msg1}}
             </h3>
 
-            <p>the page you are looking for is not avaible!</p>
+            <p>{{.Msg2}}</p>
 
-            <a href="http://localhost:8080" class="link_404">Go to Home</a>
+            <a href="http://127.0.0.1:8088" class="home_link">Go to Home</a>
           </div>
         </div>
       </div>
@@ -36,32 +36,32 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
-  .page_404 {
+  .page_status {
     padding: 40px 0;
     background: #fff;
     font-family: "Arvo", serif;
   }
 
-  .page_404 img {
+  .page_status img {
     width: 100%;
   }
 
-  .four_zero_four_bg {
+  .status_code_bg {
     background-image: url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif);
     height: 400px;
     background-position: center;
     background-repeat: no-repeat;
   }
 
-  .four_zero_four_bg h1 {
+  .status_code_bg h1 {
     font-size: 80px;
   }
 
-  .four_zero_four_bg h3 {
+  .status_code_bg h3 {
     font-size: 80px;
   }
 
-  .link_404 {
+  .home_link {
     color: #fff !important;
     padding: 10px 20px;
     background: #39ac31;
@@ -69,7 +69,7 @@
     display: inline-block;
   }
 
-  .contant_box_404 {
+  .contant_status {
     margin-top: -50px;
   }
 

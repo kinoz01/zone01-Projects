@@ -16,7 +16,7 @@
 
         <div class="select" tabindex="1">
             {{range .Fonts}}
-            <input class="selectopt" name="banner" type="radio" id="{{.}}" value="{{.}}" {{if eq $.Banner
+            <input class="selectBanner" name="banner" type="radio" id="{{.}}" value="{{.}}" {{if eq $.Banner
                 .}}checked{{end}}>
             <label for="{{.}}" class="option">{{.}}</label><br>
             {{end}}
