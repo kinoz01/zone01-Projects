@@ -7,26 +7,165 @@
 </head>
 
 <body>
-    <h1>ASCII Art Generator</h1>
+<div class="container">  
+<div class="input">
+
+    <h1>ASCII ART Generator</h1>
+
     <form action="/ascii-art" method="post">
-        <label for="text">Enter text:</label><br><br>
-        <textarea type="text" id="text" name="text" placeholder="Input Text" required>{{.Text}}</textarea><br><br>
-
-        <label>Select Banner:</label><br>
-
-        <div class="select" tabindex="1">
-            {{range .Fonts}}
-            <input class="selectBanner" name="banner" type="radio" id="{{.}}" value="{{.}}" {{if eq $.Banner
-                .}}checked{{end}}>
-            <label for="{{.}}" class="option">{{.}}</label><br>
-            {{end}}
+        <div class="choose">
+            <label for="text">Font:</label><br><br>
         </div>
 
-        <button type="submit">Generate ASCII Art</button>
-    </form>
+        
+            <select id="banner" name="banner">
+                {{range .Fonts}}
+                <option class="bannerOption" value="{{.}}" {{if eq $.Banner .}}selected{{end}}>{{.}}</option>
+                {{end}}
+            </select>  
+                    
+        
+        <textarea type="text" id="text" name="text" placeholder="Input Text" required>{{.Text}}</textarea><br><br>
 
+        <button class="submit" type="submit">Generate</button>
+        
+    </form>
+</div>
+
+<div class="art">
     <h2>ASCII Art Result</h2>
-    <pre>{{.Art}}</pre>
+    <pre class="ascii">{{.Art}}</pre>
+</div>
+
+
 </body>
 
 </html>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap');
+
+    html, body{
+        background-color: rgb(255, 255, 255);
+        height: 100%;
+        padding: 0;
+    }
+    body{
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    h1, h2 {
+        text-align: center;
+        font-family:  "Inconsolata", "Open Sans", sans-serif;
+        font-weight: 500;
+        font-size: 3em;
+        color: rgb(41, 41, 41);
+    }
+
+    h1{
+        margin-top: 120px;
+        margin-bottom: 60px;
+    }
+
+    h2{
+        border-bottom: 1px dashed rgb(65, 177, 252) ;
+        padding-bottom: 40px;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: row;
+        height: 100vh;
+        overflow-y: auto;
+    }
+
+    .input {
+        overflow-y: auto;
+        height: 100vh;
+        width:35%;
+        padding: 30px;
+        padding-right: 45px;
+        background-color: rgb(245, 245, 245);
+    }
+    .art {
+        height: 100vh;
+        width: 65%;  
+        flex-direction: column;
+        align-items: center;
+        background-color: rgb(255, 255, 255);
+    }
+
+    #text {
+        width: 99%;
+        height: 200px;
+        resize: none;
+        padding-top: 15px;
+        padding-left: 10px;
+        border-radius: 6px;  
+        font-size: 1.5em;
+    }
+    .choose{
+        font-family: "Josefin Sans";
+        font-size: 1.8em;
+        float: left;
+        color: rgb(41, 41, 41);
+        padding-top: 7px;
+    }
+    #banner {
+        width: 50%;
+        font-family: "Josefin Sans";
+        font-size: 1.3em;
+        color: rgb(41, 41, 41);
+        float:right;
+        padding: 0.5em;
+        padding-right: 5px;
+        border-radius: 5px;
+        background-color: #ffffff;
+        border: 1px solid rgb(101, 170, 248);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background-image: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 1024 1024' class='icon' version='1.1' xmlns='http://www.w3.org/2000/svg' fill='%23000000'%3E%3Cpath d='M910.752 298.666667l-426.666667 426.666666-426.666666-426.666666h853.333333z' fill='%23666666' /%3E%3C/svg%3E");  /* Custom arrow */
+        background-repeat: no-repeat;
+        background-position: calc(100% - 0.3em) center; /* Adjust arrow position */
+        background-size: 0.8em;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+    
+
+    .bannerOption {
+        background: #ffffff;
+        color: rgb(41, 41, 41);
+    }
+
+    .submit {
+        display: inline-block;
+        outline: none;
+        cursor: pointer;
+        font-size: 16px;
+        line-height: 20px;
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 13px 23px;
+        border: 1px solid rgb(101, 170, 248);
+        transition: box-shadow 0.2s ease 0s, -ms-transform 0.1s ease 0s, -webkit-transform 0.1s ease 0s, transform 0.1s ease 0s;
+        background: #fff;
+        color: #222222;
+        :hover{
+            border-color: rgb(0, 0, 0);
+            background: #ffc2c2;
+        }              
+    }
+
+    .ascii{
+        overflow-x: scroll;
+        padding: 10px;
+        padding-bottom: 50px;
+    }
+
+</style>
+

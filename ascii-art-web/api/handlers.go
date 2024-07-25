@@ -31,7 +31,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := WebPageData{
-		Text:   "Hello World!",
+		Text:   "Type Something!",
 		Banner: "standard",
 		Art:    "",
 		Fonts: []string{
