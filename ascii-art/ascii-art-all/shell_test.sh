@@ -232,6 +232,11 @@ test_output() {
     redtext 'Test 19 <hello --output=outl.txt hey>'
     go run . hello --output=outl.txt hey
     cat -e outl.txt && rm outl.txt
+    wait_for_key
+
+    redtext 'Test 20 <hello --output=outl.go>'
+    go run . hello --output=outl.go>
+    cat -e outl.go && rm outl.go
 
 }
 
@@ -561,17 +566,16 @@ alias color='test_color'
 alias reverse='test_reverse'
 
 : <<'END_COMMENT'
-function clickYesButtons() {
-    const YesButtons = document.querySelectorAll('.exerciseButton');
+function selectTrueRadioButtons() {
+    // Select all radio buttons with value "true"
+    const trueOptions = document.querySelectorAll('input[type="radio"][value="true"]');
 
-    // Click each button
-    YesButtons.forEach(button => {
-        button.click();
+    // Loop through the selected radio buttons and set their checked property to true
+    trueOptions.forEach(function(option) {
+        option.checked = true;
     });
 }
-
-// Execute the function
-clickYesButtons();
+selectTrueRadioButtons();
 END_COMMENT
 
 # sed -i 's/\r//' raw
