@@ -148,23 +148,16 @@ test_web() {
 alias web='test_web'
 
 : <<'END_COMMENT'
-function clickYesButtons() {
-    const YesButtons = document.querySelectorAll('.exerciseButton');
-    YesButtons.forEach(button => {
-        button.click();
+function selectTrueRadioButtons() {
+    // Select all radio buttons with value "true"
+    const trueOptions = document.querySelectorAll('input[type="radio"][value="true"]');
+
+    // Loop through the selected radio buttons and set their checked property to true
+    trueOptions.forEach(function(option) {
+        option.checked = true;
     });
 }
-clickYesButtons();
-
-function selectYesRadioButtons() {
-    const yesRadios = document.querySelectorAll('input[type="radio"][value="yes"]');
-    yesRadios.forEach(radio => {
-        radio.checked = true;
-    });
-}
-
-// Call the function to select all "Yes" radio buttons
-selectYesRadioButtons();
+selectTrueRadioButtons();
 END_COMMENT
 
 # sed -i -E 's/(curl.+-d.+null)/\1 -d "submit=show"/' raw

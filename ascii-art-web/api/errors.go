@@ -55,7 +55,7 @@ func Error400(w http.ResponseWriter) {
 
 // Parse and execute error html page depending on error type.
 func ErrorHandler(w http.ResponseWriter, ErrData ErrorData) {
-	tmpl, err := template.ParseFiles("templates/error.html")
+	tmpl, err := template.ParseFS(TemplateFs, "templates/error.html")
 	if err != nil {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return

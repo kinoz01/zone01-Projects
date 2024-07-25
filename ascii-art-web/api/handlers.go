@@ -2,9 +2,12 @@ package api
 
 import (
 	"asciiArt/asciiart"
+	"embed"
 	"net/http"
 	"text/template"
 )
+
+var TemplateFs embed.FS
 
 type WebPageData struct {
 	Text   string
@@ -24,7 +27,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tmpl, err := template.ParseFiles("templates/index.html")
+	tmpl, err := template.ParseFS(TemplateFs, "templates/index.html")
 	if err != nil {
 		Error500(w)
 		return
@@ -85,7 +88,7 @@ func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	tmpl, err := template.ParseFiles("templates/index.html")
+	tmpl, err := template.ParseFS(TemplateFs, "templates/index.html")
 	if err != nil {
 		Error500(w)
 		return
