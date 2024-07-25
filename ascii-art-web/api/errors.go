@@ -60,7 +60,6 @@ func ErrorHandler(w http.ResponseWriter, ErrData ErrorData) {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(ErrData.StatusCode)
 	if err := tmpl.Execute(w, ErrData); err != nil {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
