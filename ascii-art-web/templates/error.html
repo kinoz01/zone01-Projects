@@ -23,8 +23,9 @@
             </h3>
 
             <p>{{.Msg2}}</p>
-
-            <a href="http://127.0.0.1:8088" class="home_link">Go to Home</a>
+            <a href="http://127.0.0.1:8088">
+              <button class="submit" >Go to Home</button>
+            </a>
           </div>
         </div>
       </div>
@@ -77,4 +78,22 @@
     text-align: center;
     color: #303030;
   }
+  .submit {
+        display: inline-block;
+        outline: none;
+        cursor: pointer;
+        font-size: 16px;
+        line-height: 20px;
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 13px 23px;
+        border: 1px solid rgb(101, 170, 248);
+        transition: box-shadow 0.2s ease 0s, -ms-transform 0.1s ease 0s, -webkit-transform 0.1s ease 0s, transform 0.1s ease 0s;
+        background: #fff;
+        color: #222222;
+        :hover{
+            border-color: rgb(0, 0, 0);
+            background: #ffc2c2;
+        }              
+    }
 </style>
