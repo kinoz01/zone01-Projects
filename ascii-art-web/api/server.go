@@ -7,7 +7,6 @@ import (
 
 func NewServer() {
 
-	// Register handlers with the ServeMux
 	http.HandleFunc("/", HomeHandler)
 	http.HandleFunc("/ascii-art", AsciiArtHandler)
 
