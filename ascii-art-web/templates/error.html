@@ -23,9 +23,13 @@
             </h3>
 
             <p>{{.Msg2}}</p>
+            
+            {{if .StatusCode eq 500}}
+            {{else}}
             <a href="http://127.0.0.1:8088">
               <button class="submit" >Go to Home</button>
             </a>
+            {{end}}
           </div>
         </div>
       </div>

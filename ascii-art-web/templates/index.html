@@ -16,18 +16,17 @@
         <div class="choose">
             <label for="text">Font:</label><br><br>
         </div>
-
         
             <select id="banner" name="banner">
                 {{range .Fonts}}
                 <option class="bannerOption" value="{{.}}" {{if eq $.Banner .}}selected{{end}}>{{.}}</option>
                 {{end}}
-            </select>  
-                    
+            </select>                      
         
         <textarea type="text" id="text" name="text" maxlength="10000" placeholder="Input Text" required>{{.Text}}</textarea><br><br>
 
         <button class="submit" type="submit">Generate</button>
+        <br><br>
         
     </form>
 </div>
@@ -49,7 +48,7 @@
 
     *, *:before, *:after {
         -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
-        }
+    }
 
     html, body{
         background-color: rgb(255, 255, 255);
@@ -80,12 +79,12 @@
     .container {
         display: flex;
         flex-direction: row;
-        height: 100vh;
+        height: auto;
         overflow-y: auto;
     }
 
     .input {
-        height: 100vh;
+        height: auto;
         width:35%;
         padding: 30px;
         padding-right: 45px;
@@ -93,7 +92,7 @@
         box-shadow: inset 0px 0px 6px 0px rgba(0, 0, 0, 0.3);
     }
     .art {
-        height: 100vh;
+        height: auto;
         width: 65%;  
         flex-direction: column;
         align-items: center;
@@ -216,7 +215,6 @@
             width: 50%;
         }
     }
-
 
 </style>
 

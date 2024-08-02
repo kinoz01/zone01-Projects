@@ -3,19 +3,23 @@ package asciiart
 import (
 	"embed"
 	"fmt"
+	"os"
 	"regexp"
 	"strings"
 )
 
 //go:embed banners
-var banners embed.FS
+var Banners embed.FS
 
 var fontLines int
+var BadUserFont bool
 
 // ASCIIArt function generate Ascii Art.
 func ASCIIArt(userText, banner string) (string, error) {
-
 	if GetAsciiTemplateByte(banner) == nil {
+		if BadUserFont {
+			return "only imported 8-lines fonts are supported", fmt.Errorf("invalid banner")
+		}
 		return "", fmt.Errorf("invalid banner")
 	}
 	if len(userText) == 0 {
@@ -59,9 +63,19 @@ func PrintAsciiLine(userLine string, asciiTable [][]string) string {
 // This function check if a font is available at ./banners and at ../banners and lastely at ../fonts if found return its content as a slice of bytes else return nil.
 func GetAsciiTemplateByte(font string) []byte {
 	InitFontLines(font)
-	asciiTemplateByte, err := banners.ReadFile("banners/" + font + ".txt")
+	asciiTemplateByte, err := Banners.ReadFile("banners/" + font + ".txt")
 	if err != nil {
-		return nil
+		// in case of builded program we check banners folder.
+		asciiTemplateByte, err = os.ReadFile("./banners/" + font + ".txt")
+		if err != nil {
+			return nil
+		}
+		// if we find font but it's unsupportable.
+		// this will never be reached in case of "go run ." because the place we read from don't change---->"./banners/" contrary when built.
+		if len(strings.Split(string(asciiTemplateByte), "\n")) != 856 || regexp.MustCompile(`\n\n\n`).MatchString(string(asciiTemplateByte)) {
+			BadUserFont = true
+			return nil
+		}
 	}
 	return asciiTemplateByte
 }
@@ -100,5 +114,7 @@ func InitFontLines(font string) {
 		fontLines = 12
 	case "georgi":
 		fontLines = 16
+	default:
+		fontLines = 8
 	}
 }

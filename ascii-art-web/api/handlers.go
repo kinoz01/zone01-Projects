@@ -1,10 +1,14 @@
 package api
 
 import (
-	"asciiArt/asciiart"
 	"embed"
+	"fmt"
 	"net/http"
+	"os"
+	"strings"
 	"text/template"
+
+	"asciiArt/asciiart"
 )
 
 var TemplateFs embed.FS
@@ -17,7 +21,7 @@ type WebPageData struct {
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/" && r.URL.Path != "/ascii-art" {
+	if r.URL.Path != "/" {
 		Error404(w)
 		return
 	}
@@ -34,15 +38,15 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := WebPageData{
-		Text:   "Type Something!",
+		Text:   "Hello World!",
 		Banner: "standard",
 		Art:    "",
-		Fonts: []string{
-			"small", "phoenix", "o2", "starwar", "stop", "varsity", "standard",
-			"shadow", "thinkertoy", "arob", "zigzag", "henry3D", "doom", "tiles",
-			"jacky", "catwalk", "coins", "fire", "jazmine", "matrix", "blocks",
-			"univers", "impossible", "georgi",
-		},
+	}
+	data.ReadFonts()
+	data.ReadUserFonts() 
+	if data.Fonts == nil {
+		Error500(w)
+		return
 	}
 
 	if err := tmpl.Execute(w, data); err != nil {
@@ -54,11 +58,6 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		Error405(w, "POST")
-		return
-	}
-
-	if err := r.ParseForm(); err != nil {
-		Error400(w)
 		return
 	}
 
@@ -80,13 +79,9 @@ func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 		Text:   text,
 		Banner: banner,
 		Art:    art,
-		Fonts: []string{
-			"small", "phoenix", "o2", "starwar", "stop", "varsity", "standard",
-			"shadow", "thinkertoy", "arob", "zigzag", "henry3D", "doom", "tiles",
-			"jacky", "catwalk", "coins", "fire", "jazmine", "matrix", "blocks",
-			"univers", "impossible", "georgi",
-		},
 	}
+	data.ReadFonts()
+	data.ReadUserFonts()
 
 	tmpl, err := template.ParseFS(TemplateFs, "templates/index.html")
 	if err != nil {
@@ -97,5 +92,33 @@ func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	if err := tmpl.Execute(w, data); err != nil {
 		Error500(w)
 		return
+	}
+}
+
+func (d *WebPageData) ReadFonts() {
+	BannersFS := asciiart.Banners
+	entries, err := BannersFS.ReadDir("banners")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	for _, entry := range entries {
+		if strings.HasSuffix(entry.Name(), ".txt") {
+			d.Fonts = append(d.Fonts, strings.TrimSuffix(entry.Name(), ".txt"))
+		}
+	}
+}
+
+func (d *WebPageData) ReadUserFonts() {
+	files, err := os.ReadDir("banners")
+	if err != nil {
+		return
+	}
+
+	for _, file := range files {
+		if !file.IsDir() && strings.HasSuffix(file.Name(), ".txt") {
+			d.Fonts = append(d.Fonts, strings.TrimSuffix(file.Name(), ".txt"))
+		}
 	}
 }
