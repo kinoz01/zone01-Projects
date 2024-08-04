@@ -9,6 +9,6 @@ import (
 var templateFs embed.FS
 
 func main() {
-    api.TemplateFs = templateFs
+    api.TemplatesFs = templateFs
 	api.NewServer()
 }

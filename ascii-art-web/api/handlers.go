@@ -11,7 +11,7 @@ import (
 	"asciiArt/asciiart"
 )
 
-var TemplateFs embed.FS
+var TemplatesFs embed.FS
 
 type WebPageData struct {
 	Text   string
@@ -31,7 +31,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tmpl, err := template.ParseFS(TemplateFs, "templates/index.html")
+	tmpl, err := template.ParseFS(TemplatesFs, "templates/index.html")
 	if err != nil {
 		Error500(w)
 		return
@@ -43,7 +43,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		Art:    "",
 	}
 	data.ReadFonts()
-	data.ReadUserFonts() 
+	data.ReadUserFonts()
 	if data.Fonts == nil {
 		Error500(w)
 		return
@@ -61,8 +61,14 @@ func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	action := r.FormValue("action")
 	text := r.FormValue("text")
 	banner := r.FormValue("banner")
+
+	if action == "preview" {
+		PreviewFontsHandler(w, r)
+		return
+	}
 
 	if banner == "" {
 		Error400(w)
@@ -75,6 +81,11 @@ func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if action == "download" {
+		DownloadHandler(w, r, art)
+		return
+	}
+
 	data := WebPageData{
 		Text:   text,
 		Banner: banner,
@@ -83,7 +94,7 @@ func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	data.ReadFonts()
 	data.ReadUserFonts()
 
-	tmpl, err := template.ParseFS(TemplateFs, "templates/index.html")
+	tmpl, err := template.ParseFS(TemplatesFs, "templates/index.html")
 	if err != nil {
 		Error500(w)
 		return
@@ -120,5 +131,37 @@ func (d *WebPageData) ReadUserFonts() {
 		if !file.IsDir() && strings.HasSuffix(file.Name(), ".txt") {
 			d.Fonts = append(d.Fonts, strings.TrimSuffix(file.Name(), ".txt"))
 		}
+	}
+}
+
+func PreviewFontsHandler(w http.ResponseWriter, r *http.Request) {
+	templ, err := template.ParseFS(TemplatesFs, "templates/preview.html")
+	if err != nil {
+		Error500(w)
+		return
+	}
+	art, err := asciiart.ASCIIArt("Hello World!", "shadow")
+	if err != nil {
+		Error400(w)
+		return
+	}
+
+	if err := templ.Execute(w, art); err != nil {
+		Error500(w)
+		return
+	}
+}
+
+func DownloadHandler(w http.ResponseWriter, r *http.Request, art string) {
+
+	// Set content type and disposition headers
+	w.Header().Set("Content-Type", "application/octet-stream")
+	w.Header().Set("Content-Disposition", "attachment; filename=my_file.txt")
+
+	// Write the string to the response
+	_, err := w.Write([]byte(art))
+	if err != nil {
+		Error500(w)
+		return
 	}
 }
