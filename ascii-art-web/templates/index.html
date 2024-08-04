@@ -26,6 +26,8 @@
         <textarea type="text" id="text" name="text" maxlength="10000" placeholder="Input Text" required>{{.Text}}</textarea><br><br>
 
         <button class="submit" type="submit">Generate</button>
+        <button class="submit" name="action" value="preview">Preview</button>
+        <button class="submit" name="action" value="download">Download</button>
         <br><br>
         
     </form>
@@ -42,6 +44,7 @@
 </html>
 
 <style>
+
     @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
     @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap');
 
@@ -164,7 +167,9 @@
         :hover{
             border-color: rgb(0, 0, 0);
             background: #ffc2c2;
-        }              
+        }
+        margin-bottom: 10px;
+        margin-right: 10px;            
     }
 
     .art pre {
@@ -181,21 +186,21 @@
         }
     }
 
-    @media(max-width:1600px)
+    @media(max-width:1800px)
     {
          #banner {
-            width: 40%;
+            width: 50%;
         }
     }
 
     @media(max-width: 1000px)
     {
          #banner {
-            width: 55%;
+            width: 50%;
         }
     }
 
-    @media(max-width:800px)
+    @media(max-width:900px)
     {
     .container{
         flex-direction: column;
@@ -219,7 +224,7 @@
             margin-bottom: 60px;
         }   
         #banner {
-            width: 50%;
+            width: 40%;
         }
     }
     @media(max-height:720px)
@@ -229,5 +234,4 @@
         }
     }
     
-
 </style>

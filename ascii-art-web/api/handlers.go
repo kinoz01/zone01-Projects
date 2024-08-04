@@ -156,7 +156,7 @@ func DownloadHandler(w http.ResponseWriter, r *http.Request, art string) {
 
 	// Set content type and disposition headers
 	w.Header().Set("Content-Type", "application/octet-stream")
-	w.Header().Set("Content-Disposition", "attachment; filename=my_file.txt")
+	w.Header().Set("Content-Disposition", "attachment; filename=ascii.txt")
 
 	// Write the string to the response
 	_, err := w.Write([]byte(art))
