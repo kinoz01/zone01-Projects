@@ -140,13 +140,28 @@ func PreviewFontsHandler(w http.ResponseWriter, r *http.Request) {
 		Error500(w)
 		return
 	}
-	art, err := asciiart.ASCIIArt("Hello World!", "shadow")
-	if err != nil {
-		Error400(w)
-		return
+
+	var data WebPageData
+	var arts []string
+
+	data.ReadFonts()
+	data.ReadUserFonts()
+
+	for _, font := range data.Fonts {
+        art, err := asciiart.ASCIIArt("Hello There!", font)
+        if err != nil {
+            Error400(w)
+            return
+        }
+        arts = append(arts, art)
+    }
+	TemplInput := make(map[string]string)
+
+	for i:=0; i<len(data.Fonts); i++ {
+		TemplInput[data.Fonts[i]] = arts[i]
 	}
 
-	if err := templ.Execute(w, art); err != nil {
+	if err := templ.Execute(w, TemplInput); err != nil {
 		Error500(w)
 		return
 	}

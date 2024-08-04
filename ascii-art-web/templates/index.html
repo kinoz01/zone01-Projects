@@ -36,6 +36,12 @@
 <div class="art">
     <h2>ASCII Art Result</h2>
     <pre class="ascii">{{.Art}}</pre>
+    <div class="footer">
+        <p class="text">Designed by <a href="https://github.com/kinoz01" target="_blank"
+                class="textlink">kinoz01</a> | Git
+            Project <a href="https://github.com/kinoz01/zone01-Projects/tree/main/ascii-art-web" target="_blank"
+                class="textlink">here</a></p>
+    </div>
 </div>
 
 
@@ -143,8 +149,7 @@
         appearance: none;
         -webkit-appearance: none;
         -moz-appearance: none;
-    }
-    
+    }   
 
     .bannerOption {
         background: #ffffff;
@@ -175,9 +180,39 @@
     .art pre {
         overflow: scroll;
         margin: 0px;
-        padding: 10px;
+        padding-left: 20px;
+        margin-right: 20px;
         text-align: left;
+        margin-bottom: 20px;
+        border-bottom: 1px dashed rgb(65, 177, 252) ;
+        padding-bottom: 750px;
+        padding-top: 25px;
     }
+
+    .footer{
+        min-height: 35px;
+        width: 100%;
+    
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 10px;        
+    }
+
+    .text{
+        color:rgba(0,0,0,.5);
+    }
+
+    .textlink{
+        cursor: pointer;
+        text-decoration:dotted;
+        color:rgba(180, 215, 238, 0.75);
+    }
+
+    .textlink:hover{
+        text-decoration:underline;
+    }
+
 
     @media(max-width:1200px)
     {
