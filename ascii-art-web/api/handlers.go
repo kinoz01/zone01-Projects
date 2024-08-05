@@ -66,7 +66,7 @@ func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	banner := r.FormValue("banner")
 
 	if action == "preview" {
-		PreviewFontsHandler(w, r)
+		PreviewFontsHandler(w, r, text)
 		return
 	}
 
@@ -134,7 +134,7 @@ func (d *WebPageData) ReadUserFonts() {
 	}
 }
 
-func PreviewFontsHandler(w http.ResponseWriter, r *http.Request) {
+func PreviewFontsHandler(w http.ResponseWriter, r *http.Request, text string) {
 	templ, err := template.ParseFS(TemplatesFs, "templates/preview.html")
 	if err != nil {
 		Error500(w)
@@ -148,8 +148,8 @@ func PreviewFontsHandler(w http.ResponseWriter, r *http.Request) {
 	data.ReadUserFonts()
 
 	for _, font := range data.Fonts {
-        art, err := asciiart.ASCIIArt("Hello There!", font)
-        if err != nil {
+        art, err := asciiart.ASCIIArt(text, font)
+        if err != nil || art == "Non-ASCII characters aren't supported.\n" {
             Error400(w)
             return
         }
