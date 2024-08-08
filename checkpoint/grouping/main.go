@@ -21,7 +21,7 @@ func main() {
 		for _, exp := range expressions {
 			if Contains(word, exp) {
 				num++
-				n := Itoa(num)
+				n := ItoaP(num)
 				os.Stdout.WriteString(n + ": " + word + "\n")
 			}
 		}
@@ -64,7 +64,7 @@ func Fields(s string, c rune) []string {
 	return result
 }
 
-func Itoa(n int) (s string) {
+func ItoaP(n int) (s string) {
 	for n > 0 {
 		s = string(rune(n%10)+'0') + s
 		n /= 10
