@@ -44,6 +44,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	data.ReadFonts()
 	data.ReadUserFonts()
+	
 	if data.Fonts == nil {
 		Error500(w)
 		return
@@ -62,8 +63,13 @@ func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	action := r.FormValue("action")
-	text := r.FormValue("text")
-	banner := r.FormValue("banner")
+    text := "\r\n" + r.FormValue("text")
+    banner := r.FormValue("banner")
+
+    if len(text) > 5004 {
+        Error400(w)
+        return
+    }
 
 	if action == "preview" {
 		PreviewFontsHandler(w, r, text)
