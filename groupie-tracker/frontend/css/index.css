@@ -1,0 +1,189 @@
+/* General Styles */
+@import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #353535;
+    color: #dbdbdb;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.name {
+    max-width: 155px;
+}
+
+.link a {
+    font-family: "Rubik", sans-serif;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    display: block;
+    text-align: center;
+    font-size: 1.2rem;
+    color: rgb(211, 211, 211);
+    width: fit-content;
+    margin:auto;
+    margin-top: 15px;
+}
+
+a:hover {
+    color: #ff8615;
+}
+
+/* Image Styles */
+.brand-img {
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+}
+
+.link img{
+  width:300px;
+}
+
+.brand-img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* List Styles */
+ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+li{
+    margin: 20px;
+}
+
+.header {
+    height: 300px;
+    width: 100%;
+    background-image: linear-gradient(to left bottom, rgba(233, 160, 101, 0.9), rgba(214, 194, 9, 0.9)) , url('https://i.postimg.cc/3RHRwq5N/cover-image-1689797681.jpg');
+    background-position: center;  
+    clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
+  }
+  
+  .text-box{
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    color: #fff;
+    font-weight: 900;
+    padding-top: 60px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  
+  .main-heading {
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    font-size: 60px;
+    margin-top: 0px;
+    animation-name: moveInLeft;
+    animation-duration: 2s;
+    animation-timing-function: ease-out; 
+    color: #333;
+  }
+  
+  @keyframes moveInLeft {
+    0% {
+      opacity: 0%;
+      transform: translateX(-100px);
+    }
+    80% {
+      transform: translateX(20px);
+    }
+    100% {
+      transform: translateX(0px);
+    }
+  }
+
+/**Media Quey for font size*/
+@media (max-width: 852px) {
+  .main-heading {
+    font-size: 50px;
+  }
+}
+
+@media (max-width: 400px) {
+  .main-heading {
+    font-size: 40px;
+  }
+}
+/*************************/
+
+/*Media Query for the images size*/
+@media (max-width: 680px) {
+  .link img{
+    width: 250px;
+  }
+}
+@media (max-width: 579px) {
+  .link img{
+    width: 220px;
+  }
+}
+@media (max-width: 520px) {
+  .link img{
+    width: 200px;
+  }
+}
+@media (max-width: 480px) {
+  .link img{
+    width: 180px;
+  }
+}
+@media (max-width: 440px) {
+  .link img{
+    width: 160px;
+  }
+}
+@media (max-width: 400px) {
+  .link img{
+    width: 250px;
+  }
+}
+@media (max-width: 300px) {
+  .link img{
+    width: 210px;
+  }
+}
+/******************************/
+
+
+/*******************/
+.footer {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.3); /* More transparent background */
+  text-align: center;
+  padding: 10px 0;
+  margin-top: 20px; /* Space above the footer */
+}
+
+.footer-link {
+  color: #ffffff; /* White text */
+  text-decoration: none;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.github-logo {
+  width: 24px; /* Adjust the size of the GitHub logo */
+  height: 24px;
+  margin-right: 8px; /* Space between the logo and the username */
+}
+
+.footer-link:hover {
+  color: #ffa500; /* Change text color on hover */
+}

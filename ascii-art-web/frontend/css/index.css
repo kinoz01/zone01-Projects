@@ -1,0 +1,433 @@
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap');
+
+*, *:before, *:after {
+    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+}
+
+html, body{
+    padding: 0;
+    margin: 0;
+    height: min-content;
+}
+
+h1, h2 {
+    text-align: center;
+    font-family:  "Inconsolata", "Open Sans", sans-serif;
+    font-weight: 500;
+    font-size: 3em;
+    color: rgb(41, 41, 41);
+}
+
+h1{
+    margin-top: 120px;
+    margin-bottom: 60px;
+}
+body.dark-mode h1{
+    color: #e4e4e4;
+}
+
+h2{
+    border-bottom: 1px dashed rgb(65, 177, 252) ;
+    padding-bottom: 40px;
+    color: rgb(41, 41, 41);
+}
+body.dark-mode h2{
+    color: #e4e4e4;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    overflow-y: auto;
+    margin: 0;
+}
+
+.input {
+    min-height: 100%;
+    width:35%;
+    padding: 30px;
+    padding-right: 45px;
+    background-color: rgb(245, 245, 245);
+    box-shadow: inset 0px 0px 6px 0px rgba(0, 0, 0, 0.3);
+    flex-grow: 10;
+    align-self: stretch;
+}
+body.dark-mode .input {
+    background: rgb(31, 31, 31);
+}
+
+.art {
+    height: auto;
+    width: 65%;  
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(255, 255, 255);
+    flex-grow: 10;
+    overflow-y: auto;
+}
+body.dark-mode .art {
+    background: #292929;
+}
+
+#text {
+    width: 99%;
+    height: 200px;
+    resize: none;
+    padding-top: 15px;
+    padding-left: 10px;
+    border-radius: 6px; 
+    border-color: rgb(116, 116, 116);
+    font-size: 1.7em;
+    background-color: white;
+    color:  rgb(41, 41, 41);
+}
+body.dark-mode #text {
+    background: #292929;
+    color:  #e4e4e4;
+    border-color: rgba(141, 219, 255, 0.685);
+}
+
+.choose{
+    font-family: "Josefin Sans";
+    font-size: 1.8em;
+    float: left;
+    color: rgb(41, 41, 41);
+    padding-top: 7px;
+}
+body.dark-mode .choose {
+    color: #e4e4e4;
+}
+
+#banner {
+    width: 40%;
+    font-family: "Josefin Sans";
+    font-size: 1.3em;
+    color: rgb(41, 41, 41);
+    float:right;
+    padding: 0.5em;
+    padding-right: 5px;
+    border-radius: 6px;
+    background-color: #ffffff;
+    border: 1px solid rgb(101, 170, 248);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 1024 1024' class='icon' version='1.1' xmlns='http://www.w3.org/2000/svg' fill='%23000000'%3E%3Cpath d='M910.752 298.666667l-426.666667 426.666666-426.666666-426.666666h853.333333z' fill='%23666666' /%3E%3C/svg%3E");  /* Custom arrow */
+    background-repeat: no-repeat;
+    background-position: calc(100% - 0.3em) center; /* Adjust arrow position */
+    background-size: 0.8em;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+body.dark-mode #banner{
+    background-color: #e0e0e0;
+}
+
+.btns {
+    text-align: center;
+}
+.submit {
+    display: inline-block;
+    outline: none;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 13px 23px;
+    border: 1px solid rgb(101, 170, 248);
+    transition: box-shadow 0.2s ease 0s, -ms-transform 0.1s ease 0s, -webkit-transform 0.1s ease 0s, transform 0.1s ease 0s;
+    background: #fff;
+    color: #222222;
+    margin-bottom: 15px;
+    margin-right: 10px;
+}
+.submit:hover{
+    border-color: rgb(97, 97, 97);
+    background: rgb(226, 243, 255);
+}
+body.dark-mode .submit {
+    background-color: #89b7fc;
+    color: rgb(46, 46, 46);
+}
+body.dark-mode .submit:hover {
+    background-color: #bcd6ff;
+    border-color: rgb(151, 151, 151);
+    color: black;
+}
+
+.art pre {
+    overflow: auto;
+    margin: 0px;
+    padding-left: 20px;
+    margin-right: 20px;
+    text-align: left;
+    padding-bottom: 30px;
+    padding-top: 25px;
+    background: white;
+    color: rgb(41, 41, 41);
+}
+body.dark-mode .art pre {
+    background: #292929;
+    color: #ffffff;
+}
+
+.footer{
+    max-height: fit-content;
+    width: 100%;
+    border-top: 1px dashed rgb(65, 177, 252);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 10px;
+    color:rgba(0,0,0,.5) ; 
+}
+body.dark-mode .footer {
+    color: rgb(219, 219, 219);
+}
+
+.textlink{
+    cursor: pointer;
+    text-decoration:dotted;
+    color:rgba(180, 215, 238, 0.75);
+}
+
+.textlink:hover{
+    text-decoration:underline;
+}
+
+@media(max-width:900px)
+{
+    .container{
+        flex-direction: column;
+        height: auto;
+    }
+
+    .input{
+        width: 100%;
+        height:100%;   
+        border-right:none;
+        border-bottom:1px solid rgba(0,0,0,.05);
+        box-shadow: inset 0px -2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .art{
+        width: 100%;
+    }
+
+    h1{
+        margin-top: 50px;
+        margin-bottom: 60px;
+    } 
+
+    #banner {
+        width: 40%;
+    }
+}
+
+
+/**** To remove white space in the bottom ******/
+@media (min-width: 460px) and (max-width: 530px) {
+    h1 {
+      margin-top: 80px;
+    }
+  }
+
+@media(max-height:720px)
+{
+    .container {
+        height: auto;
+    }
+}
+
+/* adjusting banner options */
+@media(max-width:1200px)
+{
+     #banner {
+        width: 55%;
+    }
+}
+
+@media(max-width:1800px)
+{
+     #banner {
+        width: 50%;
+    }
+}
+
+@media(max-width: 1000px)
+{
+     #banner {
+        width: 50%;
+    }
+}
+
+
+/* adjusting fonts size */
+@media(max-width: 531px)
+{
+    h1, h2 {
+        width: 100%;
+        font-size: 8.5vw;
+    }
+}
+
+@media(max-width: 391px)
+{
+    .choose{
+        font-size: 7vw;
+    }
+
+    h1 {
+        width: 100%;
+        font-size: 30px;
+    }
+}
+
+@media(max-width: 360px)
+{
+    h1 {
+        width: 100%;
+        font-size: 25px;
+    }
+
+    .footer{
+        font-size: 4vw;
+    }
+}
+
+@media(max-width: 314px)
+{
+    h1 {
+        width: 100%;
+        font-size: 20px;
+    }
+
+    #banner {
+        margin-bottom: 10px;
+        font-size: 1em;
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+    background-color: #ccc;
+    border-radius: 34px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.toggle-switch::before {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: white;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s;
+}
+
+.dark-mode-checkbox:checked + .toggle-switch {
+    background-color: #75aaf8;
+}
+
+.dark-mode-checkbox:checked + .toggle-switch::before {
+    transform: translateX(24px);
+}
+
+.toggle-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+}
+
+.sun-icon {
+    left: 6px;
+    color: #ffcc00;
+}
+
+.moon-icon {
+    right: 6px;
+    color: #555;
+    display: none;
+}
+
+.dark-mode-checkbox:checked + .toggle-switch .sun-icon {
+    display: none;
+}
+
+.dark-mode-checkbox:checked + .toggle-switch .moon-icon {
+    display: block;
+}
+
+
+/***************** COPY TO clipboard Button ***************/
+.copy-btn {
+    position: relative;
+    bottom: 10px;
+    right: 10px;
+    top: 5px;
+    float: right;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.copy-btn svg {
+    stroke: #6eb4ff;
+    width: 24px;
+    height: 24px;
+}
+
+.copy-btn:hover {
+    color: rgba(0, 123, 255, 0.1);
+}
+
+.copy-btn:hover svg {
+    stroke: #0056b3;
+}
+
+body.dark-mode .copy-btn svg {
+    stroke: #75aaf8;
+}
+
+body.dark-mode .copy-btn:hover {
+    color: rgba(117, 170, 248, 0.1);
+}
+
+body.dark-mode .copy-btn:hover svg {
+    stroke: #0072cc;
+}
+
+.copied-msg {
+    position: relative;
+    float: right;
+    bottom: 10px;
+    right: 30;
+    top: 5px;
+    color: rgb(124, 124, 124);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+body.dark-mode .copied-msg {
+    color: rgb(187, 187, 187);
+}

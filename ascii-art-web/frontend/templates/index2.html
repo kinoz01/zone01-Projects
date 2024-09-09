@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII-ART</title>
+    <link rel="icon" href="https://i.ibb.co/zFfCjxH/Pngtree-phoenix-png-6854120.png" type="image/x-icon">
+    <link href="../css/index2.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+</head>
+<body>
+ <div class="kolxi_hna">
+    <div class="input">
+        <section>
+            <h1>ASCII ART GENERATOR</h1>
+            <form method="POST" action="/ascii-art" >
+            <div class="font">
+                <p class="fon">Choose font</p>
+                <select class="selector" name="banner">
+                    {{range .Fonts}}
+                    <option class="option" value="{{.}}" {{if eq $.Banner .}}selected{{end}}>{{.}}</option>
+                    {{end}}
+                </select>                          
+            </div>
+            <p>Enter text</p>
+                <textarea name="text" class="inputpanel" maxlength="5000" placeholder="Input Text" tabindex="3" required>{{.Text}}</textarea>
+                <div class="divbtn">
+                <button id="btn" type="submit" name="action" value="generate">submit</button>
+                <button id="btn" type="submit" name="action" value="download">Download</button>
+                </div>
+            </form>
+        </section>
+    </div>
+    <div class="resultpanel">
+        <h2>ART RESULT</h2>
+        <hr class="now page">
+        <pre>{{.Art}}</pre>
+        <hr class="final page">
+        <footer>
+            <p class="hi">Follow us : <a target="_blank" href="https://github.com/khalidrika">ktrichin</a>,  <a target="_blank" href="https://github.com/kinoz01">kinoz01 </a>🙂</p>
+        </footer>
+    </div>
+ </div>
+</body>
+</html>

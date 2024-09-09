@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ASCII Art Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <link rel="icon" href="https://i.ibb.co/zFfCjxH/Pngtree-phoenix-png-6854120.png" type="image/x-icon">
+</head>
+
+<body>
+<div class="container">  
+<div class="input">
+    <input id="dark-mode" class="dark-mode-checkbox hidden" type="checkbox">
+<label for="dark-mode" class="toggle-switch">
+    <span class="toggle-icon sun-icon">☀️</span>
+    <span class="toggle-icon moon-icon">🌙</span>
+</label>
+
+    <h1>ASCII ART Generator</h1>
+
+    <form action="/ascii-art" method="post">
+        <div class="choose">
+            <label for="text">Font:</label><br><br>
+        </div>
+        
+            <select id="banner" name="banner">
+                {{range .Fonts}}
+                <option class="bannerOption" value="{{.}}" {{if eq $.Banner .}}selected{{end}}>{{.}}</option>
+                {{end}}
+            </select>                      
+        
+        <textarea type="text" id="text" name="text" maxlength="6000" placeholder="Input Text" tabindex="3" required>{{.Text}}</textarea><br><br>
+<div class="btns">
+    <button class="submit" name="action" value="generate" type="submit">Generate</button>
+    <button class="submit" name="action" value="preview">Preview</button>
+    <button class="submit" name="action" value="download">Download</button>
+    <br><br>
+</div>
+
+    </form>
+
+</div>
+
+<div class="art">
+    <h2>ASCII Art Result</h2>
+    <pre class="ascii">{{.Art}}</pre>
+    <button class="copy-btn" onclick="copyToClipboard()" aria-label="Copy to clipboard">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+    </button>
+    <span class="copied-msg" id="copiedMsg">✓ Copied!</span>
+    <div class="footer">
+        <p>Designed by <a href="https://github.com/kinoz01" target="_blank"
+                class="textlink">kinoz01</a> | Git
+            Project <a href="https://github.com/kinoz01/zone01-Projects/tree/main/ascii-art-web" target="_blank"
+                class="textlink">here</a></p>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const darkMode = document.getElementById('dark-mode');
+        
+        // Check for saved user preference
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            darkMode.checked = true;
+        }
+
+        darkMode.addEventListener('change', function () {
+            if (this.checked) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('darkMode', 'enabled');  // Save preference
+            } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('darkMode', 'disabled');  // Save preference
+            }
+        });
+    });
+
+    function copyToClipboard() {
+        const asciiArt = document.querySelector('.ascii').innerText;
+        navigator.clipboard.writeText(asciiArt).then(() => {
+            const copiedMsg = document.getElementById('copiedMsg');
+            copiedMsg.style.opacity = 1; // Show the message
+            setTimeout(() => {
+                copiedMsg.style.opacity = 0; // Hide the message
+            }, 1000);
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+        });
+    }
+</script>
+
+</body>
+
+</html>

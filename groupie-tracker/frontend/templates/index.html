@@ -1,0 +1,38 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Groupie Tracker</title>
+    <link rel="stylesheet" href="../css/index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://i.ibb.co/zFfCjxH/Pngtree-phoenix-png-6854120.png" type="image/x-icon">
+</head>
+<body>
+    <header class="header">    
+        <div class="text-box">
+          <h1 class="main-heading">GROUPIE TRACKER</h1>
+          <br>
+        </div>
+    </header>
+
+    <ul>
+        {{range .}}
+        <li class="link">
+            <a href="/artist?id={{.ID}}">
+                <img class="brand-img" src="{{.Image}}" alt="{{.Name}}">
+            </a>
+            <a class="name" href="/artist?id={{.ID}}">{{.Name}}</a>
+        </li>
+        {{end}}
+    </ul>
+</body>
+
+<!-- Footer Section -->
+<footer class="footer">
+    <a href="https://github.com/kinoz01" target="_blank" class="footer-link">
+        <img src="https://i.postimg.cc/wxsg8CN0/github-icon-2.png" alt="GitHub Logo" class="github-logo">
+        kinoz01
+    </a>
+</footer>
+</html>

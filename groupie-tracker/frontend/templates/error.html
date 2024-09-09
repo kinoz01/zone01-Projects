@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> ASCII-ART {{.StatusCode}}</title>
+</head>
+
+
+<section class="page_status">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12 ">
+        <div class="col-sm-10 col-sm-offset-1 text-center">
+          <div class="status_code_bg">
+            <h1 class="text-center">{{.StatusCode}}</h1>
+          </div>
+
+          <div class="contant_status">
+            <h3 class="h2">
+              {{.Msg1}}
+            </h3>
+
+            <p>{{.Msg2}}</p>
+            
+            {{if eq .StatusCode 500}}
+            {{else}}
+            <a href="/">
+              <button class="submit" >Go to Home</button>
+            </a>
+            {{end}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+  .page_status {
+    padding: 40px 0;
+    background: #fff;
+    font-family: "Arvo", serif;
+  }
+
+  .page_status img {
+    width: 100%;
+  }
+
+  .status_code_bg {
+    background-image: url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif);
+    height: 400px;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .status_code_bg h1 {
+    font-size: 80px;
+  }
+
+  .status_code_bg h3 {
+    font-size: 80px;
+  }
+
+  .contant_status {
+    margin-top: -50px;
+  }
+
+  .text-center {
+    text-align: center;
+    color: #303030;
+  }
+  .submit {
+        display: inline-block;
+        outline: none;
+        cursor: pointer;
+        font-size: 16px;
+        line-height: 20px;
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 13px 23px;
+        border: 1px solid rgb(101, 170, 248);
+        transition: box-shadow 0.2s ease 0s, -ms-transform 0.1s ease 0s, -webkit-transform 0.1s ease 0s, transform 0.1s ease 0s;
+        background: #fff;
+        color: #222222;
+        :hover{
+            border-color: rgb(0, 0, 0);
+            background: #ffc2c2;
+        }              
+    }
+</style>

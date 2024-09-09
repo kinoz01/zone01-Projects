@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ASCII Art Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+<div class="container">
+    {{ range $key, $value := .}}
+        <div class="fontName">{{$key}}:</div>
+        <pre>{{$value}}</pre>
+    {{end}}
+</div>
+</body>
+
+</html>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap');
+
+    .fontName{
+        font-family:  "Inconsolata", "Open Sans", sans-serif;
+        font-weight: 600;
+        font-size: 1.2em;
+        color: rgb(83, 83, 83);
+        margin-top: 40px;
+    }
+</style>
