@@ -14,7 +14,15 @@ func main() {
 		fmt.Fscan(os.Stdin, &num)
 		arr = append(arr, num)
 
-		rRange(arr)
+		low := Median(arr) - 45
+		hight := Median(arr) + 45
+		if i < 1000 {
+			fmt.Println(num, num)
+			continue
+		}
+		if i >= 1000 {
+			fmt.Println(low, hight)
+		}
 	}
 }
 
@@ -27,11 +35,4 @@ func Median(arr []int) int {
 	} else {
 		return (arr[le/2] + arr[le/2-1]) / 2
 	}
-}
-
-func rRange(arr []int) {
-	centr := Median(arr)
-	lowerBound := centr - 45
-	upperBound := centr + 45
-	fmt.Println(lowerBound, upperBound)
 }
