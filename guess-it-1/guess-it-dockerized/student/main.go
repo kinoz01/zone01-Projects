@@ -16,11 +16,11 @@ func main() {
 
 		low := Median(arr) - 45
 		hight := Median(arr) + 45
-		if i < 2000 {
+		if i < 1000 {
 			fmt.Println(num, num)
 			continue
 		}
-		if i >= 2000 {
+		if i >= 1000 {
 			fmt.Println(low, hight)
 		}
 	}
