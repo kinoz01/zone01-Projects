@@ -15,8 +15,3 @@ body.addEventListener('click', () => {
         navLinks.classList.remove('active');
     }
 });
-
-// Prevent the menu from closing when clicking inside the menu itself
-navLinks.addEventListener('click', (e) => {
-    e.stopPropagation();
-});

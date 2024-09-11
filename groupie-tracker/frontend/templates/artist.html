@@ -178,9 +178,9 @@
 
 <!-- Inline Script to Pass Locations Array -->
 <script>
-    window.locations = [];
+    locations = [];
     {{range .Locations.Locations}}
-    window.locations.push("{{.}}");
+    locations.push("{{.}}");
     {{end}}
 </script>
 

@@ -22,7 +22,7 @@ func SetData(apiArtist server.Artist, apiArtistRelations server.Relations, apiAr
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		imageChan <- Search(apiArtist.Name, apidata.BandImages)
+		imageChan <- Search(apiArtist.Name, "logo", apidata.BandImages)
 	}()
 
 	// Goroutine for GetMembersImages

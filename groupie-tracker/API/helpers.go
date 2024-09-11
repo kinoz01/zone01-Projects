@@ -5,7 +5,7 @@ import (
 	"unicode"
 )
 
-func Search(Word string, Images []string) string {
+func Search(Word, Type string, Images []string) string {
 	// Replace spaces in artistName with hyphens
 	Word = strings.ReplaceAll(Word, " ", "-")
 	Word = strings.ToLower(Word)
@@ -19,14 +19,21 @@ func Search(Word string, Images []string) string {
 			return img
 		}
 	}
-	return "https://i.postimg.cc/5YtTGd22/not-found.png"
+	if Type == "logo" {
+		return "https://i.postimg.cc/C1wQ8qwC/no-logo.png"
+	} else if Type == "member" {
+		return "https://i.postimg.cc/wMTZCsPx/memberplaceholder.jpg"
+	} else if Type == "place" {
+		return "https://i.postimg.cc/t4K0sJ1D/placeholder-image.webp"
+	}
+	return "https://i.postimg.cc/wMTZCsPx/memberplaceholder.jpg"
 }
 
 func GetMembersImages(Members, Images []string) map[string]string {
 	membersMap := make(map[string]string)
 
 	for _, member := range Members {
-		memberimage := Search(member, Images)
+		memberimage := Search(member, "member", Images)
 		membersMap[member] = memberimage
 	}
 	return membersMap
@@ -37,7 +44,7 @@ func GetLocationsDates(Dates map[string][]string, Locations, Images []string) ma
 
 	for _, place := range Locations {
 		placeName := FormatLocation(place)
-		LocationsDates[placeName] = append(LocationsDates[placeName], Search(strings.ReplaceAll(place, "_", "-"), Images))
+		LocationsDates[placeName] = append(LocationsDates[placeName], Search(strings.ReplaceAll(place, "_", "-"), "place", Images))
 		LocationsDates[placeName] = append(LocationsDates[placeName], Dates[place]...)
 	}
 	return LocationsDates

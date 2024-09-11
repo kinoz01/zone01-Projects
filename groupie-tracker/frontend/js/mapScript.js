@@ -1,6 +1,6 @@
 function initMap() {
     // Define a default location (e.g., center of the map)
-    var defaultLocation = {lat: 20.6843, lng: -88.5678};  // This can be any default point
+    var defaultLocation = {lat: 0, lng: 0};  // This can be any default point
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 2,
         center: defaultLocation,  // Start with the default location
@@ -11,7 +11,7 @@ function initMap() {
     var geocoder = new google.maps.Geocoder();
     
     // Add markers for each location in the window.locations array
-    window.locations.forEach(function(location) {
+    locations.forEach(function(location) {
         geocoder.geocode({'address': location}, function(results, status) {
             if (status === 'OK') {
                 var marker = new google.maps.Marker({
