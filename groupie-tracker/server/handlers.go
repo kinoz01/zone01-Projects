@@ -38,30 +38,24 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 	ParseAndExecute(w, artistDetails, "frontend/templates/artist.html")
 }
 
-// Handle serving css content, while blocking access to paths "/css/..."
-func CSSHandler(w http.ResponseWriter, r *http.Request) {
-	// Strip the "/css/" prefix from the URL path to get the relative file path
-	filePath := "frontend/css/" + strings.TrimPrefix(r.URL.Path, "/css/")
-	// Read the file from the embedded filesystem
-	cssBytes, err := os.ReadFile(filePath)
-	if err != nil {
-		ErrorHandler(w, http.StatusForbidden, http.StatusText(http.StatusForbidden), "You don't have permission to access this link!")
-		return
-	}
-	// Serve the file content
-	http.ServeContent(w, r, filePath, time.Now(), bytes.NewReader(cssBytes))
-}
+// Handle serving both CSS and JS content
+func FileHandler(w http.ResponseWriter, r *http.Request) {
+	var filePath string
 
-// Handle serving JavaScript content, while blocking access to paths "/js/..."
-func JSHandler(w http.ResponseWriter, r *http.Request) {
-	// Strip the "/js/" prefix from the URL path to get the relative file path
-	filePath := "frontend/js/" + strings.TrimPrefix(r.URL.Path, "/js/")
-	// Read the file from the embedded filesystem
-	jsBytes, err := os.ReadFile(filePath)
+	// Check if the request is for a CSS or JS file and serve accordingly
+	if strings.HasPrefix(r.URL.Path, "/css/") {
+		filePath = "frontend/css/" + strings.TrimPrefix(r.URL.Path, "/css/")
+	} else if strings.HasPrefix(r.URL.Path, "/js/") {
+		filePath = "frontend/js/" + strings.TrimPrefix(r.URL.Path, "/js/")
+	}
+
+	// Read the file from the filesystem
+	fileBytes, err := os.ReadFile(filePath)
 	if err != nil {
 		ErrorHandler(w, http.StatusForbidden, http.StatusText(http.StatusForbidden), "You don't have permission to access this link!")
 		return
 	}
+
 	// Serve the file content
-	http.ServeContent(w, r, filePath, time.Now(), bytes.NewReader(jsBytes))
+	http.ServeContent(w, r, filePath, time.Now(), bytes.NewReader(fileBytes))
 }

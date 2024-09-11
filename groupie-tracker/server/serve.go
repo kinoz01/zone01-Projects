@@ -11,8 +11,8 @@ func Serve() {
 
 	http.HandleFunc("/", IndexHandler)
 	http.HandleFunc("/artist", ArtistHandler)
-	http.HandleFunc("/css/", CSSHandler)
-	http.HandleFunc("/js/", JSHandler)
+	http.HandleFunc("/css/", FileHandler)
+	http.HandleFunc("/js/", FileHandler)
 
 	log.Printf("Starting server at http://127.0.0.1:%s", port.Port)
 	if err := http.ListenAndServe(":"+port.Port, nil); err != nil {
