@@ -21,12 +21,12 @@ def average(data):
     return sum(data) / len(data)
 
 def median(data):
-    sortedData = sorted(data)
-    mid = len(sortedData) // 2
-    if len(sortedData) % 2 == 0:
-        return (sortedData[mid - 1] + sortedData[mid]) / 2
+    data.sort()
+    mid = len(data) // 2
+    if len(data) % 2 == 0:
+        return (data[mid - 1] + data[mid]) / 2
     else:
-        return sortedData[mid]
+        return data[mid]
 
 def variance(data, avg):
     return sum((x - avg) ** 2 for x in data) / len(data)
