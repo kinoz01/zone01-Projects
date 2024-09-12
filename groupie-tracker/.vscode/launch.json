@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "node",
+            "name": "debug navScript.js",
+            "request": "launch",
+            "args": [],
+            "program": "/home/kino/Desktop/zone01-Projects/groupie-tracker/frontend/js/navScript.js"
+        }
+    ]
+}

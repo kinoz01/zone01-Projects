@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{.Artist.Name}} Groupie Tracker</title>
     <link rel="stylesheet" href="../css/artist.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Home icon -->>
     <link rel="icon" href="{{.MyAPI.Image}}" type="image/x-icon">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQGCy1iSgnMkZpSBC1PJMj_ZdqJ-PpzDo&callback=initMap" async defer></script>
 </head>
 <body>
@@ -111,7 +109,7 @@
             <td class="info-value">
                 <ul class="location-list">
                     {{range $i, $v := .Locations.Locations}}
-                    <li>{{$i}} - <a href="#" class="location-link" data-location="{{$v}}" target="_blank"> {{$v}} </a></li>
+                    <li>{{$i}} - <a href="#" class="location-link" location-str="{{$v}}" target="_blank"> {{$v}} </a></li>
                     {{end}}
                 </ul>
             </td>
