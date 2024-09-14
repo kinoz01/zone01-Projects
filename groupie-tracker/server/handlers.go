@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// Handle index web page.
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	if err := CheckHomeRequest(w, r); err {
 		return
@@ -16,8 +17,7 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	var artists []Artist
 	err := FetchData("https://groupietrackers.herokuapp.com/api/artists", &artists)
 	if err != nil {
-		PrintLog(err)
-		ErrorHandler(w, http.StatusInternalServerError, "Failed to fetch artists", "Internal Server Error!")
+		ErrorHandler(w, http.StatusInternalServerError, "Failed to fetch artists", "Internal Server Error!", err)
 		return
 	}
 	ReplaceImages(&artists)
@@ -25,6 +25,7 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	ParseAndExecute(w, artists, "frontend/templates/index.html")
 }
 
+// Handle /artist? web page.
 func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
 	if err := CheckArtistRequest(w, r, id); err {
@@ -52,7 +53,7 @@ func FileHandler(w http.ResponseWriter, r *http.Request) {
 	// Read the file from the filesystem
 	fileBytes, err := os.ReadFile(filePath)
 	if err != nil {
-		ErrorHandler(w, http.StatusForbidden, http.StatusText(http.StatusForbidden), "You don't have permission to access this link!")
+		ErrorHandler(w, http.StatusForbidden, http.StatusText(http.StatusForbidden), "You don't have permission to access this link!", err)
 		return
 	}
 

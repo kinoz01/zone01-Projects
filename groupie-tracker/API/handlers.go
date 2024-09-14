@@ -13,6 +13,7 @@ type Data struct {
 	YoutubeUrl     []string            `json:"youtubeUrl"`
 }
 
+// handle the /groupie path to response with an encoded json.
 func DataHandler(w http.ResponseWriter, r *http.Request) {
 	var apiArtist server.Artist
 	var apiArtistLocations server.Locations

@@ -12,12 +12,12 @@ import (
 // Check for quiting conditions in the Home request.
 func CheckHomeRequest(w http.ResponseWriter, r *http.Request) bool {
 	if r.URL.Path != "/" {
-		ErrorHandler(w, 404, "Look like you're lost!", "The page you are looking for is not available!")
+		ErrorHandler(w, 404, "Look like you're lost!", "The page you are looking for is not available!", nil)
 		return true
 	}
 
 	if r.Method != http.MethodGet {
-		ErrorHandler(w, 405, http.StatusText(http.StatusMethodNotAllowed), "Only GET method is allowed!")
+		ErrorHandler(w, 405, http.StatusText(http.StatusMethodNotAllowed), "Only GET method is allowed!", nil)
 		return true
 	}
 	return false
@@ -26,7 +26,7 @@ func CheckHomeRequest(w http.ResponseWriter, r *http.Request) bool {
 // Check for quiting conditions in the artist path request.
 func CheckArtistRequest(w http.ResponseWriter, r *http.Request, id string) bool {
 	if r.Method != http.MethodGet {
-		ErrorHandler(w, 405, http.StatusText(http.StatusMethodNotAllowed), "Only GET method is allowed!")
+		ErrorHandler(w, 405, http.StatusText(http.StatusMethodNotAllowed), "Only GET method is allowed!", nil)
 		return true
 	}
 	if len(r.URL.Query()) == 0 || len(r.URL.Query()) > 1 {
@@ -34,16 +34,14 @@ func CheckArtistRequest(w http.ResponseWriter, r *http.Request, id string) bool 
 		return true
 	}
 	if _, err := strconv.Atoi(id); err != nil {
-		PrintLog(err)
-		ErrorHandler(w, 404, "Look like you're lost!", "The page you are looking for is not available!")
+		ErrorHandler(w, 404, "Look like you're lost!", "The page you are looking for is not available!", err)
 		return true
 	}
 
 	var artist Artist
 	err := FetchData(fmt.Sprintf("https://groupietrackers.herokuapp.com/api/artists/%s", id), &artist)
 	if err != nil || artist.ID == 0 {
-		PrintLog(err)
-		ErrorHandler(w, 404, "Look like you're lost!", "The page you are looking for is not available!")
+		ErrorHandler(w, 404, "Look like you're lost!", "The page you are looking for is not available!", err)
 		return true
 	}
 	return false
@@ -53,22 +51,21 @@ func CheckArtistRequest(w http.ResponseWriter, r *http.Request, id string) bool 
 func ParseAndExecute(w http.ResponseWriter, data any, file string) {
 	tmpl, err := template.ParseFiles(file)
 	if err != nil {
-		PrintLog(err)
-		ErrorHandler(w, http.StatusInternalServerError, "Something seems wrong, try again later!", "Internal Server Error!")
+		ErrorHandler(w, http.StatusInternalServerError, "Something seems wrong, try again later!", "Internal Server Error!", err)
 		return
 	}
 
 	// write to a temporary buffer instead of writing directly to w.
 	var buf bytes.Buffer
 	if err := tmpl.Execute(&buf, data); err != nil {
-		PrintLog(err)
-		ErrorHandler(w, 500, "Something seems wrong, try again later!", "Internal Server Error!")
+		ErrorHandler(w, 500, "Something seems wrong, try again later!", "Internal Server Error!", err)
 		return
 	}
 	// If successful, write the buffer content to the ResponseWriter
 	buf.WriteTo(w)
 }
 
+// Replace some default api images with other choosen images.
 func ReplaceImages(artists *[]Artist) {
 	for i, artist := range *artists {
 		switch artist.Name {
@@ -82,6 +79,7 @@ func ReplaceImages(artists *[]Artist) {
 	}
 }
 
+// Initialise ports (api & application ports)
 func (p *Ports) InitialisePorts() {
 	p.Port = os.Getenv("PORT")
 	if p.Port == "" {

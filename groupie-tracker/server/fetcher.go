@@ -33,7 +33,7 @@ func FetchSyncData(w http.ResponseWriter, id string, artistDetails *ArtistDetail
 	wg.Wait()
 	close(t)
 	if len(t) != 0 {
-		ErrorHandler(w, http.StatusInternalServerError, "Failed to fetch api data", "Internal Server Error!")
+		ErrorHandler(w, http.StatusInternalServerError, "Failed to fetch api data", "Internal Server Error!", nil)
 		return true
 	}
 	return false

@@ -4,7 +4,7 @@ import (
 	"strings"
 	"unicode"
 )
-
+// search for a string inside a list of links to respond with the correct link.
 func Search(Word, Type string, Images []string) string {
 	// Replace spaces in artistName with hyphens
 	Word = strings.ReplaceAll(Word, " ", "-")
@@ -29,6 +29,7 @@ func Search(Word, Type string, Images []string) string {
 	return "https://i.postimg.cc/wMTZCsPx/memberplaceholder.jpg"
 }
 
+// Return a map where the key is a member name and the value is the link to its corresponding image.
 func GetMembersImages(Members, Images []string) map[string]string {
 	membersMap := make(map[string]string)
 
@@ -39,6 +40,7 @@ func GetMembersImages(Members, Images []string) map[string]string {
 	return membersMap
 }
 
+// Return a map where key is locations and values are a slice of string containing dates.
 func GetLocationsDates(Dates map[string][]string, Locations, Images []string) map[string][]string {
 	LocationsDates := make(map[string][]string)
 
@@ -50,10 +52,12 @@ func GetLocationsDates(Dates map[string][]string, Locations, Images []string) ma
 	return LocationsDates
 }
 
+// Return youtube links depending on artist name.
 func GetYoutubeLinks(BandName string, YoutubeLinks map[string][]string) []string {
 	return YoutubeLinks[BandName]
 }
 
+// Format the location string from reo_dejanero-brazil-------------> Reo Dejaniro, Brazil
 func FormatLocation(s string) string {
 
 	parts := strings.Split(s, "-")

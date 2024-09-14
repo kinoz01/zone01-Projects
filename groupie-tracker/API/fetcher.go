@@ -7,6 +7,7 @@ import (
 	"sync"
 )
 
+// Use Goroutines to fetch herokuapp artists data and decode it in input structs, while also intialising an input ApiDAta struct in the data.go page.
 func FetchData(id string, apiArtist *server.Artist, apiArtistLocations *server.Locations, apiArtistRelations *server.Relations, apidata *ApiData, w http.ResponseWriter) {
 	var wg sync.WaitGroup
 	var errCh = make(chan error, 4)

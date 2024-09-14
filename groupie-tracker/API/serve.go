@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-
+// run and serve the api server (that will serve json data)
 func Serve() {
 	var port server.Ports
 	port.InitialisePorts()

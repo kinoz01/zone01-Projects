@@ -7,6 +7,7 @@ type ApiData struct {
 	YoutubeLinks    map[string][]string
 }
 
+// Initialise my ApiData struct fields.
 func (data *ApiData) Initialise() {
 
 	data.BandImages = []string{
