@@ -83,31 +83,16 @@ func (data *ApiData) Initialise() {
 		"https://i.postimg.cc/4djJMmMh/ken-brownell.jpg",
 		"https://i.postimg.cc/3xjzQdyD/patrick-oshea.webp",
 		"https://i.postimg.cc/Rq5pjB4R/rafael-rodriguez.jpg",
-
-	}
-
-	data.LocationsImages = []string{
-		// Queen
-		"https://i.postimg.cc/tgMZBt72/dunedin-new-zealand.jpg",
-		"https://i.postimg.cc/K8QgMybX/north-carolina-usa.webp",
-		"https://i.postimg.cc/sg3hxgt9/georgia-usa.webp",
-		"https://i.postimg.cc/yYmR7Zr8/los-angeles-usa.jpg",
-		"https://i.postimg.cc/v8zBhVrs/saitama-japan.webp",
-		"https://i.postimg.cc/pdT5Q1Vm/nagoya-japan.jpg",
-		"https://i.postimg.cc/J01hmrWv/penrose-new-zealand.jpg",
-		"https://i.postimg.cc/x1qcc1bS/osaka-japan.jpg",
-		"https://i.postimg.cc/4djJMmMh/ken-brownell.jpg",
 	}
 
 	data.YoutubeLinks = map[string][]string{
 		"Queen": {
 			"https://www.youtube.com/embed/-tJYN-eG1zk",
 			"https://www.youtube.com/embed/fJ9rUzIMcZQ",
-			"https://www.youtube.com/embed/HgzGwKwLmgM",			
+			"https://www.youtube.com/embed/HgzGwKwLmgM",
 		},
 		"soja": {
 			"https://www.youtube.com/embed/X572Mp_r46E",
-			
 		},
 		"Katy Perry": {
 			"https://www.youtube.com/embed/CevxZvSJLk8",

@@ -46,7 +46,7 @@ func GetLocationsDates(Dates map[string][]string, Locations, Images []string) ma
 
 	for _, place := range Locations {
 		placeName := FormatLocation(place)
-		LocationsDates[placeName] = append(LocationsDates[placeName], Search(strings.ReplaceAll(place, "_", "-"), "place", Images))
+		LocationsDates[placeName] = append(LocationsDates[placeName], GetApiImage(placeName))
 		LocationsDates[placeName] = append(LocationsDates[placeName], Dates[place]...)
 	}
 	return LocationsDates

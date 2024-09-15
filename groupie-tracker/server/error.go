@@ -32,6 +32,7 @@ func ErrorHandler(w http.ResponseWriter, statusCode int, msg1, msg2 string, err 
 	tmpl, err := template.ParseFiles("frontend/templates/error.html")
 	if err != nil {
 		log.Println(err)
+		
 		http.Error(w, http.StatusText(statusCode), statusCode)
 		return
 	}
@@ -44,5 +45,9 @@ func ErrorHandler(w http.ResponseWriter, statusCode int, msg1, msg2 string, err 
 	}
 	// If successful, write the buffer content to the ResponseWriter
 	buf.WriteTo(w)
+}
+
+func GetErrorPage() {
+
 }
 
