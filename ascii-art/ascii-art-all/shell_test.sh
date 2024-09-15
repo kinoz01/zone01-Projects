@@ -235,7 +235,7 @@ test_output() {
     wait_for_key
 
     redtext 'Test 20 <hello --output=outl.go>'
-    go run . hello --output=outl.go>
+    go run . hello --output=outl.go
     cat -e outl.go && rm outl.go
 
 }
