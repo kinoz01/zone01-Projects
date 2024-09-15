@@ -43,6 +43,7 @@ func ErrorHandler(w http.ResponseWriter, statusCode int, msg1, msg2 string, err 
 		return
 	}
 
+	w.WriteHeader(statusCode)
 	// If successful, write the buffer content to the ResponseWriter
 	buf.WriteTo(w)
 }

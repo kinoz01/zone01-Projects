@@ -24,6 +24,7 @@ WORKDIR /app
 # Copy the built binary from the builder stage
 COPY --from=builder /app/groupie /app/groupie
 COPY --from=builder /app/frontend /app/frontend
+COPY --from=builder  /app/API /app/API
 
 # Set the command to run the built binary
 CMD ["./groupie"]

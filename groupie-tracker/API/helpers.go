@@ -54,7 +54,7 @@ func GetLocationsDates(Dates map[string][]string, Locations, Images []string) ma
 
 // Return youtube links depending on artist name.
 func GetYoutubeLinks(BandName string, YoutubeLinks map[string][]string) []string {
-	return YoutubeLinks[BandName]
+	return YoutubeLinks[strings.ToLower(BandName)]
 }
 
 // Format the location string from reo_dejanero-brazil-------------> Reo Dejaniro, Brazil
