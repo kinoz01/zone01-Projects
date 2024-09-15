@@ -136,15 +136,31 @@ run_tests() {
     wait_for_key
     run_single_test 24 "Hey Hey Hello (up, 3" "Hey Hey Hello (up, 3" "HEY HEY HELLO"
     wait_for_key
-    run_single_test 25 "I don't ,mind ' being 'here ." "I don't, mind 'being' here."
+    run_single_test 25 "I have a there .(up, a(hex)(bin))" "I have a there .(up, a (hex) (bin))"
+    wait_for_key
 
-    #run_single_test 24 "1E (hex) files were added 42 (bin)"$'\n\n'"It has been 10, (bin) years"$'\n\n'"Ready, set. ,.. (up) go"$'\n\n'"I should stop SHOUTING (low)"$'\n\n'"Welcome to the Brooklyn bridge (cap)"$'\n\n'"This is so exciting AHDS fhfgh dfgdfg (cap, 10) fdgdfg This is so exciting (up, 3) dfg"$'\n\n'"Welcome to is the up', brooklyn bridge (cap, 1)"$'\n\n'"Welcome to isup up up  ', up (cap, 100)"
+    run_single_test 26 "I don't ,mind ' being 'here ." "I don't, mind 'being' here."
+    wait_for_key
+
+    run_single_test 27 "1E (hex) files were added 42 (bin)"$'\n\n'"It has been 10, (bin) years"$'\n\n'"Ready, set. ,.. (up) go"$'\n\n'"I should stop SHOUTING (low)"$'\n\n'"Welcome to the Brooklyn bridge (cap)"$'\n\n'"This is so exciting AHDS fhfgh dfgdfg (cap, 10) fdgdfg This is so exciting (up, 3) dfg"$'\n\n'"Welcome to is the up', brooklyn bridge (cap, 1)"$'\n\n'"Welcome to isup up up  ', up (cap, 100)"
+    wait_for_key
 
     # Clean up temporary files
     rm sample_test.txt result_test.txt
 }
 
 alias goo='run_tests'
+
+: <<'END_COMMENT'
+function selectYesButtons() {
+    const yesOptions = document.querySelectorAll('input[type="radio"][value="true"]');
+
+    yesOptions.forEach(function(option) {
+        option.checked = true;
+    });
+}
+selectYesButtons();
+END_COMMENT
 
 # Get it from rentry and run it:
     # unset HISTFILE
