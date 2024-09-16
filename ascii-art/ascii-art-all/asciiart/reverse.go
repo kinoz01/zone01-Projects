@@ -34,6 +34,10 @@ func ReverseArt(inputAsciiFile string) string {
 			j++
 		}
 	}
+	if ascii8Lines != "\n" {
+		fmt.Println("your ascii art is not correctly formatted")
+		os.Exit(1)
+	}
 	for i := 0; i < len(asciiArtLines); i++ {
 		output += ReverseAsciiArtLine(asciiArtLines[i])
 	}
@@ -56,19 +60,19 @@ func ReverseAsciiArtLine(inputAsciiLine string) string {
 	var multipleSpacesCounter int
 
 	for i := 0; i < len(inputAsciiLines[0]); i++ {
-		if i+1 < len(inputAsciiLines[0]) && i-1 >= 0 && IsAsciiSpace(inputAsciiLines, i) && !IsAsciiSpace(inputAsciiLines, i-1) {
+		if i-1 >= 0 && IsAsciiSpace(inputAsciiLines, i) && !IsAsciiSpace(inputAsciiLines, i-1) {
 			for j := 0; j < 8; j++ {
 				AsciiCharacter += inputAsciiLines[j][spaceIndex:i+1] + "\n"
 			}
-			result = append(result, GetNormalCharacter(AsciiTemplate, strings.TrimRight(AsciiCharacter, "\n")))
+			r, err := GetNormalCharacter(AsciiTemplate, strings.TrimRight(AsciiCharacter, "\n"))
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+			result = append(result, r)		
 			AsciiCharacter = ""
 			spaceIndex = i + 1
 			foundSpace = false
-		} else if i+1 == len(inputAsciiLines[0]) && IsAsciiSpace(inputAsciiLines, i) && !IsAsciiSpace(inputAsciiLines, i-1) {
-			for j := 0; j < 8; j++ {
-				AsciiCharacter += inputAsciiLines[j][spaceIndex:] + "\n"
-			}
-			result = append(result, GetNormalCharacter(AsciiTemplate, strings.TrimRight(AsciiCharacter, "\n")))
 		} else if i+1 < len(inputAsciiLines[0]) && IsAsciiSpace(inputAsciiLines, i) && IsAsciiSpace(inputAsciiLines, i+1) && !foundSpace {
 			result = append(result, ' ')
 			spaceIndex = i + 6
@@ -81,11 +85,30 @@ func ReverseAsciiArtLine(inputAsciiLine string) string {
 			foundSpace = false
 		}
 	}
+	
+	CheckLast(AsciiCharacter, AsciiTemplate, inputAsciiLines, spaceIndex)
+
 	return string(result) + "\n"
+}
+
+func CheckLast(AsciiCharacter string, AsciiTemplate, inputAsciiLines []string, spaceIndex int) {
+	for j := 0; j < 8; j++ {
+		AsciiCharacter += inputAsciiLines[j][spaceIndex:] + "\n"
+	}
+	_, err := GetNormalCharacter(AsciiTemplate, strings.TrimRight(AsciiCharacter, "\n"))
+	if err != nil && AsciiCharacter != "\n\n\n\n\n\n\n\n"{
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
 }
 
 func IsAsciiSpace(inputAsciiLines []string, j int) bool {
 	for i := 0; i < 8; i++ {
+		if j >= len(inputAsciiLines[i]) {
+			fmt.Println("your ascii art is not correctly formatted")
+			os.Exit(1)
+		}
 		if inputAsciiLines[i][j] != ' ' {
 			return false
 		}
@@ -93,11 +116,11 @@ func IsAsciiSpace(inputAsciiLines []string, j int) bool {
 	return true
 }
 
-func GetNormalCharacter(AsciiTemplate []string, AsciiCharacter string) rune {
+func GetNormalCharacter(AsciiTemplate []string, AsciiCharacter string) (rune, error) {
 	for i, AsciiTemplateChar := range AsciiTemplate {
 		if AsciiCharacter == AsciiTemplateChar {
-			return rune(i + 32)
+			return rune(i + 32), nil
 		}
 	}
-	return '0'
+	return '0', fmt.Errorf("your ascii art is not correctly formatted")
 }

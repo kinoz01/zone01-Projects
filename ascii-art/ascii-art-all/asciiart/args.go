@@ -59,7 +59,7 @@ func UserArgs(args []string) (userText, font, alignment, reverseInput string, ou
 	InitColorSlice()
 	/*********************************************************************************************/
 
-	var o, c int
+	var o, c, a int
 	// In this loop we use submatching to get string of the returns values we will work with. Since we don't have errors we only need to match submatching group with its return value.
 	// IsValidColor find the Ansi color corresponding to the color string (invalid colors are already handled in args Error, this is just to get the Ansi color value)
 	for i, arg := range args {
@@ -68,6 +68,7 @@ func UserArgs(args []string) (userText, font, alignment, reverseInput string, ou
 			color := IsValidColor(strings.TrimPrefix(arg, "--color="))
 			GetColorSlice(color, args[i+1], userText)
 		} else if reAlign.MatchString(arg) {
+			a++
 			alignment = reAlign.FindStringSubmatch(arg)[1]
 		} else if reOutput.MatchString(arg) {
 			o++
@@ -80,6 +81,10 @@ func UserArgs(args []string) (userText, font, alignment, reverseInput string, ou
 		fmt.Println("You can't color a txt output file!")
 		ColorSlice = make([]string, LenUserText)
 		return userText, font, alignment, reverseInput, outputFiles, false
+	}
+	if o>=1 && a>=1 {
+		fmt.Println("You can't center a txt output file!")
+		alignment = "left"
 	}
 
 	return userText, font, alignment, reverseInput, outputFiles, false

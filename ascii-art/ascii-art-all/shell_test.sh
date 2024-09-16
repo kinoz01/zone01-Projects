@@ -550,6 +550,16 @@ test_reverse() {
     redtext 'Test 12 <--reverse=testR.txt shadow>'
     go run . --output=testR.txt "\n\nhey\n\n\n\nlol\n\n" 
     go run . --reverse=testR.txt shadow | cat -e
+    wait_for_key
+
+    text 'Test 13 <\_n\_nhey    \_n\_n\_n\_n  the   what  \_n\_n>'
+    go run . --output=testR.txt "\n\nhey   \n\n\n\n  the   what  \n\n" 
+    go run . --reverse=testR.txt | cat -e
+    wait_for_key
+
+    text 'Test 14 <  \_n\_n  hey    \_n\_n\_n\_n  the   what  \_n\_n>'
+    go run . --output=testR.txt "  \n\n  hey   \n\n\n\n  the   what  \n\n" 
+    go run . --reverse=testR.txt | cat -e
     rm testR.txt
 }
 
