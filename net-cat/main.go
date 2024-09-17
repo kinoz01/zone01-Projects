@@ -5,198 +5,98 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"os"
-	"strings"
 	"sync"
 	"time"
 )
 
-// Client struct represents a single client
-type Client struct {
-	conn     net.Conn
-	name     string
-	messages chan string
-}
-
-// ChatServer struct represents the server that manages multiple clients
-type ChatServer struct {
-	clients    map[*Client]bool
-	register   chan *Client
-	unregister chan *Client
-	broadcast  chan string
-	mu         sync.Mutex
-	history    []string
-}
-
-var (
-	port = "8989" // default port
-	linuxLogo = `
-Welcome to TCP-Chat!
-         _nnnn_
-        dGGGGMMb
-       @p~qp~~qMb
-       M|@||@) M|
-       @,----.JM|
-      JS^\__/  qKL
-     dZP        qKRb
-    dZP          qKKb
-   fZP            SMMb
-   HZM            MMMM
-   FqM            MMMM
- __| ".        |\dS"qML
- |    `.       \| \`' \\Zq
-_)      \\.___.,|     .'
-\\____   )MMMMMP|   .'
-     \`-\'       '--'
-
-)
+var clients = make(map[net.Conn]string)
+var messages = make([]string, 0)
+var mu sync.Mutex
+var broadcast = make(chan string)
 
 func main() {
-	// Set the port from arguments or use the default
-	if len(os.Args) > 1 {
-		port = os.Args[1]
-	}
-
-	// Initialize and start the server
-	server := NewChatServer()
-	go server.ListenAndServe()
-
-	fmt.Printf("Listening on port :%s\n", port)
-	select {}
-}
-
-// NewChatServer initializes the chat server
-func NewChatServer() *ChatServer {
-	return &ChatServer{
-		clients:    make(map[*Client]bool),
-		register:   make(chan *Client),
-		unregister: make(chan *Client),
-		broadcast:  make(chan string),
-		history:    make([]string, 0),
-	}
-}
-
-// ListenAndServe listens on the specified port and accepts incoming client connections
-func (s *ChatServer) ListenAndServe() {
-	listener, err := net.Listen("tcp", ":"+port)
+	port := ":8989"
+	listener, err := net.Listen("tcp", port)
 	if err != nil {
-		log.Fatalf("Error starting server: %s", err)
+		log.Fatal(err)
 	}
 	defer listener.Close()
 
-	go s.handleMessages()
+	fmt.Println("Listening on port", port)
+
+	// Start the broadcast handler in a goroutine
+	go handleBroadcast()
 
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
-			log.Printf("Failed to accept connection: %s", err)
+			log.Fatal(err)
+		}
+		// Handle each connection in a separate goroutine
+		go handleClient(conn)
+	}
+}
+
+// Broadcast handler that sends messages to all clients
+func handleBroadcast() {
+	for {
+		msg := <-broadcast
+		mu.Lock()
+		for client := range clients {
+			client.Write([]byte(msg + "\n"))
+		}
+		mu.Unlock()
+	}
+}
+
+func handleClient(conn net.Conn) {
+	defer conn.Close()
+
+	conn.Write([]byte("Welcome to TCP-Chat!\n[ENTER YOUR NAME]: "))
+	name := ""
+	scanner := bufio.NewScanner(conn)
+
+	for scanner.Scan() {
+		name = scanner.Text()
+		if name != "" {
+			break
+		}
+		conn.Write([]byte("[ENTER YOUR NAME]: "))
+	}
+
+	mu.Lock()
+	clients[conn] = name
+	mu.Unlock()
+
+	broadcast <- fmt.Sprintf("[%s] %s has joined the chat...", timeStamp(), name)
+
+	// Send previous messages to the new client
+	mu.Lock()
+	for _, msg := range messages {
+		conn.Write([]byte(msg + "\n"))
+	}
+	mu.Unlock()
+
+	// Listen for incoming messages
+	for scanner.Scan() {
+		msg := scanner.Text()
+		if msg == "" {
 			continue
 		}
-		client := &Client{
-			conn:     conn,
-			messages: make(chan string),
-		}
-		go s.handleNewClient(client)
+		broadcastMsg := fmt.Sprintf("[%s][%s]: %s", timeStamp(), name, msg)
+		mu.Lock()
+		messages = append(messages, broadcastMsg)
+		mu.Unlock()
+		broadcast <- broadcastMsg
 	}
+
+	// Handle client leaving
+	mu.Lock()
+	delete(clients, conn)
+	mu.Unlock()
+	broadcast <- fmt.Sprintf("[%s] %s has left the chat...", timeStamp(), name)
 }
 
-// handleNewClient manages new client connections, prompts for name, and handles joining the chat
-func (s *ChatServer) handleNewClient(client *Client) {
-	client.conn.Write([]byte(linuxLogo + "\n"))
-	client.conn.Write([]byte("[ENTER YOUR NAME]: "))
-
-	reader := bufio.NewReader(client.conn)
-	name, _ := reader.ReadString('\n')
-	client.name = strings.TrimSpace(name)
-
-	if client.name == "" {
-		client.conn.Write([]byte("Name cannot be empty. Disconnecting...\n"))
-		client.conn.Close()
-		return
-	}
-
-	// Register the client
-	s.register <- client
-
-	// Send chat history to the new client
-	for _, msg := range s.history {
-		client.conn.Write([]byte(msg + "\n"))
-	}
-
-	go s.handleClientInput(client)
-	go s.sendClientMessages(client)
-}
-
-// handleClientInput reads input from a client and broadcasts it
-func (s *ChatServer) handleClientInput(client *Client) {
-	reader := bufio.NewReader(client.conn)
-	for {
-		message, err := reader.ReadString('\n')
-		if err != nil {
-			s.unregister <- client
-			return
-		}
-
-		message = strings.TrimSpace(message)
-		if message == "" {
-			continue
-		}
-
-		timestamp := time.Now().Format("2006-01-02 15:04:05")
-		formattedMessage := fmt.Sprintf("[%s][%s]: %s", timestamp, client.name, message)
-
-		s.broadcast <- formattedMessage
-	}
-}
-
-// sendClientMessages sends messages to a client
-func (s *ChatServer) sendClientMessages(client *Client) {
-	for message := range client.messages {
-		client.conn.Write([]byte(message + "\n"))
-	}
-}
-
-// handleMessages handles broadcasting messages to all clients and managing registration/unregistration
-func (s *ChatServer) handleMessages() {
-	for {
-		select {
-		case client := <-s.register:
-			s.mu.Lock()
-			if len(s.clients) >= 10 {
-				client.conn.Write([]byte("Max clients reached. Disconnecting...\n"))
-				client.conn.Close()
-			} else {
-				s.clients[client] = true
-				joinMsg := fmt.Sprintf("[%s] has joined the chat...", client.name)
-				s.broadcast <- joinMsg
-			}
-			s.mu.Unlock()
-
-		case client := <-s.unregister:
-			s.mu.Lock()
-			if _, ok := s.clients[client]; ok {
-				leaveMsg := fmt.Sprintf("[%s] has left the chat...", client.name)
-				s.broadcast <- leaveMsg
-				delete(s.clients, client)
-				client.conn.Close()
-			}
-			s.mu.Unlock()
-
-		case message := <-s.broadcast:
-			// Add message to history
-			s.history = append(s.history, message)
-
-			// Broadcast message to all clients
-			s.mu.Lock()
-			for client := range s.clients {
-				select {
-				case client.messages <- message:
-				default:
-					close(client.messages)
-					delete(s.clients, client)
-				}
-			}
-			s.mu.Unlock()
-		}
-	}
+func timeStamp() string {
+	return time.Now().Format("2006-01-02 15:04:05")
 }

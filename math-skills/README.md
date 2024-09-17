@@ -1,6 +1,6 @@
 ## How to Test the Program
 
-To test the program, move your test executable file (`math-skills`) ([stats-tests](https://assets.01-edu.org/stats-projects/stat-bin-dockerized.ziphttps://assets.01-edu.org/stats-projects/stat-bin-dockerized.zip)) to the project folder, and then simply run:
+To test the program, move your test executable file (`math-skills`) ([stats-tests](https://assets.01-edu.org/stats-projects/stat-bin-dockerized.zip)) to the project folder, and then simply run:
 
 ```bash
 go test
@@ -20,3 +20,5 @@ go test
 ```bash
 go test
 ```
+
+> Note: when using docker make sure you already run the program using docker before using `go test`.

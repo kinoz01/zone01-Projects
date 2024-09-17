@@ -29,9 +29,9 @@ func readData(filePath string) ([]float64, error) {
 	if err := scanner.Err(); err != nil {
 		return nil, err
 	}
-
-fmt.Println(len(yValues))
-
+	if len(yValues) == 0 {
+		return nil, fmt.Errorf("your file don't contain any data")
+	}
 	return yValues, nil
 }
 
