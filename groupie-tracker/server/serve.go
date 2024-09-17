@@ -27,7 +27,7 @@ func Serve() {
 				http.ListenAndServe(":"+strconv.Itoa(p), nil)
 				if p == 65000 {
 					log.Fatalf("Server failed to start: there is no available ports in your machine")
-					break
+					return
 				}
 			}
 		}
