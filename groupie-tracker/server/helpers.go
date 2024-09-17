@@ -86,7 +86,7 @@ func (p *Ports) InitialisePorts() {
 		p.Port = "8088" // Default port
 	}
 
-	p.ApiPort = os.Getenv("ApiPORT")
+	p.ApiPort = os.Getenv("APIPORT")
 	if p.ApiPort == "" {
 		p.ApiPort = "4000" // Default port
 	}
