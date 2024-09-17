@@ -21,7 +21,7 @@ func Serve() {
 		if strings.Contains(err.Error(), "address already in use") {
 			p, _ := strconv.Atoi(port.Port)
 			for {
-				log.Printf("Address %d already in use", p)
+				log.Printf("Address %d is already in use", p)
 				p++
 				log.Printf("Starting server at http://127.0.0.1:%d", p)
 				http.ListenAndServe(":"+strconv.Itoa(p), nil)
