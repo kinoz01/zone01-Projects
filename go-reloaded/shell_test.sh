@@ -136,13 +136,49 @@ run_tests() {
     wait_for_key
     run_single_test 24 "Hey Hey Hello (up, 3" "Hey Hey Hello (up, 3" "HEY HEY HELLO"
     wait_for_key
-    run_single_test 25 "I have a there .(up, a(hex)(bin))" "I have a there .(up, a (hex) (bin))"
+    run_single_test 25 "I have a there (up, a(hex)(bin))" "I have A THERE"
     wait_for_key
 
     run_single_test 26 "I don't ,mind ' being 'here ." "I don't, mind 'being' here."
     wait_for_key
 
-    run_single_test 27 "1E (hex) files were added 42 (bin)"$'\n\n'"It has been 10, (bin) years"$'\n\n'"Ready, set. ,.. (up) go"$'\n\n'"I should stop SHOUTING (low)"$'\n\n'"Welcome to the Brooklyn bridge (cap)"$'\n\n'"This is so exciting AHDS fhfgh dfgdfg (cap, 10) fdgdfg This is so exciting (up, 3) dfg"$'\n\n'"Welcome to is the up', brooklyn bridge (cap, 1)"$'\n\n'"Welcome to isup up up  ', up (cap, 100)"
+    run_single_test 27 "(bin)" "" "(bin)"
+    wait_for_key
+
+	 run_single_test 28 "(ok)" "(ok)"
+    wait_for_key
+
+	run_single_test 29 "" ""
+    wait_for_key
+
+	run_single_test 30 "(" "("
+    wait_for_key
+
+	run_single_test 31 ")" ")"
+    wait_for_key
+
+	run_single_test 32 "a a (hex)" "a 10"
+    wait_for_key
+
+	run_single_test 33 "a a a a a a apple" "an an an an an an apple"
+    wait_for_key
+
+	run_single_test 34 "hello there ... (cap, 2)" "Hello There..."
+    wait_for_key
+
+	run_single_test 35 "hello there... (cap, 2)" "Hello There..."
+    wait_for_key
+
+	run_single_test 36 "hello there ... (up, 3)" "HELLO THERE..."
+    wait_for_key
+
+    run_single_test 37 "hello there ... (up, -3)" "HELLO THERE..."
+    wait_for_key
+
+    run_single_test 38 "hello there 10 ... (((bin)))" 
+    wait_for_key
+
+    run_single_test 39 "hello there 10 ... (bin)" 
     wait_for_key
 
     # Clean up temporary files
