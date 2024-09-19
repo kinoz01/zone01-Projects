@@ -70,7 +70,7 @@ func pearsonCorrelation(xValues, yValues []float64) float64 {
 	denominator := math.Sqrt((n*sumX2 - sumX*sumX) * (n*sumY2 - sumY*sumY))
 
 	if denominator == 0 {
-		return 0
+		return math.NaN()
 	}
 
 	return numerator / denominator
