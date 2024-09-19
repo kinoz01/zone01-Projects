@@ -10,7 +10,6 @@ type ErrorData struct {
 	Msg1        string
 	Msg2        string
 	StatusCode  int
-	HomeAddress string
 }
 
 // Parse and execute error html page depending on error type.
@@ -21,7 +20,6 @@ func ErrorHandler(w http.ResponseWriter, statusCode int, msg1, msg2 string) {
 		Msg2:       msg2,
 		StatusCode: statusCode,
 	}
-	Error.HomeAddress = "http://127.0.0.1:" + Port
 
 	w.WriteHeader(Error.StatusCode)
 
