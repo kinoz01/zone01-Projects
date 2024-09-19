@@ -25,7 +25,7 @@ type SearchResults struct {
 type Cache map[string]string
 
 const (
-	apiKey    = "00f93dbcc368abe0041df6b8f4ff6b90ab59665e2f5867cf6ff0ee74f9e15db9"
+	apiKey    = "00f93dbcc368abe0041df6b8f4ff6b90ab59665e2f5867cf6ff0ee74f9e15db9" // serpapi key
 	cacheFile = "./API/locations.json" // json file name
 )
 
