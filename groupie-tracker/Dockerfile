@@ -18,13 +18,18 @@ FROM alpine:latest
 # Update package lists and install bash
 RUN apk update && apk add bash
 
+ENV PORT 8080
+ENV APIPORT 4000
+
 # Set the working directory inside the container
 WORKDIR /app
 
 # Copy the built binary from the builder stage
 COPY --from=builder /app/groupie /app/groupie
 COPY --from=builder /app/frontend /app/frontend
-COPY --from=builder  /app/API /app/API
+COPY --from=builder  /app/API/locations.json /app/API/locations.json
+COPY --from=builder  /app/API/apidata.json /app/API/apidata.json
+COPY --from=builder  /app/server/apiLinks.json /app/server/apiLinks.json
 
 # Set the command to run the built binary
 CMD ["./groupie"]

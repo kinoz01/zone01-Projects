@@ -16,7 +16,7 @@ func Serve() {
 	http.HandleFunc("/css/", FileHandler)
 	http.HandleFunc("/js/", FileHandler)
 
-	listener, err := net.Listen("tcp", Port.Port)
+	listener, err := net.Listen("tcp", ":"+Port.Port)
 	if err != nil {
 		log.Fatalf("Server failed to start: %v", err)
 		return
