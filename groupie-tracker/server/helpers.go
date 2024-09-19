@@ -79,8 +79,8 @@ func ReplaceImages(artists *[]Artist) {
 	}
 }
 
-// Initialise ports (api & application ports) using environement
-// use export PORT=:$PORT to set port where the server should start.
+// Initialise ports (api & application ports) using environement variables.
+// For example use export PORT=:$PORT to set port where the server should start.
 func (p *Ports) InitialisePorts() {
 
 	p.Port = os.Getenv("PORT")
