@@ -1,0 +1,3 @@
+add checker program for broken links
+fix random port problem for api
+detache links from go file so i don't have to restart my server to change a link (move them to json data)

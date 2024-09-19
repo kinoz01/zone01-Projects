@@ -79,15 +79,10 @@ func ReplaceImages(artists *[]Artist) {
 	}
 }
 
-// Initialise ports (api & application ports)
+// Initialise ports (api & application ports) using environement
 func (p *Ports) InitialisePorts() {
-	p.Port = os.Getenv("PORT")
-	if p.Port == "" {
-		p.Port = "8088" // Default port
-	}
 
+	p.Port = os.Getenv("PORT")
 	p.ApiPort = os.Getenv("APIPORT")
-	if p.ApiPort == "" {
-		p.ApiPort = "4000" // Default port
-	}
+
 }

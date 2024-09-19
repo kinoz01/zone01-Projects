@@ -3,6 +3,7 @@ package apiserver
 import (
 	"encoding/json"
 	"fmt"
+	"groupie/server"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -25,10 +26,14 @@ type Cache map[string]string
 
 const (
 	apiKey    = "00f93dbcc368abe0041df6b8f4ff6b90ab59665e2f5867cf6ff0ee74f9e15db9"
-	cacheFile = "./API/query_locations.json" // json file name
+	cacheFile = "./API/locations.json" // json file name
 )
 
 func GetApiImage(query string) string {
+	apiLinks, err := server.LoadApiLinks("./server/apiLinks.json")
+	if err != nil {
+		log.Fatalf("Error loading API links: %v", err)
+	}
 	query = FormatQuery(query)
 
 	// Load cache from file or initialize a new one
@@ -42,7 +47,7 @@ func GetApiImage(query string) string {
 		return url
 	}
 
-	apiUrl := fmt.Sprintf("https://serpapi.com/search.json?engine=google_images&q=%s&google_domain=google.com&gl=us&hl=en&api_key=%s", query, apiKey)
+	apiUrl := fmt.Sprintf(apiLinks.SerpApi, query, apiKey)
 
 	// Send HTTP GET request
 	resp, err := http.Get(apiUrl)
@@ -78,7 +83,7 @@ func GetApiImage(query string) string {
 // processImageResults processes the search results and returns the appropriate image URL
 func ProcessImageResults(searchResults SearchResults) (string, error) {
 	// Iterate over positions 0 to 10 to find a matching image
-	for pos := 0; pos <= 10; pos++ {
+	for pos := 0; pos <= 20; pos++ {
 		for _, result := range searchResults.Images {
 			if result.Position == pos && result.OriginalWidth >= 1200 && result.OriginalWidth >= 1.5*result.OriginalHeight {
 				return result.Original, nil
@@ -87,7 +92,7 @@ func ProcessImageResults(searchResults SearchResults) (string, error) {
 	}
 
 	// If no suitable image is found, return an error
-	return "", fmt.Errorf("no valid image found up to position 10")
+	return "", fmt.Errorf("no valid image found")
 }
 
 func FormatQuery(query string) string {

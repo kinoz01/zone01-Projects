@@ -36,7 +36,7 @@ func SetData(apiArtist server.Artist, apiArtistRelations server.Relations, apiAr
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		locationsDatesChan <- GetLocationsDates(apiArtistRelations.DatesLocations, apiArtistLocations.Locations, apidata.LocationsImages)
+		locationsDatesChan <- GetLocationsDates(apiArtistRelations.DatesLocations, apiArtistLocations.Locations)
 	}()
 
 	// Goroutine for GetYoutubeLinks

@@ -1,11 +1,18 @@
 package apiserver
 
 import (
+	"groupie/server"
+	"log"
 	"strings"
 	"unicode"
 )
+
 // search for a string inside a list of links to respond with the correct link.
 func Search(Word, Type string, Images []string) string {
+	apiLinks, err := server.LoadApiLinks("./server/apiLinks.json")
+	if err != nil {
+		log.Fatalf("Error loading API links: %v", err)
+	}
 	// Replace spaces in artistName with hyphens
 	Word = strings.ReplaceAll(Word, " ", "-")
 	Word = strings.ToLower(Word)
@@ -20,13 +27,13 @@ func Search(Word, Type string, Images []string) string {
 		}
 	}
 	if Type == "logo" {
-		return "https://i.postimg.cc/C1wQ8qwC/no-logo.png"
+		return apiLinks.OtherLinks[0]
 	} else if Type == "member" {
-		return "https://i.postimg.cc/wMTZCsPx/memberplaceholder.jpg"
+		return apiLinks.OtherLinks[1]
 	} else if Type == "place" {
-		return "https://i.postimg.cc/t4K0sJ1D/placeholder-image.webp"
+		return apiLinks.OtherLinks[2]
 	}
-	return "https://i.postimg.cc/wMTZCsPx/memberplaceholder.jpg"
+	return apiLinks.OtherLinks[1]
 }
 
 // Return a map where the key is a member name and the value is the link to its corresponding image.
@@ -41,7 +48,7 @@ func GetMembersImages(Members, Images []string) map[string]string {
 }
 
 // Return a map where key is locations and values are a slice of string containing dates.
-func GetLocationsDates(Dates map[string][]string, Locations, Images []string) map[string][]string {
+func GetLocationsDates(Dates map[string][]string, Locations []string) map[string][]string {
 	LocationsDates := make(map[string][]string)
 
 	for _, place := range Locations {

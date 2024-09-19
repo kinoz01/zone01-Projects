@@ -1,0 +1,14 @@
+{
+    
+    "artist": "https://groupietrackers.herokuapp.com/api/artists/%s",
+    "locations": "https://groupietrackers.herokuapp.com/api/locations/%s",
+    "dates": "https://groupietrackers.herokuapp.com/api/dates/%s",
+    "relations": "https://groupietrackers.herokuapp.com/api/relation/%s",
+    "serp": "https://serpapi.com/search.json?engine=google_images&q=%s&google_domain=google.com&gl=us&hl=en&api_key=%s",
+    "others": [
+        "https://i.postimg.cc/C1wQ8qwC/no-logo.png",
+        "https://i.postimg.cc/wMTZCsPx/memberplaceholder.jpg",
+        "https://i.postimg.cc/t4K0sJ1D/placeholder-image.webp"
+    ]
+}
+  
