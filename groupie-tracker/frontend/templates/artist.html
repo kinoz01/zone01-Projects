@@ -153,7 +153,9 @@
     <div class="carousel-container" id="carousel-container">
         {{range .MyAPI.YoutubeURL}}
         <div class="carousel-item">
-            <iframe class="youtube-video" src="{{.}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div class="youtube-video">
+                {{.}}
+            </div>
         </div>
         {{end}}
     </div>
