@@ -50,8 +50,8 @@ func main() {
 func Broadcast() {
 	for {
 		ms := <-broadcast
-		timestamp := time.Now().Format("2006-01-02 15:04:05")
-		formattedMessage := fmt.Sprintf("[%s][%s]: %s\n", timestamp, ms.Name, ms.Content)
+	
+		formattedMessage := fmt.Sprintf("[%s][%s]: %s-----------\n", timeStamp(), ms.Name, ms.Content)
 		mu.Lock()
 		for conn, username := range clients {
 			if conn != ms.Sender {
@@ -60,9 +60,8 @@ func Broadcast() {
 					fmt.Printf("Error writing to connection: %v\n", err)
 					conn.Close()
 					delete(clients, conn)
-				}
-				timestamp := time.Now().Format("2006-01-02 15:04:05")
-				prompt := fmt.Sprintf("[%s][%s]: ", timestamp, username)
+				}			
+				prompt := fmt.Sprintf("[%s][%s]: ", timeStamp(), username)
 				fmt.Fprint(conn, prompt)
 			}
 		}
@@ -125,8 +124,8 @@ func HandleClient(conn net.Conn) {
 	// Listen for incoming messages
 	for {
 		// Send prompt after join message
-		timestamp := time.Now().Format("2006-01-02 15:04:05")
-		prompt := fmt.Sprintf("[%s][%s]: ", timestamp, name)
+
+		prompt := fmt.Sprintf("[%s][%s]: ", timeStamp(), name)
 		fmt.Fprint(conn, prompt)
 
 		if !scanner.Scan() {
