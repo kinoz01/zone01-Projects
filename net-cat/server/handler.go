@@ -28,6 +28,9 @@ func ServeAndHandle(listener net.Listener) {
 func HandleClients(conn net.Conn) {
 
 	name, scanner := AcceptNewClient(conn)
+	if scanner == nil {
+		return
+	}
 
 	PrintClientsInfo(name, conn)
 

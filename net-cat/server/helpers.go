@@ -10,7 +10,7 @@ func timeStamp() string {
 	return time.Now().Format("2006-01-02 15:04:05")
 }
 
-// Function to check if a string contains only printable characters
+// Check if a string contains only printable characters
 func IsPrintable(s string) bool {
 	for _, r := range s {
 		// ASCII printable characters range from 32 (space) to 126 (~)
