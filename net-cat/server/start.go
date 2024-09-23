@@ -17,7 +17,7 @@ var (
 	Port       string
 )
 
-const MaxClients = 2
+const MaxClients = 10
 
 // Message struct to store message content and the sender
 type Message struct {
