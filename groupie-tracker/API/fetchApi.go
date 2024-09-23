@@ -30,10 +30,7 @@ const (
 )
 
 func GetApiImage(query string) string {
-	apiLinks, err := server.LoadApiLinks("./server/apiLinks.json")
-	if err != nil {
-		log.Fatalf("Error loading API links: %v", err)
-	}
+	
 	query = FormatQuery(query)
 
 	// Load cache from file or initialize a new one
@@ -47,7 +44,7 @@ func GetApiImage(query string) string {
 		return url
 	}
 
-	apiUrl := fmt.Sprintf(apiLinks.SerpApi, query, apiKey)
+	apiUrl := fmt.Sprintf(server.APILinks.SerpApi, query, apiKey)
 
 	// Send HTTP GET request
 	resp, err := http.Get(apiUrl)

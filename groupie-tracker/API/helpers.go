@@ -2,17 +2,13 @@ package apiserver
 
 import (
 	"groupie/server"
-	"log"
 	"strings"
 	"unicode"
 )
 
 // search for a string inside a list of links to respond with the correct link.
 func Search(Word, Type string, Images []string) string {
-	apiLinks, err := server.LoadApiLinks("./server/apiLinks.json")
-	if err != nil {
-		log.Fatalf("Error loading API links: %v", err)
-	}
+
 	// Replace spaces in artistName with hyphens
 	Word = strings.ReplaceAll(Word, " ", "-")
 	Word = strings.ToLower(Word)
@@ -27,13 +23,13 @@ func Search(Word, Type string, Images []string) string {
 		}
 	}
 	if Type == "logo" {
-		return apiLinks.OtherLinks[0]
+		return server.APILinks.OtherLinks[0]
 	} else if Type == "member" {
-		return apiLinks.OtherLinks[1]
+		return server.APILinks.OtherLinks[1]
 	} else if Type == "place" {
-		return apiLinks.OtherLinks[2]
+		return server.APILinks.OtherLinks[2]
 	}
-	return apiLinks.OtherLinks[1]
+	return server.APILinks.OtherLinks[1]
 }
 
 // Return a map where the key is a member name and the value is the link to its corresponding image.

@@ -7,9 +7,11 @@ import (
 )
 
 var Port Ports
+var APILinks *ApiLinks
 
 func Serve() {
 	Port.InitialisePorts()
+	InitialiseApiLinks()
 
 	http.HandleFunc("/", IndexHandler)
 	http.HandleFunc("/artist", ArtistHandler)

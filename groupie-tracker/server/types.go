@@ -57,4 +57,5 @@ type ApiLinks struct {
 	Relations  string   `json:"relations"`
 	SerpApi    string   `json:"serp"`
 	OtherLinks []string `json:"others"`
+	ErrorPage  string   `json:"error"`
 }

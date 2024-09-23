@@ -2,7 +2,10 @@ package server
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -86,4 +89,37 @@ func (p *Ports) InitialisePorts() {
 	p.Port = os.Getenv("PORT")
 	p.ApiPort = os.Getenv("APIPORT")
 
+}
+
+func InitialiseApiLinks() {
+	// Load the JSON with Heroku API links
+	var err error
+	APILinks, err = LoadApiLinks("./server/apiLinks.json")
+	if err != nil {
+		log.Fatalf("Error loading API links: %v", err)
+	}
+}
+
+func LoadApiLinks(filename string) (*ApiLinks, error) {
+	// Load the JSON file
+	file, err := os.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	// Read file content
+	content, err := ioutil.ReadAll(file)
+	if err != nil {
+		return nil, err
+	}
+
+	// Unmarshal the JSON into ApiLinks struct
+	var links ApiLinks
+	err = json.Unmarshal(content, &links)
+	if err != nil {
+		return nil, err
+	}
+
+	return &links, nil
 }

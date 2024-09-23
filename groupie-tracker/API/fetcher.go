@@ -3,18 +3,12 @@ package apiserver
 import (
 	"fmt"
 	"groupie/server"
-	"log"
 	"net/http"
 	"sync"
 )
 
 // Use Goroutines to fetch herokuapp artists data and decode it in input structs, while also intialising an input ApiDAta struct in the data.go page.
 func FetchData(id string, apiArtist *server.Artist, apiArtistLocations *server.Locations, apiArtistRelations *server.Relations, apidata *ApiData, w http.ResponseWriter) {
-	// Load the JSON with Heroku API links
-	apiLinks, err := server.LoadApiLinks("./server/apiLinks.json")
-	if err != nil {
-		log.Fatalf("Error loading API links: %v", err)
-	}
 
 	var wg sync.WaitGroup
 	var errCh = make(chan error, 4)
@@ -23,7 +17,7 @@ func FetchData(id string, apiArtist *server.Artist, apiArtistLocations *server.L
 	// Fetch artist data concurrently
 	go func() {
 		defer wg.Done()
-		err := server.FetchData(fmt.Sprintf(apiLinks.Artist, id), apiArtist)
+		err := server.FetchData(fmt.Sprintf(server.APILinks.Artist, id), apiArtist)
 		if err != nil {
 			errCh <- fmt.Errorf("failed to fetch artist: %w", err)
 		}
@@ -31,7 +25,7 @@ func FetchData(id string, apiArtist *server.Artist, apiArtistLocations *server.L
 
 	go func() {
 		defer wg.Done()
-		err := server.FetchData(fmt.Sprintf(apiLinks.Locations, id), apiArtistLocations)
+		err := server.FetchData(fmt.Sprintf(server.APILinks.Locations, id), apiArtistLocations)
 		if err != nil {
 			errCh <- fmt.Errorf("failed to fetch locations: %w", err)
 		}
@@ -39,7 +33,7 @@ func FetchData(id string, apiArtist *server.Artist, apiArtistLocations *server.L
 
 	go func() {
 		defer wg.Done()
-		err := server.FetchData(fmt.Sprintf(apiLinks.Relations, id), apiArtistRelations)
+		err := server.FetchData(fmt.Sprintf(server.APILinks.Relations, id), apiArtistRelations)
 		if err != nil {
 			errCh <- fmt.Errorf("failed to fetch dates: %w", err)
 		}

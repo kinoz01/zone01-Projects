@@ -71,7 +71,7 @@ func ServeRentryError(w http.ResponseWriter, err error, msg1, msg2 string, statu
 // GetErrorPage retrieves the error page from rentry.co based on the error code.
 func GetErrorPage() (string, error) {
 	// Build the URL based on the error number
-	url := "https://rentry.co/groupie-error/raw"
+	url := APILinks.ErrorPage
 
 	// Make a GET request to the URL
 	resp, err := http.Get(url)
