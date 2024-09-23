@@ -10,5 +10,5 @@ func main() {
 	if listener == nil {
 		return
 	}
-	server.ServeAndHandle(listener)
+	server.HandleConnections(listener)
 }

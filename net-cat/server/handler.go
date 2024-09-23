@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func ServeAndHandle(listener net.Listener) {
+func HandleConnections(listener net.Listener) {
 	
 	// Remove cache file and server logs
 	RemoveCahe()
