@@ -73,11 +73,11 @@ func ReplaceImages(artists *[]Artist) {
 	for i, artist := range *artists {
 		switch artist.Name {
 		case "Mamonas Assassinas":
-			(*artists)[i].Image = "https://i.postimg.cc/hjXqxwCS/500x500.jpg"
+			(*artists)[i].Image = APILinks.ReplacedImages[0]
 		case "Thirty Seconds to Mars":
-			(*artists)[i].Image = "https://i.postimg.cc/J7jQbWcT/pngegg.png"
+			(*artists)[i].Image = APILinks.ReplacedImages[1]
 		case "Eminem":
-			(*artists)[i].Image = "https://i.postimg.cc/gkg20Qyf/eminem.png"
+			(*artists)[i].Image = APILinks.ReplacedImages[2]
 		}
 	}
 }
@@ -91,8 +91,9 @@ func (p *Ports) InitialisePorts() {
 
 }
 
+// Initialise the APILinks global struct using apiLinks.json.
 func InitialiseApiLinks() {
-	// Load the JSON with Heroku API links
+	// Load the JSON with Heroku API links and other links.
 	var err error
 	APILinks, err = LoadApiLinks("./server/apiLinks.json")
 	if err != nil {

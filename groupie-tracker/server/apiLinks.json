@@ -10,6 +10,11 @@
         "https://i.postimg.cc/wMTZCsPx/memberplaceholder.jpg",
         "https://i.postimg.cc/t4K0sJ1D/placeholder-image.webp"
     ],
-    "error": "https://rentry.co/groupie-error/raw"
+    "error": "https://rentry.co/groupie-error/raw",
+    "replacedImages": [
+        "https://i.postimg.cc/hjXqxwCS/500x500.jpg",
+        "https://i.postimg.cc/J7jQbWcT/pngegg.png",
+        "https://i.postimg.cc/gkg20Qyf/eminem.png"
+    ]
 }
   

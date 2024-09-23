@@ -187,3 +187,113 @@ li{
 .footer-link:hover {
   color: #ffa500; /* Change text color on hover */
 }
+
+/* Search Bar Styles */
+.search-bar {
+  width: 100%;
+  max-width: 600px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 25px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  outline: none;
+  color: #333;
+  margin-top: 20px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Focus State */
+.search-bar:focus {
+  border-color: #ffa600;
+  background-color: #fff;
+  box-shadow: 0 6px 8px rgba(255, 115, 0, 0.3);
+}
+
+/* Placeholder Text */
+.search-bar::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+/* Responsive adjustments for tablets */
+@media (max-width: 768px) {
+  .search-bar {
+      width:80%;
+      max-width: 500px;
+      padding: 10px 15px;
+      font-size: 14px;
+  }
+}
+
+/* Responsive adjustments for mobile phones */
+@media (max-width: 480px) {
+  .search-bar {
+      width: 75%;
+      max-width: 100%;
+      padding: 8px 10px;
+      font-size: 13px;
+  }
+}
+
+/* Suggestions dropdown */
+.suggestions-list {
+  color: #353535;
+  max-width: 600px;
+  width: 100%;
+  list-style-type: none;
+  padding: 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  margin-top: 5px;
+  max-height: 200px; /* Set the max height */
+  overflow-y: auto; /* Make the list scrollable when content exceeds max-height */
+}
+
+/* Each suggestion style */
+.suggestions-list li {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.3s ease;
+}
+
+.suggestions-list li:hover {
+  background-color: #f2f2f2;
+}
+
+/* Active suggestion style for keyboard navigation */
+.suggestion-active {
+  background-color: #ffa600;
+  color: #fff;
+}
+
+/* Hide the last suggestion's border */
+.suggestions-list li:last-child {
+  border-bottom: none;
+}
+
+/* Make the suggestion list responsive */
+@media (max-width: 768px) {
+  .suggestions-list {
+    width:80%;
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 480px) {
+  .suggestions-list {
+      width: 75%;
+      max-width: 100%;
+  }
+}

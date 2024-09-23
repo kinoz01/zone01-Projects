@@ -51,12 +51,13 @@ type ArtistDetails struct {
 
 // ApiLinks represents the JSON links structure
 type ApiLinks struct {
-	Artist     string   `json:"artist"`
-	Locations  string   `json:"locations"`
-	Dates      string   `json:"dates"`
-	Relations  string   `json:"relations"`
-	SerpApi    string   `json:"serp"`
-	OtherLinks []string `json:"others"`
-	ErrorPage  string   `json:"error"`
-	Home       string   `json:"home"`
+	Artist         string   `json:"artist"`
+	Locations      string   `json:"locations"`
+	Dates          string   `json:"dates"`
+	Relations      string   `json:"relations"`
+	SerpApi        string   `json:"serp"`
+	OtherLinks     []string `json:"others"`
+	ErrorPage      string   `json:"error"`
+	Home           string   `json:"home"`
+	ReplacedImages []string `json:"replacedImages"`
 }
