@@ -11,7 +11,8 @@ func ServeAndHandle(listener net.Listener) {
 	
 	// Remove cache file (server logs)
 	RemoveCahe()
-
+	go BroadcastMessages()	
+	
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
@@ -20,7 +21,6 @@ func ServeAndHandle(listener net.Listener) {
 
 		// Handle each connection in a separate goroutine
 		go HandleClients(conn)
-		go BroadcastMessages()	
 	}
 }
 
@@ -69,7 +69,7 @@ func HandleClients(conn net.Conn) {
 	Mu.Unlock()
 
 	defer conn.Close()
-	defer fmt.Printf("%s disconnected", name)
+	defer fmt.Printf("%s disconnected\n", name)
 
 	Broadcast <- Message{Sender: conn, Content: fmt.Sprintf("\n%s has left the chat...", name), Name: name}
 }

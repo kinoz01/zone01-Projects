@@ -27,7 +27,8 @@ type Message struct {
 
 // Check port number and start server
 func StartServer() net.Listener {
-	//fmt.Print("\033[H\033[2J")
+	fmt.Print("\033[H\033[2J")
+	
 	if len(os.Args) == 2 {
 		Port = os.Args[1]
 	}
