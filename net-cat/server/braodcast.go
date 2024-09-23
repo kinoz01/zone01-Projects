@@ -14,7 +14,7 @@ func BroadcastMessages() {
 			if conn != message.Sender {
 				_, err := conn.Write([]byte("\n" + formattedMessage))
 				if err != nil {
-					fmt.Printf("Error writing to connection: %v\n", err)
+					ServerLogs.WriteString(fmt.Sprintf("Error writing to connection: %v\n", err))
 					conn.Close()
 					delete(Clients, conn)
 				}

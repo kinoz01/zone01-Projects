@@ -14,6 +14,7 @@ func AcceptNewClient(conn net.Conn) (string, *bufio.Scanner) {
 	if len(Clients) >= MaxClients {
 		conn.Write([]byte("Chat room is full. Please try again later.\n"))
 		Mu.Unlock()
+		ServerLogs.WriteString(fmt.Sprintf("Chat room is full, client connection refused from: %s\n", conn.RemoteAddr().String()))
 		conn.Close() // Close connection if chat room is full
 		return "", nil
 	}
@@ -36,13 +37,13 @@ func AcceptNewClient(conn net.Conn) (string, *bufio.Scanner) {
 
 		name = scanner.Text()
 		if !IsPrintable(name) {
-			conn.Write([]byte("[Please Enter a valid name]: "))
+			conn.Write([]byte("Please Enter a valid name: "))
 			continue
 		}
 
 		Mu.Lock()
 		if UsedName(name) {
-			conn.Write([]byte("[Name already used, please enter a new name]: "))
+			conn.Write([]byte("Name already used, please enter a new name: "))
 			Mu.Unlock()
 			continue
 		}

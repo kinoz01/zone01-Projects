@@ -18,9 +18,19 @@ func RemoveCahe() {
 		fmt.Println("\nReceived interrupt signal, cleaning up...")
 
 		// Close and delete cache file
-		if CacheFile != nil {
+		if CacheFile != nil  {
 			CacheFile.Close()
 			err := os.Remove(CacheFile.Name())
+			if err != nil {
+				log.Fatalf("Error deleting cache file: %v\n", err)
+			} else {
+				fmt.Println("Cache file deleted successfully.")
+			}
+		}
+		// Close and delete server logs
+		if ServerLogs != nil  {
+			ServerLogs.Close()
+			err := os.Remove(ServerLogs.Name())
 			if err != nil {
 				log.Fatalf("Error deleting server logs: %v\n", err)
 			} else {

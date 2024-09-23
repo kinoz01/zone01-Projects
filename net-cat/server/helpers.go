@@ -1,8 +1,11 @@
 package server
 
 import (
+	"bufio"
 	"fmt"
+	"log"
 	"net"
+	"os"
 	"time"
 )
 
@@ -33,14 +36,54 @@ func UsedName(s string) bool {
 func PrintLastMessage(last []byte, conn net.Conn) {
 	_, err := conn.Write(last)
 	if err != nil {
-		fmt.Println(err)
+		ServerLogs.WriteString(err.Error())
 	}
 }
 
-func PrintClientsInfo(name string, conn net.Conn) {
-	// Get the client's remote address
-	clientAddr := conn.RemoteAddr().String()
+func ChangeClientName(conn net.Conn, scanner *bufio.Scanner, currentName string) (string, error) {
+	// Prompt the client to enter a new name
+	fmt.Fprint(conn, "Enter your new name: ")
 
-	// Print the full address (IP:Port)
-	fmt.Printf("Client %s connected from: %s\n", name, clientAddr)
+	if !scanner.Scan() {
+		return currentName, fmt.Errorf("client disconnected")
+	}
+
+	newName := scanner.Text()
+
+	// Validate the new name
+	if UsedName(newName) {
+		conn.Write([]byte("Name is already taken. Try again with a different name.\n"))
+		return currentName, nil
+	}
+	if !IsPrintable(newName) {
+		conn.Write([]byte("Invalid name. Try again with a different name.\n"))
+		return currentName, nil
+	}
+
+	// Lock the client map and update the client's name
+	Mu.Lock()
+	delete(Clients, conn)   // Remove the old name
+	Clients[conn] = newName // Assign the new name
+	Mu.Unlock()
+
+	conn.Write([]byte(fmt.Sprintf("Your name has been changed to %s.\n", newName)))
+
+	ServerLogs.WriteString(fmt.Sprintf("\n%s has changed his name to: %s.", currentName, newName))
+
+	Broadcast <- Message{Sender: conn, Content: fmt.Sprintf("\n%s has changed his name to %s.", currentName, newName), Name: newName}
+
+	return newName, nil
+}
+
+func CacheAndLogs(Port string) {
+	var err error
+	CacheFile, err = os.Create(fmt.Sprintf("chat:%s.txt", Port))
+	if err != nil {
+		log.Fatal(err)
+	}
+	ServerLogs, err = os.Create(fmt.Sprintf("logs:%s.txt", Port))
+	if err != nil {
+		log.Fatal(err)
+	}
+	ServerLogs.WriteString(fmt.Sprintf("Server Started at: %s \n", Port))
 }

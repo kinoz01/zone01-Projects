@@ -9,7 +9,7 @@ import (
 
 func ServeAndHandle(listener net.Listener) {
 	
-	// Remove cache file (server logs)
+	// Remove cache file and server logs
 	RemoveCahe()
 	go BroadcastMessages()	
 	
@@ -32,12 +32,13 @@ func HandleClients(conn net.Conn) {
 		return
 	}
 
-	PrintClientsInfo(name, conn)
+	// Log Client info.
+	ServerLogs.WriteString(fmt.Sprintf("Client %s connected from: %s\n", name, conn.RemoteAddr().String()))
 
 	// Send previous messages to the new client
 	logs, err := os.ReadFile(fmt.Sprintf("chat:%s.txt", Port))
 	if err != nil {
-		fmt.Fprint(conn, "I can't find previous messsages, this is due to an internal server error.\n")
+		fmt.Fprint(conn, "I can't load chat history, this is due to an internal server error.\n")
 	}
 
 	PrintLastMessage(logs, conn)
@@ -54,8 +55,18 @@ func HandleClients(conn net.Conn) {
 		}
 
 		msg := scanner.Text()
+		if msg == "/name" {
+            // handle name change
+            var err error
+            name, err = ChangeClientName(conn, scanner, name)
+            if err != nil {
+                break // Handle disconnect or other errors
+            }
+            continue
+        }
+
 		if !IsPrintable(msg) {
-			conn.Write([]byte("[Please Enter a valid message]: \n"))
+			conn.Write([]byte("Please Enter a valid message: \n"))
 			continue
 		}
 
@@ -69,7 +80,7 @@ func HandleClients(conn net.Conn) {
 	Mu.Unlock()
 
 	defer conn.Close()
-	defer fmt.Printf("%s disconnected\n", name)
+	defer ServerLogs.WriteString(fmt.Sprintf("%s disconnected\n", name))
 
 	Broadcast <- Message{Sender: conn, Content: fmt.Sprintf("\n%s has left the chat...", name), Name: name}
 }

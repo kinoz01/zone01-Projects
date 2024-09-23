@@ -9,11 +9,12 @@ import (
 )
 
 var (
-	Clients   = make(map[net.Conn]string)
-	Mu        sync.Mutex
-	Broadcast = make(chan Message)
-	CacheFile *os.File
-	Port      string
+	Clients    = make(map[net.Conn]string)
+	Mu         sync.Mutex
+	Broadcast  = make(chan Message)
+	CacheFile  *os.File
+	ServerLogs *os.File
+	Port       string
 )
 
 const MaxClients = 2
@@ -28,7 +29,7 @@ type Message struct {
 // Check port number and start server
 func StartServer() net.Listener {
 	fmt.Print("\033[H\033[2J")
-	
+
 	if len(os.Args) == 2 {
 		Port = os.Args[1]
 	}
@@ -46,9 +47,8 @@ func StartServer() net.Listener {
 	}
 
 	fmt.Println("Listening on Port", Port)
-	CacheFile, err = os.Create(fmt.Sprintf("chat:%s.txt", Port))
-	if err != nil {
-		log.Fatal(err)
-	}
+	
+	CacheAndLogs(Port)
+
 	return listener
 }
