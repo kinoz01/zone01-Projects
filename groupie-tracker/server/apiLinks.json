@@ -1,4 +1,5 @@
 {   
+    "home": "https://groupietrackers.herokuapp.com/api/artists",
     "artist": "https://groupietrackers.herokuapp.com/api/artists/%s",
     "locations": "https://groupietrackers.herokuapp.com/api/locations/%s",
     "dates": "https://groupietrackers.herokuapp.com/api/dates/%s",

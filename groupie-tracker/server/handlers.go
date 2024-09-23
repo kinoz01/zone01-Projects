@@ -15,7 +15,7 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var artists []Artist
-	err := FetchData("https://groupietrackers.herokuapp.com/api/artists", &artists)
+	err := FetchData(APILinks.Home, &artists)
 	if err != nil {
 		ErrorHandler(w, http.StatusInternalServerError, "Failed to fetch artists", "Internal Server Error!", err)
 		return
