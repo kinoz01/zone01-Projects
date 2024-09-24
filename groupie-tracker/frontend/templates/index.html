@@ -15,7 +15,7 @@
     </header>
     
     <!-- Search Bar -->
-    <input type="text" id="searchBar" class="search-bar" placeholder="Search by artist, members, location, album, date..." oninput="filterArtists()">
+    <input type="text" id="searchBar" class="search-bar" placeholder="Search by artist, members, locations..." oninput="filterArtists()">
     <ul id="suggestionsList" class="suggestions-list"></ul> <!-- Suggestions dropdown -->
     
     <ul id="artistList">
@@ -30,10 +30,12 @@
             {{range .Members}}
             <p class="member" style="display:none;">{{.}}</p>
             {{end}}
-
-            <p class="locations" style="display:none;">{{.Locations}}</p>
             <p class="firstAlbum" style="display:none;">{{.FirstAlbum}}</p>
             <p class="creationDate" style="display:none;">{{.CreationDate}}</p>
+            <p class="creationDate" style="display:none;">{{.CreationDate}}</p>
+            {{range .LOCATIONS}}
+            <p class="location" style="display:none;">{{.}}</p>
+            {{end}}
         </li>
         {{end}}
     </ul>

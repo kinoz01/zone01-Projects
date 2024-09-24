@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"sync"
 	"text/template"
 )
 
@@ -123,4 +124,33 @@ func LoadApiLinks(filename string) (*ApiLinks, error) {
 	}
 
 	return &links, nil
+}
+
+func GetAllPlacesNames(artists *[]Artist) {
+	var wg sync.WaitGroup // WaitGroup to wait for all goroutines to finish
+
+	for i := range *artists {
+		artist := &(*artists)[i]
+
+		// Start a new goroutine for each artist
+		wg.Add(1)
+		go func(artist *Artist) {
+			defer wg.Done() // Mark this goroutine as done when it finishes
+
+			var location Locations
+
+			// Fetch data for this artist's locations
+			err := FetchData(artist.Locations, &location)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+
+			// Append the fetched locations to the artist's LOCATIONS field
+			artist.LOCATIONS = append(artist.LOCATIONS, location.Locations...)
+		}(artist)
+	}
+
+	// Wait for all goroutines to finish
+	wg.Wait()
 }

@@ -15,6 +15,7 @@
         "https://i.postimg.cc/hjXqxwCS/500x500.jpg",
         "https://i.postimg.cc/J7jQbWcT/pngegg.png",
         "https://i.postimg.cc/gkg20Qyf/eminem.png"
-    ]
+    ],
+    "allLocations": "https://groupietrackers.herokuapp.com/api/locations"
 }
   

@@ -17,6 +17,7 @@ type Artist struct {
 	Locations    string   `json:"locations"`
 	ConcertDates string   `json:"concertDates"`
 	Relations    string   `json:"relations"`
+	LOCATIONS    []string
 }
 
 type Relations struct {
@@ -60,4 +61,5 @@ type ApiLinks struct {
 	ErrorPage      string   `json:"error"`
 	Home           string   `json:"home"`
 	ReplacedImages []string `json:"replacedImages"`
+	AllLocations   string   `json:"allLocations"`
 }

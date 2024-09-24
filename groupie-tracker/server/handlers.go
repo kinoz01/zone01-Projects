@@ -13,14 +13,15 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	if err := CheckHomeRequest(w, r); err {
 		return
 	}
-
 	var artists []Artist
 	err := FetchData(APILinks.Home, &artists)
 	if err != nil {
-		ErrorHandler(w, http.StatusInternalServerError, "Failed to fetch artists", "Internal Server Error!", err)
+		ErrorHandler(w, 500, "Can't fetch artists", "Internal Server Error!", err)
 		return
 	}
-	ReplaceImages(&artists)
+
+	go ReplaceImages(&artists)
+	GetAllPlacesNames(&artists)
 
 	ParseAndExecute(w, artists, "frontend/templates/index.html")
 }
