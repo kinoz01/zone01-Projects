@@ -22,18 +22,12 @@ function filterArtists() {
         const locations = artists[i].getElementsByClassName('location');
 
         // Check members
-        let memberMatchFound = false; // Track if a member's name starts with the search value
         for (let j = 0; j < members.length; j++) {
             const memberName = members[j].textContent.toLowerCase();
 
             // Add member to suggestions if it matches (includes)
             if (memberName.includes(searchValue)) {
                 suggestions.push({ type: 'member', name: `${artistName} - ${memberName}`, url: artistID });
-            }
-
-            // If member's name starts with the search value, mark match found
-            if (memberName.startsWith(searchValue)) {
-                memberMatchFound = true;
             }
         }
 
@@ -129,3 +123,14 @@ function filterArtists() {
         }
     }
 }
+
+// Event listener to hide suggestions when clicking outside of the search bar
+document.addEventListener('click', function (e) {
+    const searchBar = document.getElementById('searchBar');
+    const suggestionsList = document.getElementById('suggestionsList');
+    
+    // Hide suggestions if clicked outside of search bar and suggestions list
+    if (e.target !== searchBar && e.target.parentNode !== suggestionsList) {
+        suggestionsList.innerHTML = ""; // Clear the suggestions list
+    }
+});
