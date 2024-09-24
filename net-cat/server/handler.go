@@ -32,9 +32,6 @@ func HandleClients(conn net.Conn) {
 		return
 	}
 
-	// Log Client info.
-	ServerLogs.WriteString(fmt.Sprintf("Client %s connected from: %s\n", name, conn.RemoteAddr().String()))
-
 	// Send previous messages to the new client
 	logs, err := os.ReadFile(fmt.Sprintf("chat:%s.txt", Port))
 	if err != nil {

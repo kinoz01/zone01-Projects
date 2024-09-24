@@ -68,7 +68,7 @@ func ChangeClientName(conn net.Conn, scanner *bufio.Scanner, currentName string)
 
 	conn.Write([]byte(fmt.Sprintf("Your name has been changed to %s.\n", newName)))
 
-	ServerLogs.WriteString(fmt.Sprintf("\n%s has changed his name to: %s.", currentName, newName))
+	ServerLogs.WriteString(fmt.Sprintf("%s has changed his name to: %s.\n", currentName, newName))
 
 	Broadcast <- Message{Sender: conn, Content: fmt.Sprintf("\n%s has changed his name to %s.", currentName, newName), Name: newName}
 

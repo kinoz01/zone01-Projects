@@ -54,6 +54,9 @@ func AcceptNewClient(conn net.Conn) (string, *bufio.Scanner) {
 		break
 	}
 
+	// Log Client info.
+	ServerLogs.WriteString(fmt.Sprintf("Client %s connected from: %s\n", name, conn.RemoteAddr().String()))
+
 	Broadcast <- Message{Sender: conn, Content: fmt.Sprintf("\n%s has joined the chat...", name), Name: name}
 
 	return name, scanner
