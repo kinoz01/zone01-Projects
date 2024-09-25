@@ -436,4 +436,20 @@ li{
   }
 }
 
+/* Style for the clear filters button */
+.clear-filters-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #f44336; /* Red color for visibility */
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  margin: 20px auto 0 auto;
+  display: block;
+}
 
+.clear-filters-btn:hover {
+  background-color: #d32f2f;
+}

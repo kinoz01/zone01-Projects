@@ -41,6 +41,16 @@ function generateLocationOptions() {
     });
 }
 
+function parseDateString(dateString) {
+    // Expected format: "DD-MM-YYYY"
+    const parts = dateString.split('-');
+    if (parts.length !== 3) return null;
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1; // Months are zero-based in JS Date
+    const year = parseInt(parts[2], 10);
+    return new Date(year, month, day);
+}
+
 function applyFilters() {
     const artistList = document.getElementById('artistList');
     const artists = artistList.getElementsByTagName('li');
@@ -57,6 +67,10 @@ function applyFilters() {
     const membersCheckboxes = document.querySelectorAll('.membersCheckbox:checked');
     const selectedMembers = Array.from(membersCheckboxes).map(cb => parseInt(cb.value));
 
+    // Convert filter dates to Date objects
+    const firstAlbumFromDate = firstAlbumFrom ? new Date(firstAlbumFrom) : null;
+    const firstAlbumToDate = firstAlbumTo ? new Date(firstAlbumTo) : null;
+
     // Loop through artists and apply filters
     for (let i = 0; i < artists.length; i++) {
         const artist = artists[i];
@@ -67,7 +81,7 @@ function applyFilters() {
 
         // Convert dates and numbers
         const creationYear = parseInt(creationDate);
-        const firstAlbum = new Date(firstAlbumDate);
+        const firstAlbum = parseDateString(firstAlbumDate);
         const numberOfMembers = members.length;
 
         // Initialize display flag
@@ -82,10 +96,10 @@ function applyFilters() {
         }
 
         // Apply first album date filter
-        if (firstAlbumFrom && firstAlbum < new Date(firstAlbumFrom)) {
+        if (firstAlbumFromDate && firstAlbum && firstAlbum < firstAlbumFromDate) {
             displayArtist = false;
         }
-        if (firstAlbumTo && firstAlbum > new Date(firstAlbumTo)) {
+        if (firstAlbumToDate && firstAlbum && firstAlbum > firstAlbumToDate) {
             displayArtist = false;
         }
 
@@ -151,4 +165,26 @@ function updateArtistVisibility() {
 function toggleFilter() {
     const filterContainer = document.getElementById('filterContainer');
     filterContainer.classList.toggle('show');
+}
+
+function clearFilters() {
+    // Clear creation date inputs
+    document.getElementById('creationDateFrom').value = '';
+    document.getElementById('creationDateTo').value = '';
+
+    // Clear first album date inputs
+    document.getElementById('firstAlbumFrom').value = '';
+    document.getElementById('firstAlbumTo').value = '';
+
+    // Uncheck all members checkboxes
+    const membersCheckboxes = document.querySelectorAll('.membersCheckbox');
+    membersCheckboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+
+    // Reset location select to 'all'
+    document.getElementById('locationSelect').value = 'all';
+
+    // Re-apply filters to show all artists
+    applyFilters();
 }
