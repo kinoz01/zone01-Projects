@@ -43,7 +43,7 @@ func CheckArtistRequest(w http.ResponseWriter, r *http.Request, id string) bool 
 	}
 
 	var artist Artist
-	err := FetchData(fmt.Sprintf("https://groupietrackers.herokuapp.com/api/artists/%s", id), &artist)
+	err := FetchData(fmt.Sprintf(APILinks.Artist, id), &artist)
 	if err != nil || artist.ID == 0 {
 		ErrorHandler(w, 404, "Look like you're lost!", "The page you are looking for is not available!", err)
 		return true

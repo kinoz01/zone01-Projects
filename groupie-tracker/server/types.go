@@ -1,7 +1,5 @@
 package server
 
-var Logs string
-
 type Ports struct {
 	Port    string
 	ApiPort string
