@@ -297,3 +297,143 @@ li{
       max-width: 100%;
   }
 }
+
+/* Style for the filter toggle button */
+#filterToggleBtn, .filter-toggle-btn {
+  display: block;
+  margin: 10px auto;
+  margin-top: 25px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #e6ab54; /* Match with your search bar's color */
+  color: white;
+  border: none;
+  border-radius: 25px; /* Updated for a modern look */
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  color:#464545
+}
+
+#filterToggleBtn:hover {
+  background-color: #daa23b;
+}
+
+/* Style for the filter container */
+.filter-container {
+  display: none; /* Hidden by default */
+  width: 100%;
+  max-width: 900px; /* As per your modern styles */
+  padding: 20px;
+  margin: 20px auto;
+  border: 2px solid #ccc;
+  border-radius: 25px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  color: #333;
+  position: relative;
+}
+
+/* Show the filter container when it has the 'show' class */
+.filter-container.show {
+  display: block;
+}
+
+/* Style for filter sections */
+.filter-section {
+  margin-bottom: 20px;
+}
+
+.filter-section h3 {
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  color: #333;
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center; /* Center align items vertically */
+}
+
+.filter-section label {
+  margin-right: 10px;
+  color: #555;
+  font-size: 16px;
+}
+
+.filter-section input[type="number"],
+.filter-section input[type="date"],
+.filter-section select {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 25px;
+  background-color: #fff;
+  margin-right: 20px;
+  outline: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.filter-section input[type="number"]:focus,
+.filter-section input[type="date"]:focus,
+.filter-section select:focus {
+  border-color: #ffa600;
+  box-shadow: 0 6px 8px rgba(255, 115, 0, 0.3);
+}
+
+.members-checkboxes label {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 15px;
+  font-size: 16px;
+  color: #555;
+}
+
+.members-checkboxes input[type="checkbox"] {
+  margin-right: 5px;
+  width: 18px;
+  height: 18px;
+}
+
+@media (max-width: 768px) {
+  .filter-container {
+    width: 80%;
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .filter-container {
+    max-width: 700px;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-container {
+    width: 75%;
+    max-width: 100%;
+  }
+
+  .filter-row {
+    align-items: flex-start;
+  }
+
+  .filter-section input[type="number"],
+  .filter-section input[type="date"],
+  .filter-section select {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+  .filter-section select {
+    width: 60%;
+  }
+
+  .members-checkboxes label {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
+
+

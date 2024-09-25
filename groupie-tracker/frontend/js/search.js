@@ -1,3 +1,5 @@
+// search.js
+
 let currentFocus = -1; // To track the current suggestion focus
 
 function filterArtists() {
@@ -13,31 +15,32 @@ function filterArtists() {
     let suggestions = [];
 
     for (let i = 0; i < artists.length; i++) {
-        const artistName = artists[i].getElementsByClassName('name')[0].textContent.toLowerCase();
-        const members = artists[i].getElementsByClassName('member');
-        const artistID = artists[i].getElementsByTagName('a')[0].getAttribute('href'); // Get artist URL
+        const artist = artists[i];
+        const artistName = artist.getElementsByClassName('name')[0].textContent.toLowerCase();
+        const members = artist.getElementsByClassName('member');
+        const artistID = artist.getElementsByTagName('a')[0].getAttribute('href'); // Get artist URL
 
-        const creationDate = artists[i].getElementsByClassName('creationDate')[0].textContent.toLowerCase();
-        const firstAlbumDate = artists[i].getElementsByClassName('firstAlbum')[0].textContent.toLowerCase();
-        const locations = artists[i].getElementsByClassName('location');
+        const creationDate = artist.getElementsByClassName('creationDate')[0].textContent.toLowerCase();
+        const firstAlbumDate = artist.getElementsByClassName('firstAlbum')[0].textContent.toLowerCase();
+        const locations = artist.getElementsByClassName('location');
 
         // Check members
         for (let j = 0; j < members.length; j++) {
             const memberName = members[j].textContent.toLowerCase();
 
             // Add member to suggestions if it matches (includes)
-            if (memberName.includes(searchValue)) {
+            if (memberName.includes(searchValue) && searchValue !== "") {
                 suggestions.push({ type: 'member', name: `${artistName} - ${memberName}`, url: artistID });
             }
         }
 
         // Add artist to suggestions if it matches (includes)
-        if (artistName.includes(searchValue)) {
+        if (artistName.includes(searchValue) && searchValue !== "") {
             suggestions.push({ type: 'artist', name: artistName, url: artistID });
         }
 
         // Add creation date with band name to suggestions if it matches (includes)
-        if (creationDate.includes(searchValue)) {
+        if (creationDate.includes(searchValue) && searchValue !== "") {
             suggestions.push({ 
                 type: 'creation date', 
                 name: `${artistName} - ${creationDate}`, 
@@ -46,7 +49,7 @@ function filterArtists() {
         }
 
         // Add first album date with band name to suggestions if it matches (includes)
-        if (firstAlbumDate.includes(searchValue)) {
+        if (firstAlbumDate.includes(searchValue) && searchValue !== "") {
             suggestions.push({ 
                 type: 'first album date', 
                 name: `${artistName} - ${firstAlbumDate}`, 
@@ -59,13 +62,48 @@ function filterArtists() {
             const location = locations[k].textContent.toLowerCase();
 
             // Add location to suggestions if it matches (includes)
-            if (location.includes(searchValue)) {
+            if (location.includes(searchValue) && searchValue !== "") {
                 suggestions.push({
                     type: 'location',
                     name: `${artistName} - ${location}`,
                     url: artistID
                 });
             }
+        }
+
+        // Determine if artist matches the search value
+        let memberStartsWithSearch = false;
+        let locationStartsWithSearch = false;
+
+        // Check members for starting match
+        for (let j = 0; j < members.length; j++) {
+            const memberName = members[j].textContent.toLowerCase();
+            if (memberName.startsWith(searchValue)) {
+                memberStartsWithSearch = true;
+                break;
+            }
+        }
+
+        // Check locations for starting match
+        for (let k = 0; k < locations.length; k++) {
+            const location = locations[k].textContent.toLowerCase();
+            if (location.startsWith(searchValue)) {
+                locationStartsWithSearch = true;
+                break;
+            }
+        }
+
+        // Set data attribute instead of changing display directly
+        if (
+            artistName.startsWith(searchValue) || // Starts with search value
+            memberStartsWithSearch || // Any member starts with search value
+            creationDate.startsWith(searchValue) ||
+            firstAlbumDate.startsWith(searchValue) ||
+            locationStartsWithSearch // Any location starts with search value
+        ) {
+            artist.dataset.searchMatch = 'true';
+        } else {
+            artist.dataset.searchMatch = 'false';
         }
     }
 
@@ -82,44 +120,23 @@ function filterArtists() {
         });
     }
 
-    // Filter displayed artists
+    // Update visibility based on both search and filters
+    updateArtistVisibility();
+}
+
+// Function to update artist visibility based on search and filter matches
+function updateArtistVisibility() {
+    const artists = document.getElementById('artistList').getElementsByTagName('li');
+
     for (let i = 0; i < artists.length; i++) {
-        const artistName = artists[i].getElementsByClassName('name')[0].textContent.toLowerCase();
-        const members = artists[i].getElementsByClassName('member');
-        const creationDate = artists[i].getElementsByClassName('creationDate')[0].textContent.toLowerCase();
-        const firstAlbumDate = artists[i].getElementsByClassName('firstAlbum')[0].textContent.toLowerCase();
-        const locations = artists[i].getElementsByClassName('location');
+        const artist = artists[i];
+        const searchMatch = artist.dataset.searchMatch !== 'false'; // Default to true if undefined
+        const filtersMatch = artist.dataset.filtersMatch !== 'false'; // Default to true if undefined
 
-        let memberStartsWithSearch = false;
-        let locationStartsWithSearch = false;
-
-        // Check members for starting match
-        for (let j = 0; j < members.length; j++) {
-            const memberName = members[j].textContent.toLowerCase();
-            if (memberName.startsWith(searchValue)) {
-                memberStartsWithSearch = true;
-            }
-        }
-
-        // Check locations for starting match
-        for (let k = 0; k < locations.length; k++) {
-            const location = locations[k].textContent.toLowerCase();
-            if (location.startsWith(searchValue)) {
-                locationStartsWithSearch = true;
-            }
-        }
-
-        // Show or hide artist based on matches
-        if (
-            artistName.startsWith(searchValue) || // Starts with search value
-            memberStartsWithSearch || // Any member starts with search value
-            creationDate.startsWith(searchValue) ||
-            firstAlbumDate.startsWith(searchValue) ||
-            locationStartsWithSearch // Any location starts with search value
-        ) {
-            artists[i].style.display = ''; // Show artist if condition matches
+        if (searchMatch && filtersMatch) {
+            artist.style.display = ''; // Show artist
         } else {
-            artists[i].style.display = 'none'; // Hide artist if no match
+            artist.style.display = 'none'; // Hide artist
         }
     }
 }
