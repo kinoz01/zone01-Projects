@@ -1,4 +1,3 @@
-// search.js
 
 let currentFocus = -1; // To track the current suggestion focus
 

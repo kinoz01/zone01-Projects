@@ -1,4 +1,3 @@
-// filter.js
 
 // Initialize the filter toggle button event listener
 document.getElementById('filterToggleBtn').addEventListener('click', toggleFilter);
