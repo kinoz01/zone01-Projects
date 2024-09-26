@@ -1,0 +1,10 @@
+[[start G0 G1 G2 G3 G4 D3 end] [start A0 D1 F2 F3 F4 end] [start B0 B1 A1 A2 end] [start C0 C1 C2 C3 I4 I5 end]]
+
+
+l1-g0 l2-a0 l3-b0 l4-c0 
+l1-g1 l2-d1 l3-b1 l4-c1 l5-g0 l6-a0 l7-b0 l8-c0
+l1-g2 l2-f2 l3-a1 l4-c2 l5-g2 l6-d1 l7-b1 l8-c2 l9-a0
+l1-g3 l2-f3 l3-a2 l4-c3 l5-g3 l6-f2 l7-a1 l8-c3 l9-a0
+l1-g4 l2-f4 l3-end l4-i4 l5-g4 l6-f3 l7-a2 l8-i4 l9-a1
+l1-d3 l2-end l4-i5 l5-d3 l6-f4 l7-end l8-i5 l9-a2
+l1-end l4-end l5-end l6-end l8-end l9-end
