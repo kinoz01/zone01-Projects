@@ -1,4 +1,3 @@
-
 // Initialize the filter toggle button event listener
 document.getElementById('filterToggleBtn').addEventListener('click', toggleFilter);
 
@@ -40,16 +39,6 @@ function generateLocationOptions() {
     });
 }
 
-function parseDateString(dateString) {
-    // Expected format: "DD-MM-YYYY"
-    const parts = dateString.split('-');
-    if (parts.length !== 3) return null;
-    const day = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1; // Months are zero-based in JS Date
-    const year = parseInt(parts[2], 10);
-    return new Date(year, month, day);
-}
-
 function applyFilters() {
     const artistList = document.getElementById('artistList');
     const artists = artistList.getElementsByTagName('li');
@@ -59,16 +48,15 @@ function applyFilters() {
     const creationDateTo = document.getElementById('creationDateTo').value;
     const firstAlbumFrom = document.getElementById('firstAlbumFrom').value;
     const firstAlbumTo = document.getElementById('firstAlbumTo').value;
-    
     const selectedLocation = document.getElementById('locationSelect').value.toLowerCase();
 
     // Get selected number of members
     const membersCheckboxes = document.querySelectorAll('.membersCheckbox:checked');
     const selectedMembers = Array.from(membersCheckboxes).map(cb => parseInt(cb.value));
 
-    // Convert filter dates to Date objects
-    const firstAlbumFromDate = firstAlbumFrom ? new Date(firstAlbumFrom) : null;
-    const firstAlbumToDate = firstAlbumTo ? new Date(firstAlbumTo) : null;
+    // Parse the first album years as integers
+    const firstAlbumFromYear = firstAlbumFrom ? parseInt(firstAlbumFrom, 10) : null;
+    const firstAlbumToYear = firstAlbumTo ? parseInt(firstAlbumTo, 10) : null;
 
     // Loop through artists and apply filters
     for (let i = 0; i < artists.length; i++) {
@@ -80,8 +68,10 @@ function applyFilters() {
 
         // Convert dates and numbers
         const creationYear = parseInt(creationDate);
-        const firstAlbum = parseDateString(firstAlbumDate);
         const numberOfMembers = members.length;
+
+        // Extract the year from the first album date
+        const firstAlbumYear = getYearFromDateString(firstAlbumDate);
 
         // Initialize display flag
         let displayArtist = true;
@@ -94,11 +84,11 @@ function applyFilters() {
             displayArtist = false;
         }
 
-        // Apply first album date filter
-        if (firstAlbumFromDate && firstAlbum && firstAlbum < firstAlbumFromDate) {
+        // Apply first album year filter
+        if (firstAlbumFromYear !== null && firstAlbumYear && firstAlbumYear < firstAlbumFromYear) {
             displayArtist = false;
         }
-        if (firstAlbumToDate && firstAlbum && firstAlbum > firstAlbumToDate) {
+        if (firstAlbumToYear !== null && firstAlbumYear && firstAlbumYear > firstAlbumToYear) {
             displayArtist = false;
         }
 
@@ -134,14 +124,21 @@ function applyFilters() {
 
         // Set data attribute instead of changing display directly
         if (displayArtist) {
-            artist.dataset.filtersMatch = 'true';
+            artist.dataset.filtersMatch = 'true'; // Show artist
         } else {
-            artist.dataset.filtersMatch = 'false';
+            artist.dataset.filtersMatch = 'false';// Hide artist
         }
     }
-
-    // Update visibility based on both search and filters
     updateArtistVisibility();
+}
+
+// Function to extract the year from date string
+function getYearFromDateString(dateString) {
+    // Expected format: "DD-MM-YYYY"
+    const parts = dateString.split('-');
+    if (parts.length !== 3) return null;
+    const year = parseInt(parts[2], 10);
+    return year;
 }
 
 // Function to update artist visibility based on search and filter matches
@@ -171,7 +168,7 @@ function clearFilters() {
     document.getElementById('creationDateFrom').value = '';
     document.getElementById('creationDateTo').value = '';
 
-    // Clear first album date inputs
+    // Clear first album year inputs
     document.getElementById('firstAlbumFrom').value = '';
     document.getElementById('firstAlbumTo').value = '';
 
