@@ -6,11 +6,12 @@ import "fmt"
 func BroadcastMessages() {
 	for {
 		message := <-Broadcast
-
+		
 		formattedMessage := fmt.Sprintf("[%s][%s]: %s\n", timeStamp(), message.Name, message.Content)
+		CacheFile.WriteString((formattedMessage))
+
 		Mu.Lock()
 		for conn, username := range Clients {
-			CacheFile.WriteString((formattedMessage))
 			if conn != message.Sender {
 				_, err := conn.Write([]byte("\n" + formattedMessage))
 				if err != nil {

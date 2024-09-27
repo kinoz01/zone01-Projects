@@ -17,11 +17,22 @@ func timeStamp() string {
 func IsPrintable(s string) bool {
 	for _, r := range s {
 		// ASCII printable characters range from 32 (space) to 126 (~)
-		if r < 32 || r > 126 {
+		if r < 32 || r == 127 {
 			return false
 		}
 	}
 	return true
+}
+
+func MakePrintable(msg string) (result string) {
+	for _, r := range msg {
+		// ASCII printable characters range from 32 (space) to 126 (~)
+		if r < 32 || r == 127 {
+			continue
+		}
+		result += string(r)
+	}
+	return result
 }
 
 func UsedName(s string) bool {

@@ -62,10 +62,7 @@ func HandleClients(conn net.Conn) {
             continue
         }
 
-		if !IsPrintable(msg) {
-			conn.Write([]byte("Please Enter a valid message: \n"))
-			continue
-		}
+		msg = MakePrintable(msg) 
 
 		// Broadcast the message to all clients except the sender
 		Broadcast <- Message{Sender: conn, Content: msg, Name: name}
