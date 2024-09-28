@@ -12,7 +12,14 @@ chmod +x *
 
 Now you can run the program using one of these ways:
 
-1. Using `docker compose`:
+1. Using `node`:
+
+```bash
+npm install
+node server.js
+```
+
+2. Using `docker compose`:
 
 ```bash
 docker-compose up
@@ -25,16 +32,9 @@ docker-compose down -v
 docker-compse up --build
 ```
 
-2. Using `dockerfile`:
+3. Using `dockerfile`:
 
 ```bash
 docker build -t guesser .
 docker run -p 3000:3000 guesser
 ``` 
-
-3. Using `node`:
-
-```bash
-npm install
-node server.js
-```
