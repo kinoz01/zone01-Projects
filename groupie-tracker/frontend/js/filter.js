@@ -48,7 +48,7 @@ function applyFilters() {
     const creationDateTo = document.getElementById('creationDateTo').value;
     const firstAlbumFrom = document.getElementById('firstAlbumFrom').value;
     const firstAlbumTo = document.getElementById('firstAlbumTo').value;
-    const selectedLocation = document.getElementById('locationSelect').value.toLowerCase();
+    const selectedLocation = document.getElementById('locationSelect').value;
 
     // Get selected number of members
     const membersCheckboxes = document.querySelectorAll('.membersCheckbox:checked');
@@ -105,17 +105,7 @@ function applyFilters() {
                 if (locationText.includes(selectedLocation)) {
                     locationMatch = true;
                     break;
-                } else {
-                    // Split location into parts and check each part
-                    const locationParts = locationText.split(',').map(part => part.trim());
-                    for (let part of locationParts) {
-                        if (part.includes(selectedLocation)) {
-                            locationMatch = true;
-                            break;
-                        }
-                    }
-                    if (locationMatch) break;
-                }
+                } 
             }
             if (!locationMatch) {
                 displayArtist = false;
