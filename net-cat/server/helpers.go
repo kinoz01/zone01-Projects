@@ -44,8 +44,8 @@ func UsedName(s string) bool {
 	return false
 }
 
-func PrintLastMessage(last []byte, conn net.Conn) {
-	_, err := conn.Write(last)
+func PrintLastMessages(cache []byte, conn net.Conn) {
+	_, err := conn.Write(cache)
 	if err != nil {
 		ServerLogs.WriteString(err.Error())
 	}
@@ -86,7 +86,8 @@ func ChangeClientName(conn net.Conn, scanner *bufio.Scanner, currentName string)
 	return newName, nil
 }
 
-func CacheAndLogs(Port string) {
+// Create cache and logs files
+func CreateCacheAndLogs(Port string) {
 	var err error
 	CacheFile, err = os.Create(fmt.Sprintf("chat:%s.txt", Port))
 	if err != nil {

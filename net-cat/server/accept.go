@@ -22,6 +22,7 @@ func AcceptNewClient(conn net.Conn) (string, *bufio.Scanner) {
 
 	file, err := os.ReadFile("bitri9.txt")
 	if err != nil {
+		ServerLogs.WriteString(err.Error())
 		log.Fatal(err)
 	}
 	conn.Write(file)
@@ -32,6 +33,7 @@ func AcceptNewClient(conn net.Conn) (string, *bufio.Scanner) {
 
 	for {
 		if !scanner.Scan() {
+			ServerLogs.WriteString(fmt.Sprintf("Client %s disconnected while choosing his name.\n", conn.RemoteAddr().String()))
 			return "", nil // Client disconnected
 		}
 

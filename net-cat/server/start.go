@@ -48,7 +48,7 @@ func StartServer() net.Listener {
 
 	fmt.Println("Listening on Port", Port)
 	
-	CacheAndLogs(Port)
+	CreateCacheAndLogs(Port)
 
 	return listener
 }

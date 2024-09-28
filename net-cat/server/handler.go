@@ -33,12 +33,13 @@ func HandleClients(conn net.Conn) {
 	}
 
 	// Send previous messages to the new client
-	logs, err := os.ReadFile(fmt.Sprintf("chat:%s.txt", Port))
+	cache, err := os.ReadFile(fmt.Sprintf("chat:%s.txt", Port))
 	if err != nil {
 		fmt.Fprint(conn, "I can't load chat history, this is due to an internal server error.\n")
+		ServerLogs.WriteString(err.Error())
 	}
 
-	PrintLastMessage(logs, conn)
+	PrintLastMessages(cache, conn)
 
 	// Listen for incoming messages
 	for {
@@ -57,6 +58,7 @@ func HandleClients(conn net.Conn) {
             var err error
             name, err = ChangeClientName(conn, scanner, name)
             if err != nil {
+				ServerLogs.WriteString(err.Error())
                 break // Handle disconnect or other errors
             }
             continue
