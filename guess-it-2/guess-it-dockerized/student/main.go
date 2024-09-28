@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"os"
+	"sort"
 )
 
 func main() {
@@ -21,69 +22,44 @@ func main() {
 		X = append(X, float64(i))
 		Y = append(Y, num)
 
-		if i == 1 {
-			fmt.Println(num, num)
-			i++
-			continue
-		}
-
-		// Perform linear regression on current data
-		a, b := LinearRegression(X, Y)
-
-		// Calculate residuals
-		residuals := make([]float64, len(Y))
-		for j := 0; j < len(Y); j++ {
-			yPred := a*X[j] + b
-			residuals[j] = Y[j] - yPred
-		}
-
-		// Calculate standard deviation of residuals
-		residualStd := StandardDeviation(residuals)
-
-		// Identify outliers (residuals greater than 2 times the standard deviation)
-		filteredX := []float64{}
-		filteredY := []float64{}
-		for j := 0; j < len(Y); j++ {
-			if math.Abs(residuals[j]) <= 1.4*residualStd {
-				filteredX = append(filteredX, X[j])
-				filteredY = append(filteredY, Y[j])
-			}
-		}
-
 		// Ensure we have enough data points after filtering
-		if len(filteredX) < 2 {
+		if len(X) < 2 {
 			i++
 			continue
 		}
+		a := LinearRegression(X, Y)
+
+		avgx2 := Median(X)
+        avgy2 := Median(Y)
+		b2 := avgy2 - a*avgx2
 
 		// Recompute regression with filtered data
-		a, b = LinearRegression(filteredX, filteredY)
-		r := PearsonCorrelation(filteredX, filteredY)
+		r := PearsonCorrelation(X, Y)
 
 		// Calculate standard deviation of Y
-		s_y := StandardDeviation(filteredY)
+		s_y := StandardDeviation(Y)
 
 		// Calculate standard error of estimate (SEE)
 		SEE := s_y * math.Sqrt(1 - r*r)
 
 		// Set k value to adjust confidence level (e.g., 0.2 for ~12% confidence)
-		k := 0.21
+		k := 0.2
 
 		// Predicted Y value
-		yPred := a*float64(i) + b
+		yPred := a*float64(i) + b2
 
 		// Compute prediction interval
-		lower := yPred - k*SEE
-		upper := yPred + k*SEE
+		// lower := yPred - k*SEE
+		//upper := yPred + k*SEE
 
-		fmt.Println(lower, upper)
+		fmt.Println(yPred - k*SEE, yPred + k*SEE)
 
 		i++
 	}
 }
 
 // LinearRegression calculates the slope (a) and intercept (b)
-func LinearRegression(X, Y []float64) (a, b float64) {
+func LinearRegression(X, Y []float64) (a float64) {
 	n := float64(len(X))
 	var sumX, sumY, sumXY, sumX2 float64
 	for i := 0; i < len(X); i++ {
@@ -98,7 +74,6 @@ func LinearRegression(X, Y []float64) (a, b float64) {
 	} else {
 		a = (n*sumXY - sumX*sumY) / denominator
 	}
-	b = (sumY - a*sumX) / n
 	return
 }
 
@@ -136,4 +111,25 @@ func StandardDeviation(data []float64) float64 {
 		variance += (v - mean) * (v - mean)
 	}
 	return math.Sqrt(variance / n)
+}
+
+func Averge(nums []float64) float64 {
+    sum := 0.0
+    for _, num := range nums {
+        sum += num
+    }
+    return float64(sum) / float64(len(nums))
+}
+
+
+// Calculates the median of an array of integers.
+func Median(arr []float64) float64 {
+	le := len(arr)
+	sort.Float64s(arr)
+
+	if le%2 == 1 {
+		return (arr[(le-1)/2])
+	} else {
+		return (arr[le/2] + arr[le/2-1]) / 2
+	}
 }
