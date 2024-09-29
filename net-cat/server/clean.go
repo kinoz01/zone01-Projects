@@ -12,11 +12,11 @@ import (
 func RemoveCahe() {
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt)
-	// sigChan <- os.Interrupt
+	// sigChan <- os.Interrupt // We can use this even if the syntax is valid, a signal is special case that we have Notify function to deal with it.
 
 	go func() {
-		// Receive a value from a channel: var := <-channel
 		// Send a value to a channel: channel <- value
+		// Receive a value from a channel: var := <-channel
 		v := <-sigChan
 		fmt.Printf("\nReceived %v signal, cleaning up...\n", v)
 
