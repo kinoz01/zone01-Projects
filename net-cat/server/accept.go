@@ -3,15 +3,16 @@ package server
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"net"
 	"os"
 )
 
+// AcceptNewClient handles the connection of a new client to the chat server.
 func AcceptNewClient(conn net.Conn) (string, *bufio.Scanner) {
 
 	Mu.Lock()
-	if len(Clients) >= MaxClients {
+	Clients[conn] = "temporaryName" // we add the client with a dummy name to check for the max condition.
+	if len(Clients) > MaxClients {
 		conn.Write([]byte("Chat room is full. Please try again later.\n"))
 		Mu.Unlock()
 		ServerLogs.WriteString(fmt.Sprintf("Chat room is full, client connection refused from: %s\n", conn.RemoteAddr().String()))
@@ -20,12 +21,14 @@ func AcceptNewClient(conn net.Conn) (string, *bufio.Scanner) {
 	}
 	Mu.Unlock()
 
+
 	file, err := os.ReadFile("bitri9.txt")
 	if err != nil {
-		ServerLogs.WriteString(err.Error())
-		log.Fatal(err)
+		ServerLogs.WriteString(err.Error() + "\n")
 	}
-	conn.Write(file)
+	if _, err = conn.Write(file); err != nil{
+		ServerLogs.WriteString(err.Error() + "\n")
+	}
 
 	conn.Write([]byte("Welcome to TCP-Chat!\n[ENTER YOUR NAME]: "))
 	name := ""
@@ -38,6 +41,7 @@ func AcceptNewClient(conn net.Conn) (string, *bufio.Scanner) {
 		}
 
 		name = scanner.Text()
+
 		if !IsPrintable(name) {
 			conn.Write([]byte("Please Enter a valid name: "))
 			continue

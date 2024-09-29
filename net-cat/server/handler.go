@@ -2,41 +2,42 @@ package server
 
 import (
 	"fmt"
-	"log"
 	"net"
 	"os"
 )
 
+// HandleConnections accepts incoming connections from clients
+// and spawns a goroutine to handle each client connection.
 func HandleConnections(listener net.Listener) {
-	
 	// Remove cache file and server logs
 	RemoveCahe()
-	go BroadcastMessages()	
-	
+	go BroadcastMessages()
+
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
-			log.Fatal(err)
+			ServerLogs.WriteString(err.Error() + "\n")
+			continue
 		}
 
-		// Handle each connection in a separate goroutine
+		// Handle each connected client in its own goroutine
 		go HandleClients(conn)
 	}
 }
 
-
+// HandleClients manages the interaction with a single client.
+// It reads messages from the client and broadcasts them to all other clients.
 func HandleClients(conn net.Conn) {
-
 	name, scanner := AcceptNewClient(conn)
 	if scanner == nil {
 		return
 	}
 
 	// Send previous messages to the new client
-	cache, err := os.ReadFile(fmt.Sprintf("chat:%s.txt", Port))
+	cache, err := os.ReadFile(CacheFile.Name())
 	if err != nil {
 		fmt.Fprint(conn, "I can't load chat history, this is due to an internal server error.\n")
-		ServerLogs.WriteString(err.Error())
+		ServerLogs.WriteString(err.Error() + "\n")
 	}
 
 	PrintLastMessages(cache, conn)
@@ -54,17 +55,17 @@ func HandleClients(conn net.Conn) {
 
 		msg := scanner.Text()
 		if msg == "/name" {
-            // handle name change
-            var err error
-            name, err = ChangeClientName(conn, scanner, name)
-            if err != nil {
-				ServerLogs.WriteString(err.Error())
-                break // Handle disconnect or other errors
-            }
-            continue
-        }
+			// handle name change
+			var err error
+			name, err = ChangeClientName(conn, scanner, name)
+			if err != nil {
+				ServerLogs.WriteString(err.Error() + "\n")
+				break // Handle disconnect or other errors
+			}
+			continue
+		}
 
-		msg = MakePrintable(msg) 
+		msg = MakePrintable(msg)
 
 		// Broadcast the message to all clients except the sender
 		Broadcast <- Message{Sender: conn, Content: msg, Name: name}

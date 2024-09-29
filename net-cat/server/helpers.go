@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+// Return a string representing the global format of a time.
 func timeStamp() string {
 	return time.Now().Format("2006-01-02 15:04:05")
 }
@@ -24,6 +25,7 @@ func IsPrintable(s string) bool {
 	return true
 }
 
+// Remove unprintable characters from the broadcasted message.
 func MakePrintable(msg string) (result string) {
 	for _, r := range msg {
 		// ASCII printable characters range from 32 (space) to 126 (~)
@@ -35,6 +37,7 @@ func MakePrintable(msg string) (result string) {
 	return result
 }
 
+// Check if username already used.
 func UsedName(s string) bool {
 	for _, name := range Clients {
 		if name == s {
@@ -44,6 +47,7 @@ func UsedName(s string) bool {
 	return false
 }
 
+// Write cache file to conn.
 func PrintLastMessages(cache []byte, conn net.Conn) {
 	_, err := conn.Write(cache)
 	if err != nil {
@@ -51,6 +55,7 @@ func PrintLastMessages(cache []byte, conn net.Conn) {
 	}
 }
 
+// Change client name when it types "/name"
 func ChangeClientName(conn net.Conn, scanner *bufio.Scanner, currentName string) (string, error) {
 	// Prompt the client to enter a new name
 	fmt.Fprint(conn, "Enter your new name: ")
@@ -73,7 +78,6 @@ func ChangeClientName(conn net.Conn, scanner *bufio.Scanner, currentName string)
 
 	// Lock the client map and update the client's name
 	Mu.Lock()
-	delete(Clients, conn)   // Remove the old name
 	Clients[conn] = newName // Assign the new name
 	Mu.Unlock()
 

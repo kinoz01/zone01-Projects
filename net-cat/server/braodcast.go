@@ -8,7 +8,7 @@ func BroadcastMessages() {
 		message := <-Broadcast
 		
 		formattedMessage := fmt.Sprintf("[%s][%s]: %s\n", timeStamp(), message.Name, message.Content)
-		CacheFile.WriteString((formattedMessage))
+		CacheFile.WriteString(formattedMessage)
 
 		Mu.Lock()
 		for conn, username := range Clients {
@@ -18,6 +18,7 @@ func BroadcastMessages() {
 					ServerLogs.WriteString(fmt.Sprintf("Error writing to connection: %v\n", err))
 					conn.Close()
 					delete(Clients, conn)
+					continue
 				}
 				prompt := fmt.Sprintf("[%s][%s]: ", timeStamp(), username)
 				fmt.Fprint(conn, prompt)

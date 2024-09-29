@@ -12,10 +12,13 @@ import (
 func RemoveCahe() {
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt)
+	// sigChan <- os.Interrupt
 
 	go func() {
-		<-sigChan
-		fmt.Println("\nReceived interrupt signal, cleaning up...")
+		// Receive a value from a channel: var := <-channel
+		// Send a value to a channel: channel <- value
+		v := <-sigChan
+		fmt.Printf("\nReceived %v signal, cleaning up...\n", v)
 
 		// Close and delete cache file
 		if CacheFile != nil  {

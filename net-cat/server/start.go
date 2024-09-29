@@ -12,6 +12,7 @@ var (
 	Clients    = make(map[net.Conn]string)
 	Mu         sync.Mutex
 	Broadcast  = make(chan Message)
+	Quit       = make(chan bool)
 	CacheFile  *os.File
 	ServerLogs *os.File
 	Port       string
@@ -28,7 +29,7 @@ type Message struct {
 
 // Check port number and start server
 func StartServer() net.Listener {
-	fmt.Print("\033[H\033[2J")
+	// fmt.Print("\033[H\033[2J")
 
 	if len(os.Args) == 2 {
 		Port = os.Args[1]
@@ -47,7 +48,7 @@ func StartServer() net.Listener {
 	}
 
 	fmt.Println("Listening on Port", Port)
-	
+
 	CreateCacheAndLogs(Port)
 
 	return listener
