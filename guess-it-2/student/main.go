@@ -1,89 +1,99 @@
 package main
 
 import (
-    "fmt"
-    "math"
-    "os"
+	"fmt"
+	"os"
+	"sort"
 )
 
 func main() {
-    var num float64
-    Y := []float64{}
-    X := []float64{}
+	var num float64
+	Y := []float64{}
+	X := []float64{}
 	i := 1
 
-    for {
+	for {
 		_, err := fmt.Fscan(os.Stdin, &num)
 		if err != nil {
 			os.Exit(0)
 		}
 
-        if i == 1 {
-            fmt.Println(num, num)
-            Y = append(Y, num)
-            X = append(X, float64(i))
-            continue
-        }
-        Y = append(Y, num)
-        X = append(X, float64(i))
-        avgx := Averge(X)
-        avgy := Averge(Y)
-        Xi := Center(X, avgx)
-        Yi := Center(Y, avgy)
-        a := CalculateSlope(Xi, Yi)
-        b := avgy - a*avgx
-        avgxi := Averge(Xi)
-        avgyi := Averge(Yi)
-        var1 := Vrariance(Xi, avgxi)
-        var2 := Vrariance(Yi, avgyi)
-        cov := Cov(Xi, Yi, avgxi, avgyi) / math.Sqrt(var1*var2)
-        if cov < 0 {
-            cov = -cov
-        }
-        fmt.Println((a*float64(i)+b)-(a*float64(i)+b)*(1-cov)-4.5, (a*float64(i)+b)+(a*float64(i)+b)*(1-cov)+4.5)
+		X = append(X, float64(i))
+		Y = append(Y, num)
+
+		// Ensure we have enough data points after filtering
+		if len(X) < 2 {
+			i++
+			continue
+		}
+		
+		a := LinearRegression(X, Y) // approximating the data slope (didn't use LAD because server crash due to time complexity)
+		
+		// using Median Regression (Least Absolute Deviations or LAD) for the intercept
+		X_median := Median(X)
+		Y_median := Median(Y)
+
+		b := Y_median - a*X_median  
+
+		y_approx := a*float64(i) + b
+
+		fmt.Println(y_approx-20, y_approx+20)
+
 		i++
-    }
+	}
 }
 
-func Averge(nums []float64) float64 {
-    sum := 0.0
-    for _, num := range nums {
-        sum += num
-    }
-    return float64(sum) / float64(len(nums))
+// LinearRegression calculates the slope (a) and intercept (b)
+func LinearRegression(X, Y []float64) (a float64) {
+	n := float64(len(X))
+	var sumX, sumY, sumXY, sumX2 float64
+	for i := 0; i < len(X); i++ {
+		sumX += X[i]
+		sumY += Y[i]
+		sumXY += X[i] * Y[i]
+		sumX2 += X[i] * X[i]
+	}
+	denominator := n*sumX2 - sumX*sumX
+	if denominator == 0 {
+		a = 0
+	} else {
+		a = (n*sumXY - sumX*sumY) / denominator
+	}
+	return
 }
 
-func Center(Z []float64, avg float64) []float64 {
-    res := []float64{}
-    for _, z := range Z {
-        res = append(res, z-avg)
-    }
-    return res
+// Calculates the median of an array of integers.
+func Median(arr []float64) float64 {
+	le := len(arr)
+	sort.Float64s(arr)
+
+	if le%2 == 1 {
+		return (arr[(le-1)/2])
+	} else {
+		return (arr[le/2] + arr[le/2-1]) / 2
+	}
 }
 
-func CalculateSlope(X []float64, Y []float64) float64 {
-    n := 0.0
-    N := 0.0
-    for i := 0; i < len(X); i = i + 1 {
-        n += X[i] * Y[i]
-        N += X[i] * X[i]
-    }
-    // fmt.Println(n, N)
-    return n / N
-}
+// Function to calculate the median slopes
+// ROBUST to outliers but big time complexity (we are going to use linear regression for the slope)
+func MedianSlope(X, Y []float64) float64 {
+	if len(X) != len(Y) {
+		panic("X and Y must have the same length")
+	}
 
-func Cov(X, Y []float64, avgx, avgy float64) float64 {
-    res := 0.0
-    for i := 0; i < len(X); i++ {
-        res += (X[i] - avgx) * (Y[i] - avgy)
-    }
-    return res / float64(len(X))
-}
+	var slopes []float64
 
-func Vrariance(nums []float64, averg float64) float64 {
-    sum := 0.0
-    for _, num := range nums {
-        sum += math.Pow((num)-(averg), 2)
-    }
-    return sum / float64(len(nums))
+	// Calculate the slope for all pairs (i, j) where i != j
+	for i := 0; i < len(X); i++ {
+		for j := i + 1; j < len(X); j++ {
+			// Avoid division by zero for vertical lines (X_j == X_i)
+			if X[j] != X[i] {
+				slope := (Y[j] - Y[i]) / (X[j] - X[i])
+				slopes = append(slopes, slope)
+			}
+		}
+	}
+
+	// Return the median of the slopes
+	return Median(slopes)
 }

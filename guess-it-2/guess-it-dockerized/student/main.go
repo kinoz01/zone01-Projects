@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"os"
 	"sort"
 )
@@ -27,32 +26,18 @@ func main() {
 			i++
 			continue
 		}
-		a := LinearRegression(X, Y)
+		
+		a := LinearRegression(X, Y) // approximating the data slope
+		
+		// using Median Regression (Least Absolute Deviations or LAD) for the intercept
+		X_median := Median(X)
+		Y_median := Median(Y)
 
-		avgx2 := Median(X)
-        avgy2 := Median(Y)
-		b2 := avgy2 - a*avgx2
+		b := Y_median - a*X_median  
 
-		// Recompute regression with filtered data
-		r := PearsonCorrelation(X, Y)
+		y_approx := a*float64(i) + b
 
-		// Calculate standard deviation of Y
-		s_y := StandardDeviation(Y)
-
-		// Calculate standard error of estimate (SEE)
-		SEE := s_y * math.Sqrt(1 - r*r)
-
-		// Set k value to adjust confidence level (e.g., 0.2 for ~12% confidence)
-		k := 0.2
-
-		// Predicted Y value
-		yPred := a*float64(i) + b2
-
-		// Compute prediction interval
-		// lower := yPred - k*SEE
-		//upper := yPred + k*SEE
-
-		fmt.Println(yPred - k*SEE, yPred + k*SEE)
+		fmt.Println(y_approx-20, y_approx+20)
 
 		i++
 	}
@@ -77,50 +62,6 @@ func LinearRegression(X, Y []float64) (a float64) {
 	return
 }
 
-// PearsonCorrelation calculates the Pearson correlation coefficient
-func PearsonCorrelation(X, Y []float64) float64 {
-	n := float64(len(X))
-	var sumX, sumY, sumXY, sumX2, sumY2 float64
-	for i := 0; i < len(X); i++ {
-		sumX += X[i]
-		sumY += Y[i]
-		sumXY += X[i] * Y[i]
-		sumX2 += X[i] * X[i]
-		sumY2 += Y[i] * Y[i]
-	}
-	numerator := n*sumXY - sumX*sumY
-	denominator := math.Sqrt((n*sumX2 - sumX*sumX) * (n*sumY2 - sumY*sumY))
-	if denominator == 0 {
-		return 0
-	}
-	return numerator / denominator
-}
-
-// StandardDeviation calculates the standard deviation of a slice
-func StandardDeviation(data []float64) float64 {
-	n := float64(len(data))
-	if n == 0 {
-		return 0
-	}
-	var sum, mean, variance float64
-	for _, v := range data {
-		sum += v
-	}
-	mean = sum / n
-	for _, v := range data {
-		variance += (v - mean) * (v - mean)
-	}
-	return math.Sqrt(variance / n)
-}
-
-func Averge(nums []float64) float64 {
-    sum := 0.0
-    for _, num := range nums {
-        sum += num
-    }
-    return float64(sum) / float64(len(nums))
-}
-
 
 // Calculates the median of an array of integers.
 func Median(arr []float64) float64 {
@@ -132,4 +73,28 @@ func Median(arr []float64) float64 {
 	} else {
 		return (arr[le/2] + arr[le/2-1]) / 2
 	}
+}
+
+// Function to calculate the median slopes
+// ROBUST to outliers but big time complexity (we are going to use linear regression for the slope)
+func MedianSlope(X, Y []float64) float64 {
+	if len(X) != len(Y) {
+		panic("X and Y must have the same length")
+	}
+
+	var slopes []float64
+
+	// Calculate the slope for all pairs (i, j) where i != j
+	for i := 0; i < len(X); i++ {
+		for j := i + 1; j < len(X); j++ {
+			// Avoid division by zero for vertical lines (X_j == X_i)
+			if X[j] != X[i] {
+				slope := (Y[j] - Y[i]) / (X[j] - X[i])
+				slopes = append(slopes, slope)
+			}
+		}
+	}
+
+	// Return the median of the slopes
+	return Median(slopes)
 }
