@@ -122,3 +122,35 @@ func FilterPaths(paths [][]string) [][]string {
 
 	return result
 }
+
+
+
+
+
+
+
+
+
+```bash
+ok let me putyou in context here so you can helpme solve this problem and tell if my method can lead to something:
+
+1. I have ants in a start room and i need to send them all to an end room thought a graph (channels) of rooms each room in the réseau can have only one ant at a time.
+
+2. what i do is getting all the possible paths from start to end using dfs
+
+3. next filtering them using the above filter code so i get max minimal path that don't intersect.
+
+4. THE PROBLEM:
+
+If number of ants%<number of paths  returned by the filter>=0
+
+this way work greatly 
+
+but when number of ants%<number of paths  returned by the filter>!=0
+
+i need to find new paths
+
+so what i am doing is sending antsNum-antsNUm%filteredpaths in the filtered path and for the remaining ants i am trying to find the best way to send them
+
+for example:
+```

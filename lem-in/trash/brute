@@ -1,0 +1,110 @@
+// GenerateAntSteps generates the step sequences for a given group of paths.
+func GenerateAntSteps(paths [][]string, numAnts int) ([]string, int, int) {
+	type Ant struct {
+		ID   int
+		Path []string
+		Pos  int
+	}
+
+	// Calculate inverse path lengths and total inverse length
+	pathLengths := make([]int, len(paths))
+	totalInverseLength := 0.0
+	for i, path := range paths {
+		length := len(path) - 2 // Exclude 'start' and 'end'
+		if length == 0 {
+			length = 1 // Avoid division by zero
+		}
+		pathLengths[i] = length
+		totalInverseLength += 1.0 / float64(length)
+	}
+
+	// Compute number of ants per path
+	antCounts := make([]int, len(paths))
+	assignedAnts := 0
+	for i, length := range pathLengths {
+		weight := 1.0 / float64(length)
+		share := weight / totalInverseLength
+		antCount := int(share * float64(numAnts))
+		antCounts[i] = antCount
+		assignedAnts += antCount
+	}
+
+	// Adjust for any rounding errors to ensure total ants are assigned
+	remainingAnts := numAnts - assignedAnts
+	for i := 0; remainingAnts > 0; i = (i + 1) % len(paths) {
+		antCounts[i]++
+		remainingAnts--
+	}
+
+	// Assign ants to paths based on calculated counts
+	ants := make([]Ant, 0, numAnts)
+	antID := 1
+	for i, path := range paths {
+		for j := 0; j < antCounts[i]; j++ {
+			ants = append(ants, Ant{
+				ID:   antID,
+				Path: path,
+				Pos:  0,
+			})
+			antID++
+		}
+	}
+
+	var steps []string
+	totalMoves := 0
+	antsFinished := 0
+
+	for antsFinished < numAnts {
+		line := ""
+		occupied := make(map[string]bool) // Reset occupied rooms each time step
+		for i := range ants {
+			ant := &ants[i]
+			if ant.Pos >= len(ant.Path)-1 {
+				continue // Ant has finished its path
+			}
+
+			nextRoom := ant.Path[ant.Pos+1]
+
+			// Check if the next room is occupied, except for 'end'
+			if nextRoom != "end" && occupied[nextRoom] {
+				continue // Can't move, room is occupied
+			}
+
+			// Move the ant
+			ant.Pos++
+			if nextRoom != "end" {
+				occupied[nextRoom] = true
+			}
+			line += fmt.Sprintf("L%d-%s ", ant.ID, nextRoom)
+			if nextRoom == "end" {
+				antsFinished++
+			}
+			totalMoves++
+		}
+		if line != "" {
+			steps = append(steps, line)
+		}
+	}
+	lines := len(steps)
+	return steps, lines, totalMoves
+}
+
+// CalculateBestGroup evaluates all path groups and returns the best one.
+func CalculateBestGroup(groups [][][]string, numAnts int) ([]string, PathMetrics, [][]string) {
+	var bestSteps []string
+	bestMetrics := PathMetrics{Lines: int(^uint(0) >> 1), Moves: int(^uint(0) >> 1)} // Initialize to max
+	var bestGroup [][]string
+
+	for _, group := range groups {
+		paths := group
+		steps, lines, moves := GenerateAntSteps(paths, numAnts)
+
+		// Update best metrics if this group is better
+		if lines < bestMetrics.Lines || (lines == bestMetrics.Lines && moves < bestMetrics.Moves) {
+			bestMetrics = PathMetrics{Lines: lines, Moves: moves}
+			bestSteps = steps
+			bestGroup = paths
+		}
+	}
+	return bestSteps, bestMetrics, bestGroup
+}
