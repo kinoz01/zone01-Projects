@@ -31,15 +31,15 @@ wait_for_key() {
 }
 
 test_DATA() {
-    text ''
-    go run . --output=testR.txt "       hey     hello  "
-    go run . --reverse=testR.txt | cat -e
+    text 'change'
+    node change_test.js
     wait_for_key
 
-    text 'Test 2 <all chars with new lines>' 
-    go run . --output=testR.txt '!"#$%&'\''()\n*+,-./012345\n6789:;<=>?@AB\nCDEFGHIJK\nLMNOPQRSTUVW\nXYZ[\]^_`abc\ndefghijk\nlmnopqrst\nuvwxyz{|}~'
-    go run . --reverse=testR.txt | cat -e
+    text 'circular'
+    node circular_test.js
     wait_for_key
 
     
 }
+
+alias jss=test_DATA
