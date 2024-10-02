@@ -7,9 +7,6 @@ const colors = {
 // Disable the built-in Math.sign
 Math.sign = undefined;
 
-// Import the functions from program.js
-const { sign, sameSign } = require('./sign.js');
-
 // Test setup
 const tests = [];
 const t = (f, description) => {

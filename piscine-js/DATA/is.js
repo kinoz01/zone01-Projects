@@ -7,7 +7,7 @@ is.bool = val => typeof val === 'boolean';
 is.undef = val => typeof val === 'undefined';
 is.def = val => typeof val !== 'undefined';
 is.arr = val => Array.isArray(val);
-is.obj = val => typeof val == 'object' || val == null; 
+is.obj = val => val != null || typeof val === 'object' || !Array.isArray(val); 
 is.fun = val => typeof val === 'function';
 is.truthy = val => !!val;
 is.falsy = val => !val;
