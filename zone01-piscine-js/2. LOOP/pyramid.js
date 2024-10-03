@@ -17,4 +17,4 @@ function pyramid(str, n) {
     return r.slice(0, r.length - 1)
 }
 
-console.log(pyramid("*", 7));
+console.log(pyramid("45657", 7));
