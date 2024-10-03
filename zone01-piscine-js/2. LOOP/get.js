@@ -9,5 +9,3 @@ function get(src, path) {
     }
     return src
 }
-
-console.log(get({ a: [{ b: t }] }, 'a.0.b.toString'));
