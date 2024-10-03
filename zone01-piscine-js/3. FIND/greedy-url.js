@@ -31,6 +31,6 @@ https//nan-academy.github.io/js-training/?page=editor#data.nested impolite or in
 https://192.168.1.123?something=nothing&pro=[23] htts:/nan-academy.github.io/js-training?b=123&a=123/?page=editor#data.nested  Like e-mail and voicemail and unlike calls https://www.notherExample.com/catalog.asp?itemid=232&template=fresh&crcat=ppc&crsource=google&crkw=buy-a-lot&id=3&qwe=ty (in which the caller hopes to speak directly with the recipient),
 http://www.example.com/catalog.asp?itemid=232&template=fresh&crcat=ppc&crsource=google&crkw=buy-a-lot texting does not require the caller and recipient to both be free at the same moment0.0.0.0`
 
-//console.log(getURL(dataSet), getURL(dataSet).length)
+console.log(getURL(dataSet), getURL(dataSet).length)
 console.log(greedyQuery(dataSet))
 console.log(notSoGreedy(dataSet))
