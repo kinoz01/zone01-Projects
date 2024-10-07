@@ -8,7 +8,7 @@ function WordsPlacesFinder(GRID, shortest, X, Y) {
 
             if (GRID[i][j] == '1') {
                 // we can put word only horizontally
-                if (j === X || GRID[i][j + 1] !== '0') {
+                if (j === X || (GRID[i][j + 1] === '.')) {
                     let k = i;
                     while (k < Y && GRID[k][j] !== '.') {
                         k++;
@@ -18,7 +18,7 @@ function WordsPlacesFinder(GRID, shortest, X, Y) {
                     }
                 } else {
                     // We can put word both horizontally OR vertically
-                    if (i + 1 != Y && GRID[i + 1][j] === '0') {
+                    if (i + 1 != Y && GRID[i + 1][j] !== '.') {
                         let x = j;
                         let y = i;
                         while (y < Y && GRID[y][j] !== '.') {

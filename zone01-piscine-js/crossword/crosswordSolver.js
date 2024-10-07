@@ -26,7 +26,7 @@ function crosswordSolver(puzzle, words) {
 
     if (solutions.length === 1) {
         // Only one unique solution found
-        // console.log(solutions[0]);
+        // console.log(solutions[0])
         const result = solutions[0].map(row => row.join('')).join('\n');
         console.log(result);
     } else {

@@ -19,7 +19,7 @@ anta
 o..n
 */
 
- 
+ /* 
 const puzzle2 = `...1...........
 ..1000001000...
 ...0....0......
@@ -168,4 +168,4 @@ const words9 = [
 ].reverse()
 
 crosswordSolver(puz9, words9)
-console.log("\n");
+console.log("\n"); */

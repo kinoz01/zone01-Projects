@@ -8,6 +8,7 @@ function fillGrid(GRID, words, wordPlaces, index, usedWords, solutions) {
     if (index === wordPlaces.length) {
         // All words placed
         // Deep copy the grid to save the solution
+        console.log("hey");
         solutions.push(GRID.map(row => row.slice()))
         return
     }
@@ -90,7 +91,8 @@ function placeWord(GRID, word, place, direction) {
 }
 
 function removeWord(GRID, original, place, direction) {
-        
+    console.log(original);
+    console.log(GRID);
     let { row, col } = place;
     if (direction === 'H') {
         for (let i = 0; i < original.length; i++) {
@@ -100,8 +102,7 @@ function removeWord(GRID, original, place, direction) {
         for (let i = 0; i < original.length; i++) {
             GRID[row + i][col] = original[i];
         }
-    }
-   
+    }  
 }
 
 module.exports = { fillGrid }
