@@ -28,6 +28,7 @@ function fillGrid(GRID, words, wordPlaces, index, usedWords, solutions) {
             if (usedWords[i]) continue
 
             let word = words[i]
+            console.log(word);
             if (word.length > maxLen) continue
             if (canPlaceWord(GRID, word, place, direction)) {
                 let original = placeWord(GRID, word, place, direction)
