@@ -1,21 +1,19 @@
 function sums(n) {
-    function partition(number, min) {
-
-        if (number === 0) {
-            return [[]]; // Base case: If number is 0, return an empty partition
+    function partition(num, min) {
+        if (num === 0) {
+            return [[]]
         }
 
-        let result = [];
-        for (let i = min; i <= number; i++) {
-            const subPartitions = partition(number - i, i);
-            subPartitions.forEach(sub => {
-                result.push([i, ...sub]); 
-            });
+        let result = []
+        for (let i = min; i <= num; i++) {
+            let subPartitions = partition(num - i, i)
+            for (let sub of subPartitions) {
+                result.push([i, ...sub])
+            }
         }
-        return result;
+        return result
     }
-
-    return partition(n, 1).slice(0,-1);
+    return partition(n, 1)
 }
 
 // Example usage:
