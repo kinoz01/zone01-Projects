@@ -1,0 +1,1 @@
+const flow = funcs => (...args) => funcs.reduce((acc, func) => Array.isArray(acc) ? func(...acc) : func(acc), args)
