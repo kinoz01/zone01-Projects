@@ -25,4 +25,4 @@ console.log(tempForecasts([
       state: 'california dfdf',
       region: 'West',
     },
-  ]));
+]));
