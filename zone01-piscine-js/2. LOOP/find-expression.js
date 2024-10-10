@@ -29,7 +29,4 @@ const findExpression = (num) => {
 
 const repeat = (str, n) => n <= 0 ? "" : str + repeat(str, n - 1)
 
-const add4 = '+4'
-const mul2 = '*2'
-
 console.log(findExpression(4));

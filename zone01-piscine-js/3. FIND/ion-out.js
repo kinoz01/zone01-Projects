@@ -13,5 +13,3 @@ function inOUtlong(str) {
     }
     return r
 }
-
-console.log(ionOut('1st position is the vision of the 2nd position'));
