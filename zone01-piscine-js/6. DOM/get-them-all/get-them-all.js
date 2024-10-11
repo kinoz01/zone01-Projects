@@ -1,7 +1,6 @@
 export const getArchitects = () => {
     let architects = Array.from(document.body.getElementsByTagName('a'))
-    let nonArchitects = Array.from(document.body.getElementsByTagName('a')).filter(elem => elem.tagName !== 'a')
-    console.log(nonArchitects);
+    let nonArchitects = Array.from(document.body.getElementsByTagName('span'))
     return [architects, nonArchitects]
 }
 
@@ -24,5 +23,3 @@ export const getActive = () => {
 export const getBonannoPisano = () => {
     return [document.getElementById('BonannoPisano'), getActive()[0]]
 }
-
-getArchitects()
