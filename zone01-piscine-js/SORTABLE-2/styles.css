@@ -1,0 +1,80 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table th, table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+table th {
+    background-color: #333;
+    color: white;
+    cursor: pointer;
+}
+
+table th.asc::after {
+    content: ' ▲';
+}
+
+table th.desc::after {
+    content: ' ▼';
+}
+
+img {
+    width: 50px;
+    height: auto;
+}
+
+#pagination {
+    margin-top: 10px;
+    max-width: 1000px;  /* Match the table's max-width */
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+#pagination a {
+    display: inline-block;
+    margin: 0 5px;
+    padding: 8px 12px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+#pagination a.active {
+    background-color: #0056b3;
+    font-weight: bold;
+}
+
+#pagination a:hover {
+    background-color: #0056b3;
+}
+
+#search-container {
+    margin-bottom: 20px;
+}
+
+#search-container label {
+    margin-right: 10px;
+}
+
+#search-container input,
+#search-container select {
+    padding: 5px;
+    font-size: 16px;
+}

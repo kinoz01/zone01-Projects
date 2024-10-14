@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>superheroes</title>
+        <link rel="stylesheet" href="styles.css">
+        <link rel="icon" href="https://i.postimg.cc/rw7tFNPh/j.png" type="image/png">
+    </head>
+    <body>
+        <h1>List of superheroes</h1>
+        <div id="search-container">
+            <label for="search">search :</label>
+            <input type="text" id="search" placeholder="search for a hero...">
+            <label for="page-size">Page size :</label>
+            <select id="page-size">
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="all">Show all</option>
+            </select>
+        </div>
+        <table>
+            <thead>
+                <tr class="sort-controls">
+                    <th>Images</th>
+                    <th><button data-field="name">Name</button></th>
+                    <th><button data-field="fullName">Full Name</button></th>
+                    <th><button
+                            data-field="powerstatsSum">Powerstats</button></th>
+                    <th><button data-field="race">Race</button></th>
+                    <th><button data-field="gender">Gender</button></th>
+                    <th><button data-field="height">Height</button></th>
+                    <th><button data-field="weight">Weight</button></th>
+                    <th><button data-field="placeOfBirth">Place Of
+                            Birth</button></th>
+                    <th><button data-field="alignment">Alignment</button></th>
+                </tr>
+            </thead>
+            <tbody id="hero-data"></tbody>
+        </table>
+        <div id="pagination"></div>
+        <script src="sortable.js"></script>
+    </body>
+</html>

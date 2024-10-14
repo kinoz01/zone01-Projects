@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>VillainsHub</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="icon" href="https://i.postimg.cc/rw7tFNPh/j.png" type="image/png">
+    </head>
+    <body>
+        <div class="container">
+            <h1>VillainsHub</h1>
+
+            <!-- Search bar -->
+            <input type="text" id="search" placeholder="Search by name..."
+                onkeyup="filterData()" />
+
+            <!-- Page size selector -->
+            <label for="page-size">Page Size:</label>
+            <select id="page-size" onchange="changePageSize()">
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="all">All</option>
+            </select>
+
+            <!-- Table for displaying heroes -->
+            <div class="table-container">
+                <table id="hero-table">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('name')">Name</th>
+                            <th onclick="sortTable('fullName')">Full Name</th>
+                            <th onclick="sortTable('race')">Race</th>
+                            <th onclick="sortTable('gender')">Gender</th>
+                            <th onclick="sortTable('height')">Height</th>
+                            <th onclick="sortTable('weight')">Weight</th>
+                            <th onclick="sortTable('placeOfBirth')">Place of
+                                Birth</th>
+                            <th onclick="sortTable('alignment')">Alignment</th>
+                            <th
+                                onclick="sortTable('intelligence')">Intelligence</th>
+                            <th onclick="sortTable('strength')">Strength</th>
+                            <th onclick="sortTable('speed')">Speed</th>
+                            <th
+                                onclick="sortTable('durability')">Durability</th>
+                            <th onclick="sortTable('power')">Power</th>
+                            <th onclick="sortTable('combat')">Combat</th>
+                            <th>Icon</th>
+                        </tr>
+                    </thead>
+                    <tbody id="hero-body"></tbody>
+                </table>
+            </div>
+
+            <!-- Pagination controls -->
+            <div id="pagination"></div>
+        </div>
+
+        <script src="sortable.js"></script>
+    </body>
+</html>

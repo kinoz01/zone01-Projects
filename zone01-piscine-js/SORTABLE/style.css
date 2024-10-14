@@ -1,0 +1,181 @@
+/* Updated styles.css */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f4f7f6;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center; /* Center container horizontally */
+  align-items: center;     /* Center container vertically (optional) */
+  min-height: 100vh;       /* Full viewport height */
+}
+
+.container {
+  width: 80%;              /* Adjust width for responsive design */
+  max-width: 1600px;        /* Prevent it from getting too large on wide screens */
+  padding: 30px;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  overflow: hidden;         /* Ensure content doesn't spill out */
+  margin: 20px auto;        /* Center the container horizontally */
+}
+
+h1 {
+  text-align: center;
+  color: #2e8feb;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+/* Modern Search Bar */
+#search {
+  display: block;
+  width: 60%;
+  margin: 0 auto 30px;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 30px;
+  outline: none;
+  transition: border-color 0.3s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+#search:focus {
+  border-color: #007bff;
+}
+
+/* Page Size Selector Styling */
+label {
+  display: block;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+#page-size {
+  display: block;
+  margin: 0 auto 30px;
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #fff;
+  border: 2px solid #ddd;
+  border-radius: 30px;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+#page-size:hover {
+  border-color: #007bff;
+  background-color: #f4f7f6;
+}
+
+/* Table Design */
+.table-container {
+  overflow-x: auto; /* Allow horizontal scrolling if content overflows */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+  font-size: 16px;
+}
+
+thead th {
+  background-color: #007bff;
+  color: white;
+  padding: 15px;
+  text-align: left;
+  cursor: pointer;
+  position: relative;
+}
+
+thead th:hover {
+  background-color: #0056b3;
+  transition: background-color 0.2s ease-in;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: white;
+}
+
+tbody td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+tbody img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+thead th, tbody td {
+  border-right: 1px solid #ddd;
+}
+
+thead th:last-child, tbody td:last-child {
+  border-right: none;
+}
+
+table,
+th,
+td {
+  border: 1px solid #ddd; /* Add more visible lines between cells */
+}
+
+/* Pagination */
+#pagination {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#pagination button {
+  padding: 12px 18px;
+  margin: 5px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 16px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+#pagination button:hover {
+  background-color: #0056b3;
+}
+
+#pagination button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Smooth hover effects for links */
+a {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #0056b3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #search, #page-size {
+    width: 80%;
+  }
+}
