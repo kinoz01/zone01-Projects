@@ -44,7 +44,7 @@ function cartTotal(obj) {
     return res
 }
 
-/**************Another ways using reduce, filter and map ***********/
+/************** Another ways using reduce, filter and map ***********/
 // using reduce
 const totalCal = obj => {
     return Number(Object.entries(obj).reduce((acc, keyVal) =>
