@@ -57,11 +57,11 @@ document.getElementById('page-size').addEventListener('change', function () {
     const query = this.value;
     if (query !== '') {
         if (query === 'all') {
-            pageSize = heroes.length; 
+            pageSize = heroes.length;
         } else {
             pageSize = parseInt(query);
         }
-        currentPage = 1;  
+        currentPage = 1;
         updateDisplay();
     }
 });
@@ -79,8 +79,8 @@ const getFilteredAndSortedHeroes = () => {
             let valA = getValueByField(a, sortColumn);
             let valB = getValueByField(b, sortColumn);
 
-            let missingA = isMissingValue(valA, sortColumn);
-            let missingB = isMissingValue(valB, sortColumn);
+            let missingA = isMissingValue(valA);
+            let missingB = isMissingValue(valB);
 
             if (missingA && missingB) return 0;
             if (missingA) return 1;
@@ -97,68 +97,26 @@ const getFilteredAndSortedHeroes = () => {
     return filteredHeroes;
 };
 
-function isMissingValue(val, field) {
-    const zeroIsMissing = (field === 'height' || field === 'weight');
-    return val === null || val === undefined || val === '' || val === '-' || val === 'N/A' || (zeroIsMissing && val === 0);
+function isMissingValue(val) {
+    return val === null || val === undefined || val === '' || val === '-' || val === 'N/A' || val === 0;
 }
 
-function parseHeight(valueStr) {
+function parseWeightHeight(valueStr, WeightOrHeight) {
     if (!valueStr || valueStr === '-' || valueStr === '0' || valueStr === 'N/A') {
-        return null;
+        return null
     }
-    valueStr = valueStr.trim().toLowerCase();
+    valueStr = valueStr.trim().toLowerCase().replace(/,/g, '')
 
-    // Remove commas from the string
-    valueStr = valueStr.replace(/,/g, '');
-
-    if (valueStr.includes('cm')) {
-        let value = parseFloat(valueStr);
-        return isNaN(value) ? null : value; // return cm
-    } else if (valueStr.includes('m')) {
-        let value = parseFloat(valueStr);
-        return isNaN(value) ? null : value * 100; // convert m to cm
-    } else if (valueStr.includes("'") || valueStr.includes('"')) {
-        // Feet and inches format, e.g., "6'1""
-        let feet = 0, inches = 0;
-        valueStr = valueStr.replace(/"/g, '');
-        let parts = valueStr.split("'");
-        if (parts.length === 2) {
-            feet = parseInt(parts[0]);
-            inches = parseInt(parts[1]);
-        } else if (parts.length === 1) {
-            feet = parseInt(parts[0]);
-        }
-        let totalInches = feet * 12 + inches;
-        let cm = totalInches * 2.54;
-        return cm;
+    if (WeightOrHeight === 'weight' && (valueStr.includes('tons') || valueStr.includes('ton'))) {
+        let value = parseFloat(valueStr)
+        return isNaN(value) ? null : value * 1000
     }
-    // If none of the above, attempt to parse as cm
-    let value = parseFloat(valueStr);
-    return isNaN(value) ? null : value;
-}
-
-function parseWeight(valueStr) {
-    if (!valueStr || valueStr === '-' || valueStr === '0' || valueStr === 'N/A') {
-        return null;
+    if (WeightOrHeight === 'height' && valueStr.includes('meter')) {
+        let value = parseFloat(valueStr)
+        return isNaN(value) ? null : value * 100
     }
-    valueStr = valueStr.trim().toLowerCase();
-
-    // Remove commas from the string
-    valueStr = valueStr.replace(/,/g, '');
-
-    if (valueStr.includes('kg')) {
-        let value = parseFloat(valueStr);
-        return isNaN(value) ? null : value; // return kg
-    } else if (valueStr.includes('lb')) {
-        let value = parseFloat(valueStr);
-        return isNaN(value) ? null : value * 0.453592; // convert lb to kg
-    } else if (valueStr.includes('tons') || valueStr.includes('ton')) {
-        let value = parseFloat(valueStr);
-        return isNaN(value) ? null : value * 1000; // 1 ton = 1000 kg
-    }
-    // If none of the above, attempt to parse as kg
-    let value = parseFloat(valueStr);
-    return isNaN(value) ? null : value;
+    let value = parseFloat(valueStr)
+    return isNaN(value) ? null : value
 }
 
 function getValueByField(hero, field) {
@@ -171,10 +129,6 @@ function getValueByField(hero, field) {
             let sum = 0;
             for (let stat in hero.powerstats) {
                 let statValue = hero.powerstats[stat];
-                if (typeof statValue === 'string') {
-                    // Remove commas before parsing
-                    statValue = statValue.replace(/,/g, '');
-                }
                 let value = parseInt(statValue);
                 if (isNaN(value) || value === 0) {
                     return null;
@@ -189,11 +143,11 @@ function getValueByField(hero, field) {
             return hero.appearance.gender || '';
         case 'height':
             let heightCmStr = hero.appearance.height[1];
-            let heightCm = parseHeight(heightCmStr);
+            let heightCm = parseWeightHeight(heightCmStr, 'height');
             return heightCm;
         case 'weight':
             let weightKgStr = hero.appearance.weight[1];
-            let weightKg = parseWeight(weightKgStr);
+            let weightKg = parseWeightHeight(weightKgStr, 'weight');
             return weightKg;
         case 'placeOfBirth':
             return hero.biography.placeOfBirth || '';
@@ -222,7 +176,8 @@ const renderPagination = (heroesList) => {
         if (i === currentPage) {
             link.classList.add('active');
         }
-        link.addEventListener('click', function ()  {
+        
+        link.addEventListener('click', function () {
             currentPage = i;
             const allLinks = paginationContainer.querySelectorAll('a');
             allLinks.forEach(link => link.classList.remove('active'));
