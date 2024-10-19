@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+// Parse input arguments, check errors and initialize global variables
 func ParseArgs(args []string) {
 	CheckFlags(args)
 	CheckFlagsWithoutValue(args)
@@ -18,7 +19,7 @@ func ParseArgs(args []string) {
 	CheckErrors()
 }
 
-// Return if we find invalid flag argument or we find help.
+// Return if we find invalid flag argument or we find a help flag.
 func CheckFlags(args []string) {
 	for _, arg := range args {
 		if strings.HasPrefix(arg, "-") {
@@ -87,6 +88,7 @@ func FlagWithoutVal(arg string) bool {
 	return false
 }
 
+// Initialise global variable (flags) values.
 func GetFlagsValues(args []string) {
 	for _, arg := range args {
 		if arg == "-B" {
@@ -131,9 +133,9 @@ func HandleRateLimit(arg string) {
 		}
 		RateLimitUnit = reRate.FindStringSubmatch(arg)[3]
 	}
-
 }
 
+// Initialise the FilePath with an absolute path.
 func HandlePath(path string) {
 	var err error
 	path, err = MakePath(path)
@@ -141,17 +143,12 @@ func HandlePath(path string) {
 		fmt.Fprintf(os.Stderr, "%v\n", err)
 		os.Exit(1)
 	}
-
-	err = os.MkdirAll(path, 0755)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error creating directory: %v\n", err)
-		os.Exit(1)
-	}
-	// Set the global FilePath variable
 	FilePath = path
 }
 
-// store lines of input file if it exist in the URLs array.
+// Store lines of input file if it exist in the URLs array.
+// If file don't exist InputError1 != nil
+// If file is empty InputError2 = true
 func HandleInputFile(path string) {
 	var err1 error
 	noInputs := true
@@ -164,6 +161,7 @@ func HandleInputFile(path string) {
 	file, err := os.Open(path)
 	if err != nil {
 		InputError1 = err
+		return
 	}
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
@@ -183,6 +181,7 @@ func HandleInputFile(path string) {
 // Expands '~' to the user's home directory and converts
 // relative paths to absolute paths. It returns the processed path.
 func MakePath(path string) (string, error) {
+	
 	// Expand '~' to the user's home directory
 	if strings.HasPrefix(path, "~") {
 		usr, err := user.Current()
@@ -192,7 +191,7 @@ func MakePath(path string) (string, error) {
 		path = filepath.Join(usr.HomeDir, strings.TrimPrefix(path, "~"))
 	}
 
-	// Convert to absolute path if it's relative and not "-"
+	// Convert to absolute path if it's relative.
 	if !filepath.IsAbs(path) {
 		absPath, err := filepath.Abs(path)
 		if err != nil {
@@ -203,28 +202,27 @@ func MakePath(path string) (string, error) {
 	return path, nil
 }
 
+// Check the URLs slice isn't empty and initialize Warnings if found.
 func CheckErrors() {
 	if len(URLs) == 0 {
 		PrintMissingURL()
 	}
-	var err string
 	if Mirror {
 		if OutputFile != "" {
-			err += "WARNING: You can't change filenames when mirroring a website!\n"
+			Warnings += "WARNING: You can't change filenames when mirroring a website!\n"
 		}
 		if FilePath != "" {
-			err += "WARNING: You can't change download path when mirroring a website!\n"
+			Warnings += "WARNING: You can't change download path when mirroring a website!\n"
 		}
 	} else {
 		if len(RejectedSuffixes) != 0 {
-			err += "WARNING: You can't use --reject or -R flags without using --mirror!\n"
+			Warnings += "WARNING: You can't use --reject or -R flags without using --mirror!\n"
 		}
 		if len(ExcludedPaths) != 0 {
-			err += "WARNING: You can't use --exclude or -X flags without using --mirror!\n"
+			Warnings += "WARNING: You can't use --exclude or -X flags without using --mirror!\n"
 		}
 		if ConvertLinks {
-			err += "WARNING: You can't use --convert-links flags without using --mirror!\n"
+			Warnings += "WARNING: You can't use --convert-links flags without using --mirror!\n"
 		}
 	}
-	fmt.Print(err)
 }

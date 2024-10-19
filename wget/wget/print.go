@@ -12,7 +12,7 @@ func PrintMissingURL() {
 	os.Exit(0)
 }
 
-// Print when we find a non valid flag. If/else is to match real wget output.
+// Printed when we find a non valid flag. If/else is to match real wget output.
 func PrintNotFlag() {
 	for _, arg := range NotFlags {
 		if strings.HasPrefix(arg, "--") {
