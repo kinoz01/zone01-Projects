@@ -36,7 +36,7 @@ func HandleResponse(resp *http.Response,  urlStr string) (string, string, int64,
 		fmt.Fprintf(LogOutput, "\nwget: server returned error: %d %s\n", resp.StatusCode, http.StatusText(resp.StatusCode))
 		return "", "", 0, fmt.Errorf("Erooooor")
 	} else {
-		fmt.Fprintf(LogOutput, "%s", http.StatusText(resp.StatusCode))
+		fmt.Fprintf(LogOutput, "%d %s\n", resp.StatusCode, http.StatusText(resp.StatusCode))
 	}
 
 	// Determine the filename

@@ -60,12 +60,12 @@ func DownloadFile(rawURL string) error {
 		return err
 	}
 	client := http.Client{}
-	fmt.Print("Sending request, awaiting response...  ")
+	fmt.Print("HTTP request sent, awaiting response...  ")
 	resp, err := client.Do(req)
 	if err != nil {
 		fmt.Fprintf(LogOutput, "Request failed: %v\n", err)
 	}
-	fmt.Println("--------------", resp.Header.Get("Content-Length"))
+	//fmt.Println("--------------", resp.Header.Get("Content-Length"))
 	defer resp.Body.Close()
 
 	// Handle the response
