@@ -38,8 +38,8 @@ func PrintInvalidRate(arg string) {
 	os.Exit(0)
 }
 
-// Print help when -h or --help is found.
+// Print help when -h or --help is given.
 func PrintHelp() {
-	fmt.Println("Golang wget, a non-interactive network retriever.\nUsage: wget [OPTION]... [URL]...\n\n  -B\t\t\tgo to background after startup\n  -O=FILE\t\twrite documents to FILE\n  -P=PREFIX\t\tsave files to PREFIX/..\n  --rate-limit=RATE\tlimit download rate to RATE\n  -i=FILE\t\tdownload URLs found in FILE\n  --mirror\t\tdownload an entire website\n    -R,  --reject=LIST\tIgnore suffixes in LIST when mirroring.\n    -X,  --exclude=LIST\tIgnore paths in LIST when mirroring\n    --convert-links\tconvert mirrored website links to local links.\n\nSend bug reports, questions, discussions to <https://github.com/kinoz01>")
+	fmt.Println("This project aims to recreate some functionalities of wget using the Go programming language.\nUsage: wget [OPTION]... [URL]...\n\n  -B\t\t\tgo to background after startup\n  -O=FILE\t\twrite documents to FILE\n  -P=PREFIX\t\tsave files to PREFIX/..\n  --rate-limit=RATE\tlimit download rate to RATE\n  -i=FILE\t\tdownload URLs found in FILE\n  --mirror\t\tdownload an entire website\n    -R,  --reject=LIST\tIgnore suffixes in LIST when mirroring.\n    -X,  --exclude=LIST\tIgnore paths in LIST when mirroring\n    --convert-links\tconvert mirrored website links to local links.\n\nSend bug reports, questions, discussions to <https://github.com/kinoz01>")
 	os.Exit(0)
 }
