@@ -5,6 +5,8 @@ function debounce(func, wait) {
         TimoutId = setTimeout(() => func(...args), wait)
     }
 }
+// Its like we want to wrap a setTimeout with a reset that will
+// rest the setTimeout each time the function is called
 // TimoutId = setTimeout(() => func(...args), wait)
 // VS
 // TimoutId = setTimeout(func(...args), wait)
