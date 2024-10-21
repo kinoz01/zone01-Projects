@@ -22,35 +22,16 @@ func DownloadFile(rawURL string) error {
 	timestamp := time.Now().Format("--2006-01-02 15:04:05--")
 	fmt.Fprintf(LogOutput, "%s  %s\n", timestamp, normalizedURL)
 
-	// No need for error check as we already parsed the url before.
-	parsedURL, _ := url.Parse(normalizedURL)
-
-	hostname := parsedURL.Hostname()
-	if hostname == "" {
-		fmt.Fprintf(LogOutput, "%s: Invalid host name.\n", normalizedURL)
-		return fmt.Errorf("Errooooor")
-	}
+	
 
 	// Resolve hostname (host name ---> IPs) (using DNS lookup)
-	if err := ResolveHostname(hostname); err != nil {
+	if err := ResolveHostname(normalizedURL); err != nil {
 		return err
 	}
 
 	// -P flag directories creation.
 	InitializePath()
 
-	// Prepare HTTP client
-	//client := PrepareHTTPClient()
-
-	// Prepare HTTP request
-	//req, err := PrepareHTTPRequest(normalizedURL)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// Perform the request.
-	//resp, err := PerformRequest(req, client, normalizedURL)
-	//resp, err := http.Get(normalizedURL)
 	req, err := http.NewRequest("GET", normalizedURL, nil)
 	req.Header.Set("User-Agent", "Wget/1.21.1")
 	req.Header.Set("Accept", "*/*")
@@ -60,12 +41,11 @@ func DownloadFile(rawURL string) error {
 		return err
 	}
 	client := http.Client{}
-	fmt.Print("HTTP request sent, awaiting response...  ")
+	fmt.Fprintf(LogOutput, "HTTP request sent, awaiting response...  ")
 	resp, err := client.Do(req)
 	if err != nil {
 		fmt.Fprintf(LogOutput, "Request failed: %v\n", err)
 	}
-	//fmt.Println("--------------", resp.Header.Get("Content-Length"))
 	defer resp.Body.Close()
 
 	// Handle the response
@@ -80,12 +60,20 @@ func DownloadFile(rawURL string) error {
 		return err
 	}
 
-	fmt.Fprintf(LogOutput, "\n%s (%s) saved [%d]\n", filepath.Base(destPath), hostname, bytesDownloaded)
+	fmt.Fprintf(LogOutput, "\n%s (%s) saved [%d]\n", filepath.Base(destPath), normalizedURL, bytesDownloaded)
 	return nil
 }
 
 // Resolves a hostname to its IP addresses using DNS lookup.
-func ResolveHostname(hostname string) error {
+func ResolveHostname(URL string) error {
+	// No need for error check as we already parsed the url before.
+	parsedURL, _ := url.Parse(URL)
+
+	hostname := parsedURL.Hostname()
+	if hostname == "" {
+		fmt.Fprintf(LogOutput, "%s: Invalid host name.\n", URL)
+		return fmt.Errorf("Errooooor")
+	}
 	fmt.Fprintf(LogOutput, "Resolving %s (%s)... ", hostname, hostname)
 	ips, err := net.LookupIP(hostname)
 	if err != nil {
