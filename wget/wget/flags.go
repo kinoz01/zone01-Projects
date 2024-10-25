@@ -181,7 +181,7 @@ func HandleInputFile(path string) {
 // Expands '~' to the user's home directory and converts
 // relative paths to absolute paths. It returns the processed path.
 func MakePath(path string) (string, error) {
-	
+
 	// Expand '~' to the user's home directory
 	if strings.HasPrefix(path, "~") {
 		usr, err := user.Current()
@@ -213,6 +213,12 @@ func CheckErrors() {
 		}
 		if FilePath != "" {
 			Warnings += "WARNING: You can't change download path when mirroring a website!\n"
+		}
+		if RateLimit != 0 {
+			Warnings += "WARNING: You can't use rate limit when mirroring a website!\n"
+		}
+		if len(URLs) > 1 {
+			Warnings += "WARNING: Mirroring support only one link at a time! I mirrored the first link in your list\n"
 		}
 	} else {
 		if len(RejectedSuffixes) != 0 {
