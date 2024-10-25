@@ -2,35 +2,17 @@ package wget
 
 import (
 	"fmt"
-	"mime"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
+
 	"golang.org/x/exp/slices"
 )
 
-// Processes the HTTP response, handles redirects, and prepares for download.
-func HandleResponse(resp *http.Response,  urlStr string) (string, string, int64, error) {
-	// if resp.StatusCode >= 300 && resp.StatusCode < 400 {
-	// 	location := resp.Header.Get("Location")
-	// 	if location != "" {
-	// 		fmt.Fprintf(LogOutput, "Location: %s [following]\n", location)
-	// 		// Prepare new request
-	// 		req, err := PrepareHTTPRequest(location)
-	// 		if err != nil {
-	// 			return "", "", 0, err
-	// 		}
-	// 		// Perform the request recursively
-	// 		newResp, err := PerformRequest(req, client, location)
-	// 		if err != nil {
-	// 			return "", "", 0, err
-	// 		}
-	// 		defer newResp.Body.Close()
-	// 		return HandleResponse(newResp, client, location)
-	// 	}
-	// }
+// Processes the HTTP response, and prepares for download.
+func HandleResponse(resp *http.Response) (string, string, int64, error) {
 
 	if resp.StatusCode != http.StatusOK {
 		fmt.Fprintf(LogOutput, "\nwget: server returned error: %d %s\n", resp.StatusCode, http.StatusText(resp.StatusCode))
@@ -52,7 +34,7 @@ func HandleResponse(resp *http.Response,  urlStr string) (string, string, int64,
 	// Get content length and content type
 	contentLength := resp.ContentLength
 	contentType := resp.Header.Get("Content-Type")
-	if contentLength == -1 {		
+	if contentLength == -1 {
 		if cl := resp.Header.Get("Content-Length"); cl != "" {
 			contentLength, _ = strconv.ParseInt(cl, 10, 64)
 		}
@@ -76,39 +58,19 @@ func DetermineFilename(resp *http.Response) (string, error) {
 		return OutputFile, nil
 	}
 
-	cd := resp.Header.Get("Content-Disposition")
-	if cd != "" {
-		_, params, err := mime.ParseMediaType(cd)
-		if err == nil {
-			if filename, ok := params["filename"]; ok {
-				if IsInvalidFilename(filename) {
-					return "index.html", nil
-				}
-				return filename, nil
-			}
-		}
-	}
-
 	// Use the last path segment of the final URL
-	finalURL := resp.Request.URL
-	path := finalURL.Path
-	filename := filepath.Base(path)
+	filename := filepath.Base(resp.Request.URL.Path)
 
 	if IsInvalidFilename(filename) {
 		filename = "index.html"
-	} else if !strings.Contains(filename, ".") {
-		contentType := resp.Header.Get("Content-Type")
-		ext := GetFileExtension(contentType)
-		filename += ext
 	}
-
 	return filename, nil
 }
 
 // Checks if the destination file exists and modifies the name if necessary
 func HandleExistingFiles() string {
-	destDir := FilePath
-	destPath := filepath.Join(destDir, OutputFile)
+
+	destPath := filepath.Join(FilePath, OutputFile)
 
 	dir := filepath.Dir(destPath)
 	ext := filepath.Ext(destPath)
@@ -131,35 +93,7 @@ func HandleExistingFiles() string {
 
 func IsInvalidFilename(filename string) bool {
 	invalidFilenames := []string{"", ".", "/", "unsupportedbrowser"}
-	if slices.Contains(invalidFilenames, filename) || strings.HasSuffix(filename, "/") || strings.Contains(filename, "?") {
-		return true
-	}
-	return false
-}
-
-func GetFileExtension(contentType string) string {
-	if contentType == "" {
-		return ""
-	}
-	if strings.Contains(contentType, ";") {
-		contentType = strings.Split(contentType, ";")[0]
-	}
-	switch contentType {
-	case "text/html":
-		return ".html"
-	case "text/plain":
-		return ".txt"
-	case "application/json":
-		return ".json"
-	case "application/octet-stream":
-		return ".bin"
-	default:
-		exts, _ := mime.ExtensionsByType(contentType)
-		if len(exts) > 0 {
-			return exts[0]
-		}
-	}
-	return ""
+	return slices.Contains(invalidFilenames, filename)
 }
 
 func FormatSize(size int64) string {

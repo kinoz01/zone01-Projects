@@ -32,8 +32,8 @@ func Run() {
 		wg.Add(1)
 		go func(rawURL string) {
 			defer wg.Done()
-			err := DownloadFile(rawURL)
-			if err == nil { // Error already logged in the function.
+			err := Wget(rawURL)
+			if err == nil { // Errors already logged above.
 				fmt.Fprintf(LogOutput, "\nDownloaded [%s]\n", rawURL)
 			}
 		}(rawURL)

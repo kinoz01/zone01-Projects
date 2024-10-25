@@ -12,7 +12,7 @@ import (
 )
 
 // Handle client, request, response and content saving (basically everything)
-func DownloadFile(rawURL string) error {
+func Wget(rawURL string) error {
 
 	normalizedURL, err := HSTSurlCheck(rawURL)
 	if err != nil {
@@ -22,9 +22,8 @@ func DownloadFile(rawURL string) error {
 	timestamp := time.Now().Format("--2006-01-02 15:04:05--")
 	fmt.Fprintf(LogOutput, "%s  %s\n", timestamp, normalizedURL)
 
-	
-
 	// Resolve hostname (host name ---> IPs) (using DNS lookup)
+	// used tp print host ips
 	if err := ResolveHostname(normalizedURL); err != nil {
 		return err
 	}
@@ -32,30 +31,20 @@ func DownloadFile(rawURL string) error {
 	// -P flag directories creation.
 	InitializePath()
 
-	req, err := http.NewRequest("GET", normalizedURL, nil)
-	req.Header.Set("User-Agent", "Wget/1.21.1")
-	req.Header.Set("Accept", "*/*")
-	req.Header.Set("Accept-Encoding", "identity")
-	req.Header.Set("Connection", "Keep-Alive")
+	response, err := MakeRequest(normalizedURL)
 	if err != nil {
 		return err
 	}
-	client := http.Client{}
-	fmt.Fprintf(LogOutput, "HTTP request sent, awaiting response...  ")
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Fprintf(LogOutput, "Request failed: %v\n", err)
-	}
-	defer resp.Body.Close()
+	defer response.Body.Close()
 
 	// Handle the response
-	filename, destPath, contentLength, err := HandleResponse(resp, normalizedURL)
+	filename, destPath, contentLength, err := HandleResponse(response)
 	if err != nil {
 		return err
 	}
 
 	// Now, download the file
-	bytesDownloaded, err := DownloadAndSaveFile(resp, destPath, contentLength, filename)
+	bytesDownloaded, err := DownloadAndSaveFile(response, destPath, contentLength, filename)
 	if err != nil {
 		return err
 	}
@@ -100,4 +89,24 @@ func InitializePath() {
 		fmt.Fprintf(os.Stderr, "Error creating directory: %v\n", err)
 		os.Exit(1)
 	}
+}
+
+func MakeRequest(url string) (*http.Response, error) {
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("User-Agent", "Wget/1.21.1")
+	req.Header.Set("Accept", "*/*")
+	req.Header.Set("Accept-Encoding", "identity")
+	req.Header.Set("Connection", "Keep-Alive")
+
+	client := http.Client{}
+	fmt.Fprintf(LogOutput, "HTTP request sent, awaiting response...  ")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Fprintf(LogOutput, "Request failed: %v\n", err)
+	}
+	return resp, nil
 }

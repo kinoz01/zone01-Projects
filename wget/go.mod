@@ -3,10 +3,10 @@ module wget
 go 1.18
 
 require (
-	github.com/juju/ratelimit v1.0.2
 	github.com/vbauerster/mpb v3.4.0+incompatible
 	github.com/vbauerster/mpb/v8 v8.8.3
 	golang.org/x/exp v0.0.0-20241009180824-f66d83c29e7c
+	golang.org/x/net v0.30.0
 	golang.org/x/sys v0.26.0
 )
 
@@ -18,5 +18,4 @@ require (
 	github.com/rivo/uniseg v0.4.7 // indirect
 	golang.org/x/crypto v0.28.0 // indirect
 	golang.org/x/term v0.25.0 // indirect
-	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 )
