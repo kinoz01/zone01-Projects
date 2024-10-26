@@ -2,8 +2,6 @@ package wget
 
 import (
 	"io"
-
-	"github.com/vbauerster/mpb/v8"
 )
 
 var (
@@ -21,7 +19,6 @@ var (
 	RejectedSuffixes []string      // rejected suffixes
 	ExcludedPaths    []string      // rejected paths
 	ConvertLinks     bool          // --convert-links
-	ProgressBar      *mpb.Progress // Progress bar
 	LogOutput        io.Writer     // writer to log (wget-file or stdout)
 	Warnings         string        // Warnings found during CheckErrors() func
 )

@@ -1,181 +1,169 @@
 package wget
 
 import (
-    "fmt"
-    "io"
-    "net/http"
-    "os"
-    "strings"
-    "time"
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"strings"
+	"time"
 
-    "golang.org/x/sys/unix"
-
-    "github.com/vbauerster/mpb"
-    "github.com/vbauerster/mpb/decor"
+	"github.com/vbauerster/mpb"
+	"github.com/vbauerster/mpb/decor"
 )
 
-// DownloadAndSaveFile downloads the content from resp and saves it to destPath.
+// SaveFile downloads the content from resp and saves it to destPath.
 // It handles rate limiting and displays a progress bar if not in silent mode.
-func DownloadAndSaveFile(resp *http.Response, destPath string, contentLength int64, filename string) (int64, error) {
-    // Create the file
-    file, err := os.Create(destPath)
-    if err != nil {
-        fmt.Fprintf(LogOutput, "wget: error creating file '%s': %v\n", destPath, err)
-        return 0, err
-    }
-    defer file.Close()
+func SaveFile(resp *http.Response, destPath string, contentLength int64, filename string) (int64, error) {
+	// Create the file
+	file, err := os.Create(destPath)
+	if err != nil {
+		fmt.Fprintf(LogOutput, "wget: error creating file '%s': %v\n", destPath, err)
+		return 0, err
+	}
+	defer file.Close()
 
-    // Get rate limit in bytes per second
-    rateLimitBytesPerSec, err := GetRateLimitBytesPerSecond()
-    if err != nil {
-        fmt.Fprintf(LogOutput, "error with rate limit: %v\n", err)
-        return 0, err
-    }
+	// Get rate limit in bytes per second
+	rateLimit, err := GetRateLimit()
+	if err != nil {
+		fmt.Fprintf(LogOutput, "Error getting rate limit: %v\n", err)
+		return 0, err
+	}
 
-    // Apply rate limiting if specified
-    var reader io.Reader = resp.Body
-    if rateLimitBytesPerSec > 0 {
-        reader = NewRateLimitedReader(resp.Body, rateLimitBytesPerSec)
-    }
+	// Apply rate limiting if specified
+	var reader io.Reader = resp.Body
+	if rateLimit > 0 {
+		reader = NewRateLimitedReader(resp.Body, rateLimit)
+	}
 
-    // Use progress bar if not silent
-    if !Silent {
-        p := mpb.New(mpb.WithWidth(int(float64(GetTerminalWidth()) * 0.7)))
-        var bar *mpb.Bar
+	// Use progress bar if not silent
+	if !Silent {
+		p := mpb.New()
+		var bar *mpb.Bar
 
-        if contentLength > 0 {
-            bar = p.AddBar(contentLength,
-                mpb.BarStyle(" ▓▓░"),
-                mpb.PrependDecorators(
-                    decor.Name(fmt.Sprintf(" %s ", filename)),
-                    decor.CountersKibiByte("%.1f / %.1f"),
-                ),
-                mpb.AppendDecorators(
-                    decor.Percentage(decor.WCSyncSpace),
-                    decor.AverageSpeed(decor.UnitKiB, " %.2f "),
-                    decor.EwmaETA(decor.ET_STYLE_GO, 60, decor.WCSyncWidth),
-                ),
-            )
-        } else {
-            bar = p.AddBar(0,
-                mpb.BarStyle(" ▓▓░"),
-                mpb.PrependDecorators(
-                    decor.Name(fmt.Sprintf(" %s ", filename)),
-                    //decor.CounterKibiByte("%.1f"),
-					//decor.CountersKibiByte("% .1f"),
+		if contentLength > 0 {
+			bar = p.AddBar(contentLength,
+				mpb.BarStyle(" ▓▓░"),
+				mpb.PrependDecorators(
+					decor.Name(fmt.Sprintf(" %s ", filename)),
 					decor.CountersKibiByte("%.1f / %.1f"),
-                ),
-                mpb.AppendDecorators(
-                    decor.AverageSpeed(decor.UnitKiB, " %.2f "),
-                ),
-            )
-        }
+				),
+				mpb.AppendDecorators(
+					decor.Percentage(),
+					decor.AverageSpeed(decor.UnitKiB, " %.2f "),
+					decor.EwmaETA(decor.ET_STYLE_GO, 60),
+				),
+			)
+		} else {
+			bar = p.AddBar(0,
+				mpb.BarStyle(" ▓▓░"),
+				mpb.PrependDecorators(
+					decor.Name(fmt.Sprintf(" %s ", filename)),
+					decor.CountersKibiByte("%.1f / %.1f"),
+				),
+				mpb.AppendDecorators(
+					decor.AverageSpeed(decor.UnitKiB, " %.2f "),
+				),
+			)
+		}
 
-        reader = bar.ProxyReader(reader)
-        bytesDownloaded, err := io.Copy(file, reader)
-        if err != nil {
-            fmt.Fprintf(LogOutput, "wget: error writing to file '%s': %v\n", destPath, err)
-            return bytesDownloaded, err
-        }
+		reader = bar.ProxyReader(reader)
+		bytesDownloaded, err := io.Copy(file, reader)
+		if err != nil {
+			fmt.Fprintf(LogOutput, "wget: error writing to file '%s': %v\n", destPath, err)
+			return bytesDownloaded, err
+		}
 
-        // For unknown content length, set bar total to bytes downloaded and complete the bar
-        if contentLength <= 0 {
-            bar.SetTotal(bar.Current(), true)
-        }
+		// For unknown content length, set bar total to bytes downloaded and complete the bar
+		if contentLength <= 0 {
+			bar.SetTotal(bar.Current(), true)
+		}
 
-        p.Wait()
+		p.Wait()
+		return bytesDownloaded, nil
 
-        return bytesDownloaded, nil
-    } else {
-        bytesDownloaded, err := io.Copy(file, reader)
-        if err != nil {
-            fmt.Fprintf(LogOutput, "wget: error writing to file '%s': %v\n", destPath, err)
-            return bytesDownloaded, err
-        }
+	} else {
+		bytesDownloaded, err := io.Copy(file, reader)
+		if err != nil {
+			fmt.Fprintf(LogOutput, "wget: error writing to file '%s': %v\n", destPath, err)
+			return bytesDownloaded, err
+		}
 
-        fmt.Fprintf(LogOutput, "Downloaded %d bytes\n", bytesDownloaded)
-
-        return bytesDownloaded, nil
-    }
+		return bytesDownloaded, nil
+	}
 }
 
-// RateLimitedReader limits the reading speed from an io.Reader.
+// New io.Reader type that wrap and limits the reading speed from an io.Reader.
 type RateLimitedReader struct {
-    reader    io.Reader
-    rateLimit float64    // bytes per second
-    lastTime  time.Time  // last time bytes were read
-    allowance float64    // bytes allowed to read
+	reader    io.Reader
+	rateLimit float64   // bytes per second
+	lastTime  time.Time // time of the last read operation
+	bytesRead int64     // total bytes read since lastTime
 }
 
-// NewRateLimitedReader creates a new RateLimitedReader.
+// Creates a new RateLimitedReader.
 func NewRateLimitedReader(r io.Reader, rateLimit float64) *RateLimitedReader {
-    return &RateLimitedReader{
-        reader:    r,
-        rateLimit: rateLimit,
-        lastTime:  time.Now(),
-        allowance: rateLimit, // Start with full allowance
-    }
+	return &RateLimitedReader{
+		reader:    r,
+		rateLimit: rateLimit,
+		lastTime:  time.Now(),
+	}
 }
 
-// Read reads data from the underlying reader and enforces the rate limit.
+// Reads data from the underlying reader and enforces the rate limit.
 func (r *RateLimitedReader) Read(p []byte) (int, error) {
-    if r.rateLimit <= 0 {
-        return r.reader.Read(p)
-    }
 
-    now := time.Now()
-    elapsed := now.Sub(r.lastTime).Seconds()
-    r.lastTime = now
-    r.allowance += elapsed * r.rateLimit
-    if r.allowance > r.rateLimit {
-        r.allowance = r.rateLimit
-    }
+	now := time.Now()
+	elapsed := now.Sub(r.lastTime).Seconds()
 
-    maxBytes := int(r.allowance)
-    if maxBytes < 1 {
-        // Need to wait
-        sleepTime := time.Duration((1 - r.allowance/r.rateLimit) * float64(time.Second))
-        time.Sleep(sleepTime)
-        r.allowance = 0
-        maxBytes = 1
-    }
+	// Calculate the maximum bytes allowed to read based on elapsed time.
+	allowedBytes := r.rateLimit * elapsed
+	// If we have read more than allowed, we need to wait.
+	if float64(r.bytesRead) >= allowedBytes {
+		sleepTime := time.Duration(((float64(r.bytesRead) - allowedBytes) / r.rateLimit) * float64(time.Second))
+		time.Sleep(sleepTime)
 
-    if maxBytes > len(p) {
-        maxBytes = len(p)
-    }
+		now = time.Now()
+		elapsed = now.Sub(r.lastTime).Seconds()
+		allowedBytes = r.rateLimit * elapsed
+	}
 
-    n, err := r.reader.Read(p[:maxBytes])
-    r.allowance -= float64(n)
-    return n, err
+	// Calculate the remaining bytes we are allowed to read.
+	remainingBytes := allowedBytes - float64(r.bytesRead)
+	if remainingBytes < 1 {
+		// Ensure we read at least 1 byte.
+		remainingBytes = 1
+	}
+
+	// Limit the read to the remaining allowed bytes and buffer size.
+	maxBytes := int(remainingBytes)
+	if maxBytes > len(p) {
+		maxBytes = len(p)
+	}
+	n, err := r.reader.Read(p[:maxBytes])
+	r.bytesRead += int64(n)
+
+	// Update lastTime and bytesRead if enough time has passed.
+	if r.bytesRead >= int64(r.rateLimit) {       
+		r.lastTime = now
+		r.bytesRead = 0
+	}
+
+	return n, err
 }
 
-// GetRateLimitBytesPerSecond converts the rate limit to bytes per second.
-func GetRateLimitBytesPerSecond() (float64, error) {
-    if RateLimitUnit == "" || RateLimit == 0 {
-        return 0, nil // No rate limit
-    }
-    var rateLimitBytesPerSec float64
-    switch strings.ToLower(RateLimitUnit) {
-    case "b":
-        rateLimitBytesPerSec = RateLimit
-    case "k":
-        rateLimitBytesPerSec = RateLimit * 1024
-    case "m":
-        rateLimitBytesPerSec = RateLimit * 1024 * 1024
-    default:
-        rateLimitBytesPerSec = RateLimit
-    }
-    return rateLimitBytesPerSec, nil
-}
-
-// GetTerminalWidth gets the width of the terminal for progress bar display.
-func GetTerminalWidth() int {
-    fd := int(os.Stdout.Fd())
-
-    ws, err := unix.IoctlGetWinsize(fd, unix.TIOCGWINSZ)
-    if err != nil {
-        return 80
-    }
-
-    return int(ws.Col)
+// GetRateLimit converts the rate limit to bytes per second.
+func GetRateLimit() (float64, error) {
+	var rateLimit float64
+	switch strings.ToLower(RateLimitUnit) {
+	case "b":
+		rateLimit = RateLimit
+	case "k":
+		rateLimit = RateLimit * 1024
+	case "m":
+		rateLimit = RateLimit * 1024 * 1024
+	default:
+		rateLimit = RateLimit
+	}
+	return rateLimit, nil
 }

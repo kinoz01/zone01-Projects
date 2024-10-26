@@ -43,8 +43,8 @@ func Wget(rawURL string) error {
 		return err
 	}
 
-	// Now, download the file
-	bytesDownloaded, err := DownloadAndSaveFile(response, destPath, contentLength, filename)
+	// Now, download and save the file
+	bytesDownloaded, err := SaveFile(response, destPath, contentLength, filename)
 	if err != nil {
 		return err
 	}
@@ -91,20 +91,16 @@ func InitializePath() {
 	}
 }
 
+// perform an HTTP request to the URL and return the response.
 func MakeRequest(url string) (*http.Response, error) {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
 	}
 	req.Header.Set("User-Agent", "Wget/1.21.1")
-	req.Header.Set("Accept", "*/*")
-	req.Header.Set("Accept-Encoding", "identity")
-	req.Header.Set("Connection", "Keep-Alive")
-
-	client := http.Client{}
+	
+	resp, err := http.DefaultClient.Do(req)
 	fmt.Fprintf(LogOutput, "HTTP request sent, awaiting response...  ")
-
-	resp, err := client.Do(req)
 	if err != nil {
 		fmt.Fprintf(LogOutput, "Request failed: %v\n", err)
 	}

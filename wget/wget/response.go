@@ -31,23 +31,7 @@ func HandleResponse(resp *http.Response) (string, string, int64, error) {
 	// Handle existing files
 	destPath := HandleExistingFiles()
 
-	// Get content length and content type
-	contentLength := resp.ContentLength
-	contentType := resp.Header.Get("Content-Type")
-	if contentLength == -1 {
-		if cl := resp.Header.Get("Content-Length"); cl != "" {
-			contentLength, _ = strconv.ParseInt(cl, 10, 64)
-		}
-	}
-
-	// Print length and saving message
-	if contentLength > 0 {
-		sizeStr := FormatSize(contentLength)
-		fmt.Fprintf(LogOutput, "Length: %d (%s) [%s]\n", contentLength, sizeStr, contentType)
-	} else {
-		fmt.Fprintf(LogOutput, "Length: unspecified [%s]\n", contentType)
-	}
-	fmt.Fprintf(LogOutput, "Saving to: '%s'\n\n", destPath)
+	contentLength := GetContentLength(resp, destPath)
 
 	return filename, destPath, contentLength, nil
 }
@@ -69,9 +53,8 @@ func DetermineFilename(resp *http.Response) (string, error) {
 
 // Checks if the destination file exists and modifies the name if necessary
 func HandleExistingFiles() string {
-
 	destPath := filepath.Join(FilePath, OutputFile)
-
+	
 	dir := filepath.Dir(destPath)
 	ext := filepath.Ext(destPath)
 	name := strings.TrimSuffix(filepath.Base(destPath), ext)
@@ -91,16 +74,40 @@ func HandleExistingFiles() string {
 	return destPath
 }
 
+// Check if the filename is valid.
 func IsInvalidFilename(filename string) bool {
 	invalidFilenames := []string{"", ".", "/", "unsupportedbrowser"}
 	return slices.Contains(invalidFilenames, filename)
 }
 
+// Get Content Length and set content type
+func GetContentLength(resp *http.Response, destPath string) int64 {
+	
+	contentType := resp.Header.Get("Content-Type")
+	contentLength := resp.ContentLength
+	if contentLength == -1 {
+		if cl := resp.Header.Get("Content-Length"); cl != "" {
+			contentLength, _ = strconv.ParseInt(cl, 10, 64)
+		}
+	}
+
+	// Print length and saving message
+	if contentLength > 0 {
+		sizeStr := FormatSize(contentLength)
+		fmt.Fprintf(LogOutput, "Length: %d (%s) [%s]\n", contentLength, sizeStr, contentType)
+	} else {
+		fmt.Fprintf(LogOutput, "Length: unspecified [%s]\n", contentType)
+	}
+	fmt.Fprintf(LogOutput, "Saving to: '%s'\n\n", destPath)
+	return contentLength
+}
+
+// converts the content length into a human-readable format like KB, MB, or GB.
 func FormatSize(size int64) string {
 	const (
-		KB = 1 << (10 * 1)
-		MB = 1 << (10 * 2)
-		GB = 1 << (10 * 3)
+		KB = 1 << (10 * 1) // 1024 bytes
+		MB = 1 << (10 * 2) // 1048576 bytes (1024 * 1024)
+		GB = 1 << (10 * 3) // 1073741824 bytes (1024 * 1024 * 1024)
 	)
 
 	floatSize := float64(size)
