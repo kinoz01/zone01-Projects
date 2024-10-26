@@ -118,8 +118,11 @@ func (r *RateLimitedReader) Read(p []byte) (int, error) {
 
 	// Calculate the maximum bytes allowed to read based on elapsed time.
 	allowedBytes := r.rateLimit * elapsed
+    //fmt.Fprintln(LogOutput,"///////////////////////", allowedBytes, r.rateLimit, elapsed)
+    //fmt.Fprintln(LogOutput,"++++++++++++++++++++++++++++++", r.bytesRead)
 	// If we have read more than allowed, we need to wait.
 	if float64(r.bytesRead) >= allowedBytes {
+        //fmt.Fprintln(LogOutput,"----------------------------", r.bytesRead, allowedBytes)
 		sleepTime := time.Duration(((float64(r.bytesRead) - allowedBytes) / r.rateLimit) * float64(time.Second))
 		time.Sleep(sleepTime)
 
