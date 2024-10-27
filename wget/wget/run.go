@@ -32,6 +32,7 @@ func Run() {
 
 	endTime := time.Now()
 	fmt.Fprintf(LogOutput, "finished at %s\n", endTime.Format("2006-01-02 15:04:05"))
+	fmt.Fprint(LogOutput, Warnings)
 }
 
 func SetLogDestination() *os.File {

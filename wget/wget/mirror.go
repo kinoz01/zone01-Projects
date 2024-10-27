@@ -355,7 +355,6 @@ func sanitizeFilename(urlStr string) string {
 	if err != nil {
 		return strings.ReplaceAll(urlStr, "/", "_")
 	}
-	host := strings.ReplaceAll(u.Host, ".", "_")
 	path := strings.ReplaceAll(u.Path, "/", "_")
-	return host + path
+	return u.Host + path
 }
